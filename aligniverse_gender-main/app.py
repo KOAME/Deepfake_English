@@ -18,7 +18,6 @@ from fabric import Connection
 st.set_page_config(
     page_title="Aligniverse",
     page_icon="🌍",
-    layout="wide",  # Full-width layout
     initial_sidebar_state="collapsed"  # Collapsed sidebar by default
 )
 ##start survey
