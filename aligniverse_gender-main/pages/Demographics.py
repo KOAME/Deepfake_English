@@ -85,7 +85,7 @@ def update_participant(participant_id, age, gender_identity, country_of_residenc
 survey = ss.StreamlitSurvey("demographics_survey")
 
 #load data
-df_countries = pd.read_csv("UNSD_Methodology_ancestry.csv", sep = ";")
+df_countries = pd.read_csv("../UNSD_Methodology_ancestry.csv", sep = ";")
 
 age_groups = ["I wish not to declare","18-30", "31-40", "41-50","51-60", "60<"]
 pronouns = [
