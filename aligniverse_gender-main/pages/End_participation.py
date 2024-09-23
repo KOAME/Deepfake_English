@@ -4,6 +4,31 @@ st.set_page_config(
     initial_sidebar_state="collapsed"  # Collapsed sidebar by default
 )
 
+# Initialize session state for sidebar state if not already set
+if 'sidebar_state' not in st.session_state:
+    st.session_state.sidebar_state = 'collapsed'
+
+# Function to collapse the sidebar
+def collapse_sidebar():
+    st.markdown(
+        """
+        <style>
+            [data-testid="collapsedControl"] {
+                display: none;
+            }
+            [data-testid="stSidebar"] {
+                display: none;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Apply the sidebar collapse dynamically based on session state
+if st.session_state.sidebar_state == 'collapsed':
+    collapse_sidebar()
+    
+
 st.title("Thank you!")
 st.write("Thank you for being part of our study and helping us improve the alignment of Large Language Models.")
 st.balloons()
