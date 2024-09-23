@@ -62,9 +62,7 @@ smmap==5.0.1
 soupsieve==2.6
 SQLAlchemy==1.4.49
 sshtunnel==0.4.0
-streamlit==1.38.0
-streamlit-scrollable-textbox==0.0.3
-streamlit_survey==1.0.0
+streamlit
 tenacity==8.5.0
 toml==0.10.2
 tornado==6.4.1
