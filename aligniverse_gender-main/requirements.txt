@@ -35,10 +35,10 @@ MarkupSafe==2.1.5
 mdurl==0.1.2
 msgpack==1.1.0
 narwhals==1.8.1
-numpy==1.26.4
+numpy==1.26.1
 packaging==24.1
 pandas==1.5.3
-paramiko==3.5.0
+paramiko
 pillow==10.4.0
 pip==24.2
 protobuf==5.28.1
@@ -47,7 +47,7 @@ pyarrow==17.0.0
 pycparser==2.22
 pydeck==0.9.1
 Pygments==2.18.0
-PyMySQL==1.1.1
+PyMySQL
 PyNaCl==1.5.0
 python-dateutil==2.9.0.post0
 pytz==2024.2
@@ -61,10 +61,11 @@ six==1.16.0
 smmap==5.0.1
 soupsieve==2.6
 SQLAlchemy==1.4.49
-sshtunnel==0.4.0
+sshtunnel
 streamlit
-streamlit-scrollable-textbox==0.0.3
-streamlit_survey==1.0.0
+streamlit-scrollable-textbox
+streamlit_survey
+st-gsheets-connection
 tenacity==8.5.0
 toml==0.10.2
 tornado==6.4.1
@@ -77,3 +78,7 @@ wheel==0.44.0
 wrapt==1.16.0
 zope.event==5.0
 zope.interface==7.0.3
+mysql-connector-python
+cloud-sql-python-connector
+gcsfs
+st-files-connection
