@@ -13,6 +13,31 @@ from fabric import Connection
 st.set_page_config(
     initial_sidebar_state="collapsed"  # Collapsed sidebar by default
 )
+
+# Initialize session state for sidebar state if not already set
+if 'sidebar_state' not in st.session_state:
+    st.session_state.sidebar_state = 'collapsed'
+
+# Function to collapse the sidebar
+def collapse_sidebar():
+    st.markdown(
+        """
+        <style>
+            [data-testid="collapsedControl"] {
+                display: none;
+            }
+            [data-testid="stSidebar"] {
+                display: none;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Apply the sidebar collapse dynamically based on session state
+if st.session_state.sidebar_state == 'collapsed':
+    collapse_sidebar()
+    
 ssh_host = st.secrets["ssh_host"]
 ssh_port = st.secrets["ssh_port"]
 ssh_user = st.secrets["ssh_user"]
