@@ -12,6 +12,17 @@ import os
 import pymysql
 from sshtunnel import SSHTunnelForwarder
 from fabric import Connection
+
+
+##set config
+# Set the page config at the top of the file
+st.set_page_config(
+    page_title="Aligniverse",
+    page_icon="🌍",
+    initial_sidebar_state="collapsed"  # Collapsed sidebar by default
+)
+
+
 # Initialize session state for sidebar state if not already set
 if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
@@ -36,13 +47,7 @@ def collapse_sidebar():
 if st.session_state.sidebar_state == 'collapsed':
     collapse_sidebar()
     
-##set config
-# Set the page config at the top of the file
-st.set_page_config(
-    page_title="Aligniverse",
-    page_icon="🌍",
-    initial_sidebar_state="collapsed"  # Collapsed sidebar by default
-)
+
 ##start survey
 survey = ss.StreamlitSurvey("Survey Aligniverse")
 
