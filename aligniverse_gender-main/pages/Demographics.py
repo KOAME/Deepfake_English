@@ -9,7 +9,9 @@ import os
 import pymysql
 from sshtunnel import SSHTunnelForwarder
 from fabric import Connection
-
+st.set_page_config(
+    initial_sidebar_state="collapsed"  # Collapsed sidebar by default
+)
 ssh_host = st.secrets["ssh_host"]
 ssh_port = st.secrets["ssh_port"]
 ssh_user = st.secrets["ssh_user"]
