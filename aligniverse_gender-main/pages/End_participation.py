@@ -1,6 +1,8 @@
 import streamlit as st
 import streamlit_survey as ss
-
+st.set_page_config(
+    initial_sidebar_state="collapsed"  # Collapsed sidebar by default
+)
 
 st.title("Thank you!")
 st.write("Thank you for being part of our study and helping us improve the alignment of Large Language Models.")
