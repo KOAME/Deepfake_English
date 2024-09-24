@@ -132,11 +132,7 @@ conn = Connection(
     host=ssh_host,
     port=ssh_port,
     user=ssh_user,
-    connect_kwargs={"password": ssh_password},
-    connect_timeout=6600,
-    read_timeout=800,
-    write_timeout=800,
-    max_allowed_packet=64 * 1024 * 1024  # 64MB
+    connect_kwargs={"password": ssh_password}
     
 )
 
@@ -157,7 +153,7 @@ def getconn():
         password=db_password,
         database=db_name,
         port=tunnel.local_bind_port,
-        connect_timeout=6600
+        connect_timeout=6600,
         read_timeout=800,
         write_timeout=800,
         max_allowed_packet=64 * 1024 * 1024  # 64MB
