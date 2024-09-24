@@ -55,7 +55,7 @@ conn = Connection(
     port=ssh_port,
     user=ssh_user,
     connect_kwargs={"password": ssh_password},
-    connect_timeout=3600
+    connect_timeout=6600
 )
 
 # Create SSH Tunnel
