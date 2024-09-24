@@ -66,7 +66,8 @@ tunnel = SSHTunnelForwarder(
     (ssh_host, ssh_port),
     ssh_username=ssh_user,
     ssh_password=ssh_password,
-    remote_bind_address=(db_host, db_port)
+    remote_bind_address=(db_host, db_port),
+    keep_alive_interval=30
 )
 tunnel.start()
 
@@ -82,8 +83,8 @@ def getconn(retries=3, delay=5):
                 database=db_name,
                 port=tunnel.local_bind_port,
                 connect_timeout=8600,
-                read_timeout=3600,
-                write_timeout=3600,
+                read_timeout=8600,
+                write_timeout=8600,
                 max_allowed_packet=64 * 1024 * 1024  # 64MB
             )
             return conn
