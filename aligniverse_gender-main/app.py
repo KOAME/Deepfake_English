@@ -1,6 +1,8 @@
 import streamlit as st
 import streamlit_survey as ss
 import streamlit_scrollable_textbox as stx
+import time
+
 
 import json
 import pandas as pd
