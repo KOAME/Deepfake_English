@@ -75,7 +75,10 @@ def getconn():
         password=db_password,
         database=db_name,
         port=tunnel.local_bind_port,
-        connect_timeout=3600
+        connect_timeout=6600,
+        read_timeout=800,
+        write_timeout=800,
+        max_allowed_packet=64 * 1024 * 1024  # 64MB
     )
     return conn
 
