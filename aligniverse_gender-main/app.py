@@ -146,19 +146,33 @@ tunnel = SSHTunnelForwarder(
 )
 tunnel.start()
 
-def getconn():
-    conn = pymysql.connect(
-        host='127.0.0.1',
-        user=db_user,
-        password=db_password,
-        database=db_name,
-        port=tunnel.local_bind_port,
-        connect_timeout=8600,
-        read_timeout=3600,
-        write_timeout=3600,
-        max_allowed_packet=64 * 1024 * 1024  # 64MB
-    )
-    return conn
+# Function to establish a database connection with retry logic
+def getconn(retries=3, delay=5):
+    attempt = 0
+    while attempt < retries:
+        try:
+            conn = pymysql.connect(
+                host='127.0.0.1',
+                user=db_user,
+                password=db_password,
+                database=db_name,
+                port=tunnel.local_bind_port,
+                connect_timeout=8600,
+                read_timeout=3600,
+                write_timeout=3600,
+                max_allowed_packet=64 * 1024 * 1024  # 64MB
+            )
+            return conn
+        except pymysql.err.OperationalError as e:
+            st.error(f"Connection attempt {attempt + 1} failed: {e}")
+            attempt += 1
+            if attempt < retries:
+                st.info(f"Retrying in {delay} seconds...")
+                time.sleep(delay)
+            else:
+                st.error("Failed to connect to the database after multiple retries.")
+                raise
+
 
 pool = create_engine(
     "mysql+pymysql://",
