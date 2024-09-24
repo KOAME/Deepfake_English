@@ -91,7 +91,7 @@ def getconn(retries=5, delay=20):
                 st.info(f"Retrying in {delay} seconds...")
                 time.sleep(delay)
             else:
-                st.error("Failed to connect to the database after multiple retries.")
+                st.error("Failed to connect to the database after multiple retries. Please Return the study and check your network!")
                 raise
 
 
