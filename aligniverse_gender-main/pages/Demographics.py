@@ -99,11 +99,16 @@ def getconn(retries=3, delay=5):
                 raise
 
 
-# Create a SQLAlchemy engine
-pool = create_engine(
-    "mysql+pymysql://",
-    creator=getconn,
-)
+# Create a SQLAlchemy engine with error handling
+try:
+    pool = create_engine(
+        "mysql+pymysql://",
+        creator=getconn,
+    )
+except Exception as e:
+    st.error(f"Error creating database engine: {e}")
+    st.stop()
+
 
 def update_participant(participant_id, age, gender_identity, country_of_residence, ancestry, ethnicity, political_party, political_spectrum):
     update_query = text("""
@@ -117,23 +122,34 @@ def update_participant(participant_id, age, gender_identity, country_of_residenc
         political_spectrum = :political_spectrum
     WHERE participant_id = :participant_id
     """)
-    with pool.connect() as connection:
-        connection.execute(update_query, {
-            'participant_id': participant_id,
-            'age': age,
-            'gender_identity': gender_identity,
-            'country_of_residence': country_of_residence,
-            'ancestry': ancestry,
-            'ethnicity': ethnicity,
-            'political_party': political_party,
-            'political_spectrum': political_spectrum
+    try:
+        with pool.connect() as connection:
+            connection.execute(update_query, {
+                'participant_id': participant_id,
+                'age': age,
+                'gender_identity': gender_identity,
+                'country_of_residence': country_of_residence,
+                'ancestry': ancestry,
+                'ethnicity': ethnicity,
+                'political_party': political_party,
+                'political_spectrum': political_spectrum
         })
+    except Exception as e:
+        st.error("Failed to connect to the database after multiple retries - Update. Please Return the study and check your network!")
 
 ##start survey
 survey = ss.StreamlitSurvey("demographics_survey")
 
 #load data
-df_countries = pd.read_csv("https://raw.githubusercontent.com/DALIAALISIDDIG/Aligniverse_Gender_English/refs/heads/main/aligniverse_gender-main/UNSD_Methodology_ancestry.csv", sep = ";")
+# Load data with error handling
+try:
+    df_countries = pd.read_csv(
+        "https://raw.githubusercontent.com/DALIAALISIDDIG/Aligniverse_Gender_English/refs/heads/main/aligniverse_gender-main/UNSD_Methodology_ancestry.csv", 
+        sep=";"
+    )
+except Exception as e:
+    st.error("Failed to connect to the database after multiple retries -Data. Please Return the study and check your network!")
+    st.stop()
 
 age_groups = ["I wish not to declare","18-30", "31-40", "41-50","51-60", "60<"]
 pronouns = [
@@ -187,11 +203,15 @@ q6_demo = survey.selectbox("Which political party would you be most likely to vo
 q7_demo = survey.select_slider("Where do you see yourself on the political spectrum?", options=["Liberal", "Rather liberal", "Centre", "Rather conservative", "Conservative"], id="Q7_demo")
 
 def get_last_id():
-    with pool.connect() as connection:
-        last_id_query = text("SELECT LAST_INSERT_ID()")
-        last_id_result = connection.execute(last_id_query)
-        last_id = last_id_result.scalar()
-        return last_id
+    try:
+        with pool.connect() as connection:
+            last_id_query = text("SELECT LAST_INSERT_ID()")
+            last_id_result = connection.execute(last_id_query)
+            last_id = last_id_result.scalar()
+            return last_id
+    except Exception as e:
+       st.error("Failed to connect to the database after multiple retries - ID. Please Return the study and check your network!")
+        return None
 
 if 'participant_id' not in st.session_state:
     last_id = get_last_id()
