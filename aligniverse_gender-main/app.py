@@ -132,7 +132,8 @@ conn = Connection(
     host=ssh_host,
     port=ssh_port,
     user=ssh_user,
-    connect_kwargs={"password": ssh_password}
+    connect_kwargs={"password": ssh_password},
+    connect_timeout=6600,
     
 )
 
