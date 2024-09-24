@@ -141,7 +141,8 @@ tunnel = SSHTunnelForwarder(
     (ssh_host, ssh_port),
     ssh_username=ssh_user,
     ssh_password=ssh_password,
-    remote_bind_address=(db_host, db_port)
+    remote_bind_address=(db_host, db_port),
+    connect_timeout=6600
     
 )
 tunnel.start()
