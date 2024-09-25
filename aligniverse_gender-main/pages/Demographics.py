@@ -11,6 +11,7 @@ import os
 import pymysql
 from sshtunnel import SSHTunnelForwarder
 from fabric import Connection
+from sqlalchemy.exc import SQLAlchemyError
 
 
 st.set_page_config(
@@ -52,29 +53,25 @@ db_password = st.secrets["db_password"]
 db_name = st.secrets["db_name"]
 db_port = st.secrets["db_port"]
 
-### Set up SSH connection and port forwarding
-conn = Connection(
-    host=ssh_host,
-    port=ssh_port,
-    user=ssh_user,
-    connect_kwargs={"password": ssh_password},
-    connect_timeout=8600
-)
+# Set up SSH tunnel with retry logic
+def start_ssh_tunnel():
+    try:
+        tunnel = SSHTunnelForwarder(
+            (ssh_host, ssh_port),
+            ssh_username=ssh_user,
+            ssh_password=ssh_password,
+            remote_bind_address=(db_host, db_port),
+            set_keepalive=30  # Keeps SSH connection alive
+        )
+        tunnel.start()
+        return tunnel
+    except Exception as e:
+        st.error(f"SSH tunnel connection failed: {e}")
+        raise
 
-# Create SSH Tunnel
-tunnel = SSHTunnelForwarder(
-    (ssh_host, ssh_port),
-    ssh_username=ssh_user,
-    ssh_password=ssh_password,
-    remote_bind_address=(db_host, db_port),
-    keep_alive_interval=30
-)
-tunnel.start()
-
-# Function to establish a database connection with retry logic
-def getconn(retries=3, delay=5):
-    attempt = 0
-    while attempt < retries:
+# Establish a database connection with retries
+def get_connection(tunnel, retries=3, delay=5):
+    for attempt in range(retries):
         try:
             conn = pymysql.connect(
                 host='127.0.0.1',
@@ -82,34 +79,42 @@ def getconn(retries=3, delay=5):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=8600,
-                read_timeout=8600,
-                write_timeout=8600,
-                max_allowed_packet=64 * 1024 * 1024  # 64MB
+                connect_timeout=9600,  # Increased 
+                read_timeout=8600,     # Increased
+                write_timeout=8600,    # Increased 
+                max_allowed_packet=128 * 1024 * 1024  # 128MB
             )
             return conn
         except pymysql.err.OperationalError as e:
             st.error(f"Connection attempt {attempt + 1} failed: {e}")
-            attempt += 1
-            if attempt < retries:
-                st.info(f"Retrying in {delay} seconds...")
+            if attempt < retries - 1:
                 time.sleep(delay)
             else:
-                st.error("Failed to connect to the database after multiple retries. Please Return the study and check your network!")
+                st.error("Failed to connect to the database after multiple retries. Please check your network.")
                 raise
 
+# Create SQLAlchemy engine with retry and connection pooling
+def create_engine_with_pool(tunnel):
+    try:
+        pool = create_engine(
+            "mysql+pymysql://",
+            creator=lambda: get_connection(tunnel),
+            pool_pre_ping=True,
+            pool_recycle=3600  # Recycles connections every hour
+            pool_size=10,           # Set pool size to handle multiple connections
+            max_overflow=10        # Allow 10 extra simultaneous connections if needed        )
+        return pool
+    except Exception as e:
+        st.error(f"Error creating database engine: {e}")
+        st.stop()
 
-# Create a SQLAlchemy engine with error handling
-try:
-    pool = create_engine(
-        "mysql+pymysql://",
-        creator=getconn,
-    )
-except Exception as e:
-    st.error(f"Error creating database engine: {e}")
-    st.stop()
+# Start SSH Tunnel and set up DB pool
+tunnel = start_ssh_tunnel()
+pool = create_engine_with_pool(tunnel)
 
 
+
+# Database operations with error handling
 def update_participant(participant_id, age, gender_identity, country_of_residence, ancestry, ethnicity, political_party, political_spectrum):
     update_query = text("""
     UPDATE df_participants
@@ -133,7 +138,9 @@ def update_participant(participant_id, age, gender_identity, country_of_residenc
                 'ethnicity': ethnicity,
                 'political_party': political_party,
                 'political_spectrum': political_spectrum
-        })
+            })
+    except SQLAlchemyError as e:
+        st.error(f"Database update failed: {e}")
     except Exception as e:
         st.error("Failed to connect to the database after multiple retries - Update. Please Return the study and check your network!")
 
@@ -202,13 +209,17 @@ q6_demo = survey.selectbox("Which political party would you be most likely to vo
 
 q7_demo = survey.select_slider("Where do you see yourself on the political spectrum?", options=["Liberal", "Rather liberal", "Centre", "Rather conservative", "Conservative"], id="Q7_demo")
 
+
+# Submission handler
 def get_last_id():
     try:
         with pool.connect() as connection:
             last_id_query = text("SELECT LAST_INSERT_ID()")
-            last_id_result = connection.execute(last_id_query)
-            last_id = last_id_result.scalar()
-            return last_id
+            result = connection.execute(last_id_query)
+            return result.scalar()
+    except SQLAlchemyError as e:
+        st.error(f"Failed to fetch participant ID: {e}")
+        return None
     except Exception as e:
        st.error("Failed to connect to the database after multiple retries - ID. Please Return the study and check your network!")
         return None
