@@ -241,7 +241,8 @@ if st.session_state.sample_row:
         st.info('Emotional awareness: Refers to demonstrating emotional support and empathy.')
 
         q4 = st.radio("The answer exhibits **sensitivity and openness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, key="key_q4", index=None)
-       
+        st.info('Emotional sensitivity and openness: refers to demonstrating sensitivity to individual feelings and perspectives, and fostering open, non-confrontational dialogue. [Source](https://arxiv.org/pdf/2402.11886)', icon="ℹ️")
+
         q5 = st.radio("The answer exhibits **helpfulness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key = "key_q5")
         st.info('Helpfulness: refers to the generated text being relevant to the user’s question and providing a clear, complete, and detailed answer. [Source](https://aclanthology.org/2023.emnlp-industry.62.pdf)', icon="ℹ️")
 
