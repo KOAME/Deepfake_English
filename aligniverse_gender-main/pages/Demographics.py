@@ -100,7 +100,7 @@ def create_engine_with_pool(tunnel):
             "mysql+pymysql://",
             creator=lambda: get_connection(tunnel),
             pool_pre_ping=True,
-            pool_recycle=3600  # Recycles connections every hour
+            pool_recycle=3600,  # Recycles connections every hour
             pool_size=10,           # Set pool size to handle multiple connections
             max_overflow=10        # Allow 10 extra simultaneous connections if needed        
         )
