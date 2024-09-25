@@ -179,9 +179,9 @@ def get_sqlalchemy_engine(tunnel):
         "mysql+pymysql://",
         creator=lambda: get_connection(tunnel),
         pool_pre_ping=True,    # Ensure connection is alive before executing a query
-        pool_recycle=3600,     # Recycle connections every 1 hour to prevent disconnection
-        pool_size=10,           # Set pool size to handle multiple connections
-        max_overflow=10        # Allow 10 extra simultaneous connections if needed
+        pool_recycle=600,     # Recycle connections every 1 hour to prevent disconnection 
+        pool_size=100,           # Set pool size to handle multiple connections
+        max_overflow=100        # Allow 10 extra simultaneous connections if needed
     )
     return pool
 
