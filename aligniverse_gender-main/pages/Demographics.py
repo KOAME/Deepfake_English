@@ -79,9 +79,9 @@ def get_connection(tunnel, retries=3, delay=5):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=9600,  # Increased 
-                read_timeout=8600,     # Increased
-                write_timeout=8600,    # Increased 
+                connect_timeout=10600,  # Increased 
+                read_timeout=9600,     # Increased
+                write_timeout=9600,    # Increased 
                 max_allowed_packet=128 * 1024 * 1024  # 128MB
             )
             return conn
@@ -101,8 +101,8 @@ def create_engine_with_pool(tunnel):
             creator=lambda: get_connection(tunnel),
             pool_pre_ping=True,
             pool_recycle=3600,  # Recycles connections every hour
-            pool_size=10,           # Set pool size to handle multiple connections
-            max_overflow=10        # Allow 10 extra simultaneous connections if needed        
+            pool_size=100,           # Set pool size to handle multiple connections
+            max_overflow=100        # Allow 10 extra simultaneous connections if needed        
         )
         return pool
     except Exception as e:
