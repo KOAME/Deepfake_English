@@ -104,8 +104,8 @@ def get_sqlalchemy_engine(tunnel):
         creator=lambda: get_connection(tunnel),
         pool_pre_ping=True,   # Ensure connections are alive before query
         pool_recycle=3600,    # Recycle connections every 1 hour
-        pool_size=100,          # Number of connections in the pool
-        max_overflow=100       # Allow overflow for multiple requests
+        pool_size=1000,          # Number of connections in the pool
+        max_overflow=1000       # Allow overflow for multiple requests
     )
     return pool
 
