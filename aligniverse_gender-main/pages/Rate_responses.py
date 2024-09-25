@@ -12,6 +12,9 @@ import pymysql
 from sshtunnel import SSHTunnelForwarder
 from fabric import Connection
 
+from sqlalchemy.exc import SQLAlchemyError
+
+
 st.set_page_config(
     initial_sidebar_state="collapsed"  # Collapsed sidebar by default
 )
