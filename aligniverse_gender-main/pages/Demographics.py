@@ -102,11 +102,13 @@ def create_engine_with_pool(tunnel):
             pool_pre_ping=True,
             pool_recycle=3600  # Recycles connections every hour
             pool_size=10,           # Set pool size to handle multiple connections
-            max_overflow=10        # Allow 10 extra simultaneous connections if needed        )
+            max_overflow=10        # Allow 10 extra simultaneous connections if needed        
+        )
         return pool
     except Exception as e:
         st.error(f"Error creating database engine: {e}")
         st.stop()
+        
 
 # Start SSH Tunnel and set up DB pool
 tunnel = start_ssh_tunnel()
