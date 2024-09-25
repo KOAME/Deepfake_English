@@ -144,7 +144,7 @@ def start_ssh_tunnel():
         return tunnel
     except Exception as e:
         st.error(f"SSH tunnel connection failed: {e}")
-        rais
+        raise  
 
 # Establish Database connection with retry logic and optimized timeouts
 def get_connection(tunnel, retries=3, delay=5):
