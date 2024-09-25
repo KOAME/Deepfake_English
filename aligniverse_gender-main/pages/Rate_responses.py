@@ -212,7 +212,10 @@ if 'count' not in st.session_state:
 # Fetch the sample row from the database once when the page is loaded or refreshed
 if 'sample_row' not in st.session_state:
     with pool.connect() as db_conn:
-        query = text("SELECT * FROM df_prompts WHERE rated = 0 ORDER BY RAND() LIMIT 1")
+        #query = text("SELECT * FROM df_prompts WHERE rated = 0 ORDER BY RAND() LIMIT 1")
+        query = text("SELECT * FROM df_prompts WHERE rated = 0 AND prompt_id >= FLOOR(RAND() * (SELECT MAX(prompt_id) FROM df_prompts)) LIMIT 1;")
+        
+
         result = db_conn.execute(query)
         st.session_state.sample_row = result.fetchone()
 
