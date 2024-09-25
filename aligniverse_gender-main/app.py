@@ -138,7 +138,7 @@ def start_ssh_tunnel():
             ssh_username=ssh_user,
             ssh_password=ssh_password,
             remote_bind_address=(db_host, db_port),
-            set_keepalive=60  # Send keep-alive packets every 60 seconds to keep connection alive
+            set_keepalive=30  # Send keep-alive packets every 60 seconds to keep connection alive
         )
         tunnel.start()
         return tunnel
