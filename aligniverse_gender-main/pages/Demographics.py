@@ -224,7 +224,7 @@ def get_last_id():
         return None
     except Exception as e:
        st.error("Failed to connect to the database after multiple retries - ID. Please Return the study and check your network!")
-        return None
+       return None
 
 if 'participant_id' not in st.session_state:
     last_id = get_last_id()
