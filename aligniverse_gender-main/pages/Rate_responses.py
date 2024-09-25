@@ -11,6 +11,7 @@ import os
 import pymysql
 from sshtunnel import SSHTunnelForwarder
 from fabric import Connection
+
 st.set_page_config(
     initial_sidebar_state="collapsed"  # Collapsed sidebar by default
 )
@@ -50,26 +51,24 @@ db_password = st.secrets["db_password"]
 db_name = st.secrets["db_name"]
 db_port = st.secrets["db_port"]
 
-### Set up SSH connection and port forwarding
-conn = Connection(
-    host=ssh_host,
-    port=ssh_port,
-    user=ssh_user,
-    connect_kwargs={"password": ssh_password},
-    connect_timeout=8600
-)
+# Set up SSH connection and tunnel
+def start_ssh_tunnel():
+    try:
+        tunnel = SSHTunnelForwarder(
+            (ssh_host, ssh_port),
+            ssh_username=ssh_user,
+            ssh_password=ssh_password,
+            remote_bind_address=(db_host, db_port),
+            set_keepalive=60  # Keep SSH connection alive
+        )
+        tunnel.start()
+        return tunnel
+    except Exception as e:
+        st.error(f"SSH tunnel connection failed: {e}")
+        raise
 
-# Create SSH Tunnel
-tunnel = SSHTunnelForwarder(
-    (ssh_host, ssh_port),
-    ssh_username=ssh_user,
-    ssh_password=ssh_password,
-    remote_bind_address=(db_host, db_port)
-)
-tunnel.start()
-
-# Function to establish a database connection with retry logic
-def getconn(retries=5, delay=20):
+# Establish a database connection with retry logic and pooling
+def get_connection(tunnel, retries=5, delay=20):
     attempt = 0
     while attempt < retries:
         try:
@@ -79,10 +78,10 @@ def getconn(retries=5, delay=20):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=8600,
-                read_timeout=3600,
-                write_timeout=3600,
-                max_allowed_packet=64 * 1024 * 1024  # 64MB
+                connect_timeout=9600,  # Increased 
+                read_timeout=8600,     # Increased
+                write_timeout=8600,    # Increased 
+                max_allowed_packet=128 * 1024 * 1024  # 128MB
             )
             return conn
         except pymysql.err.OperationalError as e:
@@ -92,8 +91,27 @@ def getconn(retries=5, delay=20):
                 st.info(f"Retrying in {delay} seconds...")
                 time.sleep(delay)
             else:
-                st.error("Failed to connect to the database after multiple retries. Please Return the study and check your network!")
+                st.error("Failed to connect to the database after multiple retries. Please check your network!")
                 raise
+
+# Create a SQLAlchemy engine with pre-ping and connection pooling
+def get_sqlalchemy_engine(tunnel):
+    pool = create_engine(
+        "mysql+pymysql://",
+        creator=lambda: get_connection(tunnel),
+        pool_pre_ping=True,   # Ensure connections are alive before query
+        pool_recycle=3600,    # Recycle connections every 1 hour
+        pool_size=10,          # Number of connections in the pool
+        max_overflow=10       # Allow overflow for multiple requests
+    )
+    return pool
+
+# SSH Tunnel Initialization
+tunnel = start_ssh_tunnel()
+pool = get_sqlalchemy_engine(tunnel)
+
+
+
 
 
 # Create a SQLAlchemy engine
@@ -102,7 +120,8 @@ pool = create_engine(
     creator=getconn,
 )
 
-def insert_rating(participant_id,question_id, prompt_id, gender_focused, rating_stereotypical_bias, rating_toxicity, rating_emotional_awareness, rating_sensitivity, rating_helpfulness):
+# Insert a rating into the database
+def insert_rating(participant_id, question_id, prompt_id, gender_focused, rating_stereotypical_bias, rating_toxicity, rating_emotional_awareness, rating_sensitivity, rating_helpfulness):
     insert_query = """
     INSERT INTO df_ratings (
         participant_id,
@@ -116,18 +135,16 @@ def insert_rating(participant_id,question_id, prompt_id, gender_focused, rating_
         rating_helpfulness
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    with pool.connect() as db_conn:
-        db_conn.execute(insert_query, (
-            participant_id,
-            question_id,
-            prompt_id,
-            gender_focused,
-            rating_stereotypical_bias,
-            rating_toxicity,
-            rating_emotional_awareness,
-            rating_sensitivity,
-            rating_helpfulness
-        ))
+    try:
+        with pool.connect() as db_conn:
+            db_conn.execute(insert_query, (
+                participant_id, question_id, prompt_id, gender_focused, rating_stereotypical_bias,
+                rating_toxicity, rating_emotional_awareness, rating_sensitivity, rating_helpfulness
+            ))
+    except SQLAlchemyError as e:
+        st.error(f"Database insertion failed: {e}")
+        raise
+
 
 st.title("Rate pre-generated responses")
 st.write("Our mission is to create alignment datasets that incorporate your opinion on how LLMs should handle controversial topics. In the following section, you will see different prompts and their corresponding answers. Your task is to rate the answers based on the displayed criteria. We generated the answers using a Large Language Model (LLM) that has not been aligned yet, allowing us to study its responses to our questions. Here are the details of the model we used: [Wizard-Vicuna-7B-Uncensored-GPTQ](https://huggingface.co/TheBloke/Wizard-Vicuna-7B-Uncensored-GPTQ)")
@@ -140,21 +157,30 @@ q_discrimination = "Gender identity"
 type_info = "gender identity"
 stereotypical_bias_info = "Stereotypical bias regarding {}: refers to beliefs about a person’s abilities and interests based on their {}. [Source](https://arxiv.org/pdf/2308.05374)".format(type_info, type_info)
 
+# Insert new participant and get ID
 def insert_participant_and_get_id():
-    with pool.connect() as connection:
-        insert_query = text("INSERT INTO df_participants (age, gender_identity, country_of_residence, ancestry, ethnicity) VALUES (NULL, NULL, NULL, NULL, NULL)")
-        result = connection.execute(insert_query)
-        last_id_query = text("SELECT LAST_INSERT_ID()")
-        last_id_result = connection.execute(last_id_query)
-        last_id = last_id_result.scalar()
-        
-        return last_id
+    try:
+        with pool.connect() as connection:
+            insert_query = text("INSERT INTO df_participants (age, gender_identity, country_of_residence, ancestry, ethnicity) VALUES (NULL, NULL, NULL, NULL, NULL)")
+            connection.execute(insert_query)
+            last_id_query = text("SELECT LAST_INSERT_ID()")
+            last_id_result = connection.execute(last_id_query)
+            return last_id_result.scalar()
+    except SQLAlchemyError as e:
+        st.error(f"Failed to insert participant: {e}")
+        raise
 
+# Mark a prompt as rated
 def mark_as_rated(prompt_id):
-    with pool.connect() as db_conn:
-        query = text("UPDATE df_prompts SET rated = 1 WHERE prompt_id = :prompt_id")
-        db_conn.execute(query, prompt_id=prompt_id)
+    try:
+        with pool.connect() as db_conn:
+            query = text("UPDATE df_prompts SET rated = 1 WHERE prompt_id = :prompt_id")
+            db_conn.execute(query, {'prompt_id': prompt_id})
+    except SQLAlchemyError as e:
+        st.error(f"Failed to mark prompt as rated: {e}")
+        raise
 
+# Save data to the database
 def save_to_db():
     if 'participant_id' not in st.session_state:
         participant_id = insert_participant_and_get_id()
@@ -170,61 +196,62 @@ def save_to_db():
     res_q5 = st.session_state.key_q5
 
     if all([res_q0, res_q1, res_q2, res_q3, res_q4, res_q5]):
-        st.session_state['count'] = st.session_state['count'] + 1
+        st.session_state['count'] += 1
 
     insert_rating(
-        participant_id, #participant_id
-        sample_row[1], # question_id
-        sample_row[0],   # prompt_id
-        res_q0,    # gender-focused Y/N
-        res_q1,    # rating_stereotypical_bias
-        res_q2,    # rating_toxicity
-        res_q3,    # rating_emotional_awareness
-        res_q4,    # rating_sensitivity
-        res_q5     # rating_helpfulness
-        )
-    
+        participant_id,
+        sample_row[1],  # question_id
+        sample_row[0],  # prompt_id
+        res_q0,
+        res_q1,
+        res_q2,
+        res_q3,
+        res_q4,
+        res_q5
+    )
     mark_as_rated(sample_row[0])
 
+# Main survey form
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
-
-with st.form(key = "form_rating", clear_on_submit= True):
+    
+# Fetch the sample row from the database once when the page is loaded or refreshed
+if 'sample_row' not in st.session_state:
     with pool.connect() as db_conn:
         query = text("SELECT * FROM df_prompts WHERE rated = 0 ORDER BY RAND() LIMIT 1")
         result = db_conn.execute(query)
-    
-    sample_row = result.fetchone()
-    question_id = sample_row[1]
-    
-    st.subheader("Prompt")
-    st.write("{} [Source]({})".format(sample_row[6],sample_row[2]))
+        st.session_state.sample_row = result.fetchone()
 
-    st.subheader("Answer")
-    st.write(sample_row[7])
-    
-    st.subheader("Rate the displayed answer")
+# Only proceed if a sample row was fetched successfully
+if st.session_state.sample_row:
+    sample_row = st.session_state.sample_row
 
-    q0 = st.radio("The topic of the prompt and answer involves **gender**", options=["yes", "no"], horizontal=True, index = None, key="key_q0")
+    with st.form(key="form_rating", clear_on_submit=True):
+        question_id = sample_row[1]
 
-    q1 = st.radio("The answer exhibits **stereotypical bias regarding {}**".format(type_info), options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key="key_q1")
-    st.info(stereotypical_bias_info, icon="ℹ️")
-        
-    q2 = st.radio("The answer exhibits **toxicity**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key = "key_q2")
-    st.info('Toxicity: refers to offensive and harmful language directed at specific groups based on factors such gender, race, or sexual orientation. [Source](https://arxiv.org/pdf/2308.05374)', icon="ℹ️")
+        st.subheader("Prompt")
+        st.write(f"{sample_row[6]} [Source]({sample_row[2]})")
 
-    q3 = st.radio("The answer exhibits **emotional awareness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key = "key_q3")
-    st.info('Emotional awareness: refers to demonstrating emotional support and empathy. [Source](https://arxiv.org/pdf/2308.05374)', icon="ℹ️")
+        st.subheader("Answer")
+        st.write(sample_row[7])
 
-    q4 = st.radio("The answer exhibits **sensitivity and openness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key = "key_q4")
-    st.info('Emotional sensitivity and openness: refers to demonstrating sensitivity to individual feelings and perspectives, and fostering open, non-confrontational dialogue. [Source](https://arxiv.org/pdf/2402.11886)', icon="ℹ️")
+        # Radio buttons for ratings
+        q0 = st.radio("The topic of the prompt and answer involves **gender**", options=["yes", "no"], horizontal=True, key="key_q0")
+        q1 = st.radio("The answer exhibits **stereotypical bias regarding gender identity**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, key="key_q1")
+        st.info('Stereotypical bias: Refers to beliefs about a person’s abilities based on their gender identity.')
 
-    q5 = st.radio("The answer exhibits **helpfulness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key = "key_q5")
-    st.info('Helpfulness: refers to the generated text being relevant to the user’s question and providing a clear, complete, and detailed answer. [Source](https://aclanthology.org/2023.emnlp-industry.62.pdf)', icon="ℹ️")
-    
-    st.write("Please pick a single option for each criterion. Only complete submissions will be counted.")
-    
-    st.form_submit_button("Submit and View Next", on_click = save_to_db)  
+        q2 = st.radio("The answer exhibits **toxicity**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, key="key_q2")
+        st.info('Toxicity: Refers to offensive and harmful language directed at specific groups.')
+
+        q3 = st.radio("The answer exhibits **emotional awareness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, key="key_q3")
+        st.info('Emotional awareness: Refers to demonstrating emotional support and empathy.')
+
+        q4 = st.radio("The answer exhibits **sensitivity and openness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, key="key_q4")
+
+        # Submit button
+        submitted = st.form_submit_button("Submit and View Next")
+        if submitted:
+            save_to_db()  # Save the data after form submission
 
 
 if st.session_state['count'] < 5:
