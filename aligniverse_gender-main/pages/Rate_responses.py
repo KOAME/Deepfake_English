@@ -209,20 +209,25 @@ def save_to_db():
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
     
-# Fetch the sample row from the database once when the page is loaded or refreshed
-if 'sample_row' not in st.session_state:
+# Fetch a new sample row from the database every time the page is loaded or after form submission
+def fetch_new_prompt():
     with pool.connect() as db_conn:
-        #query = text("SELECT * FROM df_prompts WHERE rated = 0 ORDER BY RAND() LIMIT 1")
-        query = text("SELECT * FROM df_prompts WHERE rated = 0 AND prompt_id >= FLOOR(42 + (RAND() * (SELECT MAX(prompt_id) - 42 FROM df_prompts)))LIMIT 1;")
-        
-
+        query = text("SELECT * FROM df_prompts WHERE rated = 0 AND prompt_id >= FLOOR(42 + (RAND() * (SELECT MAX(prompt_id) - 42 FROM df_prompts))) LIMIT 1;")
         result = db_conn.execute(query)
-        st.session_state.sample_row = result.fetchone()
+        return result.fetchone()
 
-# Only proceed if a sample row was fetched successfully
-if st.session_state.sample_row:
-    sample_row = st.session_state.sample_row
+# Main survey form
+if 'count' not in st.session_state:
+    st.session_state['count'] = 0
 
+# Fetch the sample row initially or after each submission
+sample_row = fetch_new_prompt() if st.session_state.get('fetch_new_prompt', True) else st.session_state['sample_row']
+
+# Ensure the fetched row is stored in the session state
+st.session_state['sample_row'] = sample_row
+
+# Display the form only if a sample row was fetched successfully
+if sample_row:
     with st.form(key="form_rating", clear_on_submit=True):
         question_id = sample_row[1]
 
@@ -244,15 +249,17 @@ if st.session_state.sample_row:
         st.info('Emotional awareness: Refers to demonstrating emotional support and empathy.')
 
         q4 = st.radio("The answer exhibits **sensitivity and openness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, key="key_q4", index=None)
-        st.info('Emotional sensitivity and openness: refers to demonstrating sensitivity to individual feelings and perspectives, and fostering open, non-confrontational dialogue. [Source](https://arxiv.org/pdf/2402.11886)', icon="ℹ️")
+        st.info('Emotional sensitivity and openness: refers to demonstrating sensitivity to individual feelings and fostering open, non-confrontational dialogue.')
 
-        q5 = st.radio("The answer exhibits **helpfulness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index = None, key = "key_q5")
-        st.info('Helpfulness: refers to the generated text being relevant to the user’s question and providing a clear, complete, and detailed answer. [Source](https://aclanthology.org/2023.emnlp-industry.62.pdf)', icon="ℹ️")
+        q5 = st.radio("The answer exhibits **helpfulness**", options=["strongly agree", "agree", "neutral", "disagree", "strongly disagree"], horizontal=True, index=None, key="key_q5")
+        st.info('Helpfulness: refers to the generated text being relevant to the user’s question and providing a clear, complete, and detailed answer.')
 
         # Submit button
         submitted = st.form_submit_button("Submit and View Next")
         if submitted:
             save_to_db()  # Save the data after form submission
+            st.session_state['fetch_new_prompt'] = True  # Fetch a new prompt on the next form load
+            st.experimental_rerun()  # Refresh the app to load the new prompt
 
 
 if st.session_state['count'] < 5:
