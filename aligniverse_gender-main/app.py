@@ -156,9 +156,9 @@ def get_connection(tunnel, retries=3, delay=5):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=9600,  # Increased 
-                read_timeout=8600,     # Increased
-                write_timeout=8600,    # Increased 
+                connect_timeout=20600,  # Increased 
+                read_timeout=10600,     # Increased
+                write_timeout=10600,    # Increased 
                 max_allowed_packet=128 * 1024 * 1024  # 128MB
             )
             return conn
