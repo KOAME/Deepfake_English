@@ -205,32 +205,29 @@ def save_to_db():
     )
     mark_as_rated(sample_row[0])
 
-# Main survey form
-if 'count' not in st.session_state:
-    st.session_state['count'] = 0
-    
-# Fetch a new sample row from the database every time the page is loaded or after form submission
+# Fetch a new prompt each time after submission
 def fetch_new_prompt():
     with pool.connect() as db_conn:
         query = text("SELECT * FROM df_prompts WHERE rated = 0 AND prompt_id >= FLOOR(42 + (RAND() * (SELECT MAX(prompt_id) - 42 FROM df_prompts))) LIMIT 1;")
         result = db_conn.execute(query)
         return result.fetchone()
 
-# Main survey form
+# Main survey logic
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
 
-# Fetch the sample row initially or after each submission
-sample_row = fetch_new_prompt() if st.session_state.get('fetch_new_prompt', True) else st.session_state['sample_row']
+if 'fetch_new_prompt' in st.session_state and st.session_state['fetch_new_prompt']:
+    st.session_state.sample_row = fetch_new_prompt()
+    st.session_state['fetch_new_prompt'] = False
 
-# Ensure the fetched row is stored in the session state
-st.session_state['sample_row'] = sample_row
+if 'sample_row' not in st.session_state:
+    st.session_state.sample_row = fetch_new_prompt()
 
-# Display the form only if a sample row was fetched successfully
+sample_row = st.session_state.sample_row
+
+# Survey form
 if sample_row:
     with st.form(key="form_rating", clear_on_submit=True):
-        question_id = sample_row[1]
-
         st.subheader("Prompt")
         st.write(f"{sample_row[6]} [Source]({sample_row[2]})")
 
@@ -257,9 +254,8 @@ if sample_row:
         # Submit button
         submitted = st.form_submit_button("Submit and View Next")
         if submitted:
-            save_to_db()  # Save the data after form submission
-            st.session_state['fetch_new_prompt'] = True  # Fetch a new prompt on the next form load
-            st.experimental_rerun()  # Refresh the app to load the new prompt
+            save_to_db()
+            st.session_state['fetch_new_prompt'] = True
 
 
 if st.session_state['count'] < 5:
