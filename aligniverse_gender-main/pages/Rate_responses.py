@@ -213,7 +213,7 @@ if 'count' not in st.session_state:
 if 'sample_row' not in st.session_state:
     with pool.connect() as db_conn:
         #query = text("SELECT * FROM df_prompts WHERE rated = 0 ORDER BY RAND() LIMIT 1")
-        query = text("SELECT * FROM df_prompts WHERE rated = 0 AND prompt_id >= FLOOR(RAND() * (SELECT MAX(prompt_id) FROM df_prompts)) LIMIT 1;")
+        query = text("SELECT * FROM df_prompts WHERE rated = 0 AND prompt_id >= FLOOR(42 + (RAND() * (SELECT MAX(prompt_id) - 42 FROM df_prompts)))LIMIT 1;")
         
 
         result = db_conn.execute(query)
