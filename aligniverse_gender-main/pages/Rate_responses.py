@@ -62,7 +62,7 @@ def start_ssh_tunnel():
             ssh_username=ssh_user,
             ssh_password=ssh_password,
             remote_bind_address=(db_host, db_port),
-            set_keepalive=60  # Keep SSH connection alive
+            set_keepalive=30  # Keep SSH connection alive
         )
         tunnel.start()
         return tunnel
@@ -81,9 +81,9 @@ def get_connection(tunnel, retries=5, delay=20):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=9600,  # Increased 
-                read_timeout=8600,     # Increased
-                write_timeout=8600,    # Increased 
+                connect_timeout=10600,  # Increased 
+                read_timeout=9600,     # Increased
+                write_timeout=9600,    # Increased 
                 max_allowed_packet=128 * 1024 * 1024  # 128MB
             )
             return conn
@@ -104,8 +104,8 @@ def get_sqlalchemy_engine(tunnel):
         creator=lambda: get_connection(tunnel),
         pool_pre_ping=True,   # Ensure connections are alive before query
         pool_recycle=3600,    # Recycle connections every 1 hour
-        pool_size=10,          # Number of connections in the pool
-        max_overflow=10       # Allow overflow for multiple requests
+        pool_size=100,          # Number of connections in the pool
+        max_overflow=100       # Allow overflow for multiple requests
     )
     return pool
 
