@@ -114,15 +114,6 @@ tunnel = start_ssh_tunnel()
 pool = get_sqlalchemy_engine(tunnel)
 
 
-
-
-
-# Create a SQLAlchemy engine
-pool = create_engine(
-    "mysql+pymysql://",
-    creator=getconn,
-)
-
 # Insert a rating into the database
 def insert_rating(participant_id, question_id, prompt_id, gender_focused, rating_stereotypical_bias, rating_toxicity, rating_emotional_awareness, rating_sensitivity, rating_helpfulness):
     insert_query = """
