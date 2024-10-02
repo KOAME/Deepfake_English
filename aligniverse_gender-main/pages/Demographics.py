@@ -101,8 +101,8 @@ def create_engine_with_pool(tunnel):
             creator=lambda: get_connection(tunnel),
             pool_pre_ping=True,
             pool_recycle=3600,  # Recycles connections every hour
-            pool_size=1000,           # Set pool size to handle multiple connections
-            max_overflow=1000        # Allow 10 extra simultaneous connections if needed        
+            pool_size=3000,           # Set pool size to handle multiple connections
+            max_overflow=3000        # Allow 10 extra simultaneous connections if needed        
         )
         return pool
     except Exception as e:
