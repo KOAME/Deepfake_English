@@ -156,7 +156,7 @@ def get_connection(tunnel, retries=3, delay=5):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=20600,  # Increased 
+                connect_timeout=40600,  # Increased 
                 read_timeout=10600,     # Increased
                 write_timeout=10600,    # Increased 
                 max_allowed_packet=128 * 1024 * 1024  # 128MB
@@ -180,8 +180,8 @@ def get_sqlalchemy_engine(tunnel):
         creator=lambda: get_connection(tunnel),
         pool_pre_ping=True,    # Ensure connection is alive before executing a query
         pool_recycle=600,     # Recycle connections every 1 hour to prevent disconnection 
-        pool_size=1000,           # Set pool size to handle multiple connections
-        max_overflow=1000        # Allow 10 extra simultaneous connections if needed
+        pool_size=4000,           # Set pool size to handle multiple connections
+        max_overflow=3000        # Allow 10 extra simultaneous connections if needed
     )
     return pool
 
