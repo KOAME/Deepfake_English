@@ -34,15 +34,20 @@ def collapse_sidebar():
         [data-testid="stSidebar"] {
             display: none;
         }
-
-        /* Make the radio buttons and sliders larger */
-        .stRadio label, .stSlider label {
-            font-size: 18px;  /* Increase the font size of radio and slider labels */
+        
+        div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
+            font-size: 18px;
+        }
+        
+        /* Custom class for markdown labels */
+        .slider-label {
+            font-size: 18px !important;  /* Set desired slider label size */
         }
 
-        /* Make the info boxes smaller */
-        .stAlert {
-            font-size: 14px !important;  /* Decrease the font size in the info boxes */
+        /* Adjust the video size */
+        iframe, video {
+            width: 400px !important;
+            height: 225px !important;
         }
         </style>
         """, unsafe_allow_html=True)
@@ -148,8 +153,8 @@ if st.session_state.sidebar_state == 'collapsed':
 #         raise
 
 
-st.title("Welcome, Detective!")
-st.write("Listen to each clip and decide: real or fake")
+st.title("Welcome, Detective! 🎧🕵️‍")
+# st.write("Listen to each clip and decide: real or fake")
 ##start survey
 survey = ss.StreamlitSurvey("rate_survey")
 
@@ -222,6 +227,7 @@ survey = ss.StreamlitSurvey("rate_survey")
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
 
+slider_options = [None] + list(range(1, 11))
 with st.form(key = "form_rating", clear_on_submit= True):
     try:
         # with pool.connect() as db_conn:
@@ -239,47 +245,119 @@ with st.form(key = "form_rating", clear_on_submit= True):
 
         st.subheader("Audio Clip")
         st.write("Sample audio clip here.")
+        st.video('https://youtu.be/DHXYWT3vkbY')
         
         st.subheader("Listen to the audio clip.")
-    
-        q0 = st.radio("Is it Real or Fake?", options=["Real", "Fake"], horizontal=True, index = None, key="key_q0")
-    
-        q1 = st.slider("How confident are you that this audio clip is real/fake?", min_value=1, max_value=10, value=None, key="key_q1")
-        st.info('Scale: 1 - Not at all confident  to 10 - Extremely confident', icon="ℹ️")
-            
-        q2 = st.slider("How did the speed of the speech influence your overall impression of the message?", min_value=1, max_value=10, value=None, key="key_q2")
-        st.info('Scale: 1 - Very negatively to 10 - Very positively', icon="ℹ️")
-    
-        q3 = st.radio("Was the pace of the speech engaging or distracting?", options=["Engaging", "Distracting"], horizontal=True, index = None, key = "key_q3")
 
-        q4 = st.slider("How smoothly was the speech delivered, and how did this affect its clarity and persuasiveness?", min_value=1, max_value=10, value=None, key="key_q4")
-        st.info('Scale: 1 - Not clear at all to 10 - Extremely clear', icon="ℹ️")
-    
-        q5 = st.radio("Were there any moments that made you question the speaker's competence?", options=["yes", "no"], horizontal=True, index = None, key = "key_q5")
+        st.markdown('<div class="slider-label">🔍 Is it Real or Fake?</div>', unsafe_allow_html=True)
+        q0 = st.radio(
+            label="Is it Real or Fake?",
+            options=["Real", "Fake"],
+            horizontal=True,
+            index=None,
+            key="key_q0",
+            label_visibility="collapsed"
+        )
 
-        q6 = st.slider("How did changes in pitch affect your feelings about the speaker's sincerity?", min_value=1, max_value=10,
-                       value=None, key="key_q6")
-        st.info('Scale: 1 - Not sincere at all to 10 - Extremely sincere', icon="ℹ️")
+        st.markdown('<div class="slider-label">🎯 How confident are you that this audio clip is real/fake?</div>', unsafe_allow_html=True)
+        q1 = st.select_slider(
+            "Scale: 1 - Not at all confident  to 10 - Extremely confident (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q1",
+        )
 
-        q7 = st.slider("How effective were changes in loudness and emphasis in grabbing your attention?", min_value=1,
-                       max_value=10, value=None, key="key_q7")
-        st.info('Scale: 1 - Not at all to 10 - Completely', icon="ℹ️")
+        st.markdown('<div class="slider-label">🚀 How did the speed of the speech influence your overall impression of the message?</div>',
+                    unsafe_allow_html=True)
+        q2 = st.select_slider(
+            "Scale: 1 - Very negatively to 10 - Very positively (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q2"
+        )
 
-        q8 = st.slider("Did the variations in volume and stress add to the emotional impact of the speech?", min_value=1, max_value=10,
-                       value=None, key="key_q8")
-        st.info('Scale: 1 - Not at all to 10 - Very much', icon="ℹ️")
+        st.markdown('<div class="slider-label">🎶 Was the pace of the speech engaging or distracting?</div>',
+            unsafe_allow_html=True)
+        q3 = st.radio(
+            "Was the pace of the speech engaging or distracting?",
+            options=["Engaging", "Distracting"],
+            horizontal=True,
+            index=None,
+            key="key_q3",
+            label_visibility="collapsed"
+        )
 
-        q9 = st.slider("Did the intonation influence how honest the speaker seemed?", min_value=1,
-                       max_value=10, value=None, key="key_q9")
-        st.info('Scale: 1 - Not at all to 10 - Very much', icon="ℹ️")
+        st.markdown(
+            '<div class="slider-label">🗣️ How smoothly was the speech delivered, and how did this affect its clarity and persuasiveness?</div>',
+            unsafe_allow_html=True)
+        q4 = st.select_slider(
+            "Scale: 1 - Not clear at all to 10 - Extremely clear (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q4"
+        )
 
-        q10 = st.slider("How trustworthy did you find the speaker's delivery?", min_value=1, max_value=10,
-                       value=None, key="key_q10")
-        st.info('Scale: 1 - Not at all to 10 - Very much', icon="ℹ️")
+        st.markdown(
+            '<div class="slider-label">🧐 Were there any moments that made you question the speaker\'s competence?</div>',
+            unsafe_allow_html=True)
+        q5 = st.radio(
+            "Were there any moments that made you question the speaker's competence?",
+            options=["Yes", "No"],
+            horizontal=True,
+            index=None,
+            key="key_q5",
+            label_visibility="collapsed"
+        )
 
-        q11 = st.slider("How genuine did the speech feel to you?", min_value=1,
-                       max_value=10, value=None, key="key_q11")
-        st.info('Scale: 1 - Not genuine at all to 10 - Very genuine', icon="ℹ️")
+        st.markdown('<div class="slider-label">📈🎵 How did changes in pitch affect your feelings about the speaker\'s sincerity?</div>',
+                    unsafe_allow_html=True)
+        q6 = st.select_slider(
+            "Scale: 1 - Not sincere at all to 10 - Extremely sincere (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q6"
+        )
+
+        st.markdown('<div class="slider-label">📈🔊 How effective were changes in loudness and emphasis in grabbing your attention?</div>', unsafe_allow_html=True)
+        q7 = st.select_slider(
+            "Scale: 1 - Not at all to 10 - Completely (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q7"
+        )
+
+        st.markdown('<div class="slider-label">📈🎭 Did the variations in volume and stress add to the emotional impact of the speech?</div>', unsafe_allow_html=True)
+        q8 = st.select_slider(
+            "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q8"
+        )
+
+        st.markdown('<div class="slider-label">🤔 Did the intonation influence how honest the speaker seemed?</div>', unsafe_allow_html=True)
+        q9 = st.select_slider(
+            "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q9"
+        )
+
+        st.markdown('<div class="slider-label">🤝 How trustworthy did you find the speaker\'s delivery?</div>', unsafe_allow_html=True)
+        q10 = st.select_slider(
+            "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q10"
+        )
+
+        st.markdown('<div class="slider-label">🤗 How genuine did the speech feel to you?</div>',
+                    unsafe_allow_html=True)
+        q11 = st.select_slider(
+            "Scale: 1 - Not genuine at all to 10 - Very genuine (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q11"
+        )
 
         st.write("Please pick a single option for each criterion. Only complete submissions will be counted.")
         
@@ -287,7 +365,7 @@ with st.form(key = "form_rating", clear_on_submit= True):
         st.form_submit_button("Submit and View Next")
 
         # Cheng: this line is just for testing purposes
-        if all([q1]): st.session_state['count'] += 1
+        if all([q11]): st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
