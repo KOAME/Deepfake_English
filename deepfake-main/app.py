@@ -58,8 +58,8 @@ st.title("Welcome, Detective!")
 text1 = "We've got 10 sneaky audio snippets, some from real politicians and some crafted by masterful tricksters. Your mission? Separate fact from fiction!"
 st.write(text1)
 
-text2 = "**How to Play: Listen to each clip and decide: real or fake?"
-st.write(text2)
+text2 = "**How to Play**: Listen to each clip and decide: real or fake?"
+st.markdown(text2)
 
 text3 = "Time to uncover the truth! This challenge lasts 15 minutes."
 st.write(text3)

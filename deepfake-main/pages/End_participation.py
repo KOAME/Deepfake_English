@@ -30,7 +30,7 @@ if st.session_state.sidebar_state == 'collapsed':
     
 
 st.title("Thank you!")
-st.write("Thank you for being part of our study and helping us improve the alignment of Large Language Models.")
+st.write("Thank you for being part of our study.")
 st.balloons()
 
 st.write("By clicking the following button, you will be redirected back to Prolifics such that your submission can be counted.")
