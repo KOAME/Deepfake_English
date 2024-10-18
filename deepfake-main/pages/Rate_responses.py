@@ -243,12 +243,15 @@ with st.form(key = "form_rating", clear_on_submit= True):
         # st.subheader("Answer")
         # st.write(sample_row[7])
 
-        st.subheader("Audio Clip")
+        st.subheader("Listen to the audio clip")
         st.write("Sample audio clip here.")
         st.video('https://youtu.be/DHXYWT3vkbY')
-        
-        st.subheader("Listen to the audio clip.")
 
+        st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
+
+        st.divider()  # Add a divider line
+
+        st.markdown('<h4>Audio Authenticity</h4>', unsafe_allow_html=True)
         st.markdown('<div class="slider-label">🔍 Is it Real or Fake?</div>', unsafe_allow_html=True)
         q0 = st.radio(
             label="Is it Real or Fake?",
@@ -267,6 +270,8 @@ with st.form(key = "form_rating", clear_on_submit= True):
             key="key_q1",
         )
 
+        st.divider()  # Add a divider line
+        st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown('<div class="slider-label">🚀 How did the speed of the speech influence your overall impression of the message?</div>',
                     unsafe_allow_html=True)
         q2 = st.select_slider(
@@ -287,6 +292,7 @@ with st.form(key = "form_rating", clear_on_submit= True):
             label_visibility="collapsed"
         )
 
+        st.markdown('<h4>Speech Clarity and Persuasiveness</h4>', unsafe_allow_html=True)
         st.markdown(
             '<div class="slider-label">🗣️ How smoothly was the speech delivered, and how did this affect its clarity and persuasiveness?</div>',
             unsafe_allow_html=True)
@@ -309,6 +315,7 @@ with st.form(key = "form_rating", clear_on_submit= True):
             label_visibility="collapsed"
         )
 
+        st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
         st.markdown('<div class="slider-label">📈🎵 How did changes in pitch affect your feelings about the speaker\'s sincerity?</div>',
                     unsafe_allow_html=True)
         q6 = st.select_slider(
@@ -342,6 +349,8 @@ with st.form(key = "form_rating", clear_on_submit= True):
             key="key_q9"
         )
 
+        st.divider()  # Add a divider line
+        st.markdown('<h4>Speaker Trustworthiness and Genuineness</h4>', unsafe_allow_html=True)
         st.markdown('<div class="slider-label">🤝 How trustworthy did you find the speaker\'s delivery?</div>', unsafe_allow_html=True)
         q10 = st.select_slider(
             "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
@@ -359,10 +368,12 @@ with st.form(key = "form_rating", clear_on_submit= True):
             key="key_q11"
         )
 
-        st.write("Please pick a single option for each criterion. Only complete submissions will be counted.")
+        st.divider()  # Add a divider line
+
+        st.warning("Please pick a single option for each criterion. Only complete submissions will be counted.")
         
         # st.form_submit_button("Submit and View Next", on_click = save_to_db)
-        st.form_submit_button("Submit and View Next")
+        st.form_submit_button("**Submit and View Next**")
 
         # Cheng: this line is just for testing purposes
         if all([q11]): st.session_state['count'] += 1
@@ -381,4 +392,4 @@ else:
     st.write("You have rated 10 audios and you can finish your participation now.")
     # st.switch_page("pages/Demographics.py")
     # Cheng: this line is just for testing purposes
-    st.switch_page("pages/End_participation.py")
+    # st.switch_page("pages/End_participation.py")
