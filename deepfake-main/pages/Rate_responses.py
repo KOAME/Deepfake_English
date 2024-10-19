@@ -299,9 +299,11 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.divider()  # Add a divider line
+
         st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
-        st.markdown('<div class="slider-label">🚀 How did the speed of the speech influence your overall impression of the message?</div>',
-                    unsafe_allow_html=True)
+        st.markdown(
+            '<div class="slider-label">🚀 How did the speed of the speech influence your overall impression of the message?</div>',
+            unsafe_allow_html=True)
 
         q2 = st.select_slider(
             "Scale: 1 - Very negatively to 10 - Very positively (default value None means no rating)",
@@ -344,9 +346,12 @@ with st.form(key="form_rating", clear_on_submit=True):
             label_visibility="collapsed"
         )
 
+        st.divider()  # Add a divider line
+
         st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
-        st.markdown('<div class="slider-label">📈🎵 How did changes in pitch affect your feelings about the speaker\'s sincerity?</div>',
-                    unsafe_allow_html=True)
+        st.markdown(
+            '<div class="slider-label">📈🎵 How did changes in pitch affect your feelings about the speaker\'s sincerity?</div>',
+            unsafe_allow_html=True)
 
         q6 = st.select_slider(
             "Scale: 1 - Not sincere at all to 10 - Extremely sincere (default value None means no rating)",
@@ -385,8 +390,10 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.divider()  # Add a divider line
+
         st.markdown('<h4>Speaker Trustworthiness and Genuineness</h4>', unsafe_allow_html=True)
-        st.markdown('<div class="slider-label">🤝 How trustworthy did you find the speaker\'s delivery?</div>', unsafe_allow_html=True)
+        st.markdown('<div class="slider-label">🤝 How trustworthy did you find the speaker\'s delivery?</div>',
+                    unsafe_allow_html=True)
 
         q10 = st.select_slider(
             "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
@@ -408,7 +415,8 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.warning("Please pick a single option for each criterion. Only complete submissions will be counted.")
 
-        st.form_submit_button("**Submit and View Next**", on_click = save_to_db)
+        # TODO not let if any of the questions unanswered
+        st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
         # Cheng: this line is just for testing purposes
         if all([q11]): st.session_state['count'] += 1
