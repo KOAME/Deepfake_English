@@ -50,15 +50,15 @@ if st.session_state.sidebar_state == 'collapsed':
 ##start survey
 survey = ss.StreamlitSurvey("Survey Deepfake")
 
-st.title("Welcome, Detective!")
+st.title("Welcome, Audio Explorer! 🎧‍")
 
-text1 = "We've got 10 sneaky audio snippets, some from real politicians and some crafted by masterful tricksters. Your mission? Separate fact from fiction!"
-st.write(text1)
+# text1 = "We've got 10 sneaky audio snippets, some from real politicians and some crafted by masterful tricksters. Your mission? Separate fact from fiction!"
+# st.write(text1)
 
-text2 = "**How to Play**: Listen to each clip and decide: real or fake?"
+text2 = "**How to Play**: Listen to each clip and share your thoughts."
 st.markdown(text2)
 
-text3 = "Time to uncover the truth! This challenge lasts 15 minutes."
+text3 = "Enjoy the journey! This challenge lasts 15 minutes."
 st.write(text3)
 
 st.divider()
@@ -68,7 +68,7 @@ st.write("We are committed to safeguarding your privacy. Please review the study
 if st.button("Review general information and consent form"):
     # st.switch_page("pages/Study_terms.py")
 
-    content = """**Information on data protection**
+    content = """Information on data protection
     In this study, Orestis Papakyriakopoulos is responsible for data processing. The legal basis for processing is personal consent (Art. 6 para. 1 lit. a, Art. 9 para. 2 lit. a GDPR). The data will be treated confidentially at all times. The data will be collected solely for the purpose of the study described above and will only be used within this framework. We do not collect personal data. We do collect additional sensitive personal data. These include age, gender identification, country of residence, ancestry, and ethnic affiliation. All data will be collected anonymously. This means that no one, including the study leaders, can determine to whom the data belongs. 
     The data will be stored on a server of TUM. We do not transfer your data to other institutions in Germany, the EU, or to a third country outside the EU, nor to an international organization. The research data may be used for scientific publications and/or made available to other researchers in scientific databases indefinitely. The data will be used in a form that does not allow any conclusions to be drawn about the individual study participants (anonymized). 
     Consent to the processing of your data is voluntary. You can withdraw your consent at any time without providing reasons and without any disadvantages for you. After withdrawal, no further data will be collected. The lawfulness of the processing carried out based on the consent until the withdrawal remains unaffected. You have the right to obtain information about the data, including a free copy. Furthermore, you can request the correction, blocking, restriction of processing, or deletion of the data, and, if applicable, the transfer of the data. In these cases, please contact:  Prof. Dr. Orestis Papakyriakopoulos, orestis.p(at)tum.de

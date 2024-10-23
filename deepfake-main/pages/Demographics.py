@@ -61,7 +61,7 @@ occupation_list = [
     "Manufacturing & Production",
     "Freelance & Self-employed",
     "Student",
-    "Unemployed"
+    "Unemployed",
     "Other"
 ]
 

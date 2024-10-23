@@ -163,8 +163,8 @@ def insert_rating(participant_id, audio_clip_id, realness, confidence, speech_sp
         raise
 
 
-st.title("Welcome, Detective! 🎧🕵️‍")
-st.write("Listen to each clip and decide: real or fake")
+st.title("Welcome, Audio Explorer! 🎧‍")
+st.write("Listen to each clip and share your thoughts")
 
 # Start Survey
 survey = ss.StreamlitSurvey("rate_survey")
@@ -279,34 +279,10 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
 
         st.divider()  # Add a divider line
-
-        st.markdown('<h4>Audio Authenticity</h4>', unsafe_allow_html=True)
-        st.markdown('<div class="slider-label">🔍 Is it Real or Fake?</div>', unsafe_allow_html=True)
-        q0 = st.radio(
-            label="Is it Real or Fake?",
-            options=["Real", "Fake"],
-            horizontal=True,
-            index=None,
-            key="key_q0",
-            label_visibility="collapsed"
-        )
-
-        st.markdown('<div class="slider-label">🎯 How confident are you that this audio clip is real/fake?</div>',
-                    unsafe_allow_html=True)
-        q1 = st.select_slider(
-            "Scale: 1 - Not at all confident  to 10 - Extremely confident (default value None means no rating)",
-            options=slider_options,
-            value=None,
-            key="key_q1",
-        )
-
-        st.divider()  # Add a divider line
-
         st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
             '<div class="slider-label">🚀 How did the speed of the speech influence your overall impression of the message?</div>',
             unsafe_allow_html=True)
-
         q2 = st.select_slider(
             "Scale: 1 - Very negatively to 10 - Very positively (default value None means no rating)",
             options=slider_options,
@@ -349,7 +325,6 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.divider()  # Add a divider line
-
         st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
         st.markdown(
             '<div class="slider-label">📈🎵 How did changes in pitch affect your feelings about the speaker\'s sincerity?</div>',
@@ -392,7 +367,6 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.divider()  # Add a divider line
-
         st.markdown('<h4>Speaker Trustworthiness and Genuineness</h4>', unsafe_allow_html=True)
         st.markdown('<div class="slider-label">🤝 How trustworthy did you find the speaker\'s delivery?</div>',
                     unsafe_allow_html=True)
@@ -411,6 +385,27 @@ with st.form(key="form_rating", clear_on_submit=True):
             options=slider_options,
             value=None,
             key="key_q11"
+        )
+
+        st.divider()  # Add a divider line
+        st.markdown('<h4>Audio Authenticity</h4>', unsafe_allow_html=True)
+        st.markdown('<div class="slider-label">🔍 Is it Real or Fake?</div>', unsafe_allow_html=True)
+        q0 = st.radio(
+            label="Is it Real or Fake?",
+            options=["Real", "Fake"],
+            horizontal=True,
+            index=None,
+            key="key_q0",
+            label_visibility="collapsed"
+        )
+
+        st.markdown('<div class="slider-label">🎯 How confident are you that this audio clip is real/fake?</div>',
+                    unsafe_allow_html=True)
+        q1 = st.select_slider(
+            "Scale: 1 - Not at all confident  to 10 - Extremely confident (default value None means no rating)",
+            options=slider_options,
+            value=None,
+            key="key_q1",
         )
 
         st.divider()  # Add a divider line
