@@ -415,11 +415,10 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.warning("Please pick a single option for each criterion. Only complete submissions will be counted.")
 
-        # TODO not let if any of the questions unanswered
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
-        # Cheng: this line is just for testing purposes
-        if all([q11]): st.session_state['count'] += 1
+        if all([q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11]):
+            st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
