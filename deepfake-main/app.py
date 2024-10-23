@@ -68,16 +68,29 @@ st.write("We are committed to safeguarding your privacy. Please review the study
 if st.button("Review general information and consent form"):
     # st.switch_page("pages/Study_terms.py")
 
-    content = """Information on data protection
-    In this study, Orestis Papakyriakopoulos is responsible for data processing. The legal basis for processing is personal consent (Art. 6 para. 1 lit. a, Art. 9 para. 2 lit. a GDPR). The data will be treated confidentially at all times. The data will be collected solely for the purpose of the study described above and will only be used within this framework. We do not collect personal data. We do collect additional sensitive personal data. These include age, gender identification, country of residence, ancestry, and ethnic affiliation. All data will be collected anonymously. This means that no one, including the study leaders, can determine to whom the data belongs. 
-    The data will be stored on a server of TUM. We do not transfer your data to other institutions in Germany, the EU, or to a third country outside the EU, nor to an international organization. The research data may be used for scientific publications and/or made available to other researchers in scientific databases indefinitely. The data will be used in a form that does not allow any conclusions to be drawn about the individual study participants (anonymized). 
-    Consent to the processing of your data is voluntary. You can withdraw your consent at any time without providing reasons and without any disadvantages for you. After withdrawal, no further data will be collected. The lawfulness of the processing carried out based on the consent until the withdrawal remains unaffected. You have the right to obtain information about the data, including a free copy. Furthermore, you can request the correction, blocking, restriction of processing, or deletion of the data, and, if applicable, the transfer of the data. In these cases, please contact:  Prof. Dr. Orestis Papakyriakopoulos, orestis.p(at)tum.de
-    However, after anonymization, the data can no longer be attributed to an individual. Once anonymization has taken place, it is no longer possible to access, block, or delete the data. For questions regarding data processing and compliance with data protection regulations, the following data protection officer is available:
-    Official Data Protection Officer of the Technical University of Munich
-    Postal address: Arcisstr. 21, 80333 München
-    Phone: 089/289-17052
-    E-Mail: beauftragter@datenschutz.tum.de
-    You also have the right to file a complaint with any data protection supervisory authority. A list of supervisory authorities in Germany can be found at: https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html
+    content = """GENERAL INFORMATION:
+    You are invited to participate in a research study aimed at developing tools for detecting and labelling audio clips. Your participation will involve playing a game where you rate audio segments and assess their persuasiveness.
+
+    RISKS AND BENEFITS:
+    - Risks: There are no significant risks associated with participating in this study.
+    - Benefits: Your participation will contribute to scientific knowledge and the development of tools to detect and mitigate the impact of manipulated audio in various contexts.
+
+    PROCEDURE:
+    You will participate in a game where you listen to various audio clips and provide ratings on their persuasiveness and authenticity. The game is designed to be engaging and will take approximately 10 minutes to complete.
+
+    CONFIDENTIALITY:
+    Your responses will be kept confidential and anonymised. All data will be securely stored, and individual responses will not be identifiable in any reports or publications resulting from this study.
+
+    VOLUNTARY PARTICIPATION:
+    Participation is voluntary. You have the right to refuse or withdraw from the study at any time without penalty.
+
+    DATA PROTECTION:
+    All collected data will be anonymised and stored securely in compliance with GDPR regulations. Personal identifiers will be removed, and only aggregated data will be used for analysis and reporting.
+
+    CONTACT INFORMATION:
+    If you have any questions or concerns about this study, please contact **orestis.p@tum.de**.
+
+    By proceeding with this study, you acknowledge that you have read and understood this consent form and agree to participate voluntarily.
     """
     stx.scrollableTextbox(content, height=150)
 
