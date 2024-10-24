@@ -189,7 +189,7 @@ def insert_participant_and_get_id(pool):
                 "listening_habits, tech_savy, ai_experience, media_consumption) VALUES (NULL, NULL, NULL, NULL, NULL, "
                 "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)")
             result = connection.execute(insert_query)
-            connection.commit()
+            # connection.commit()
             last_id_query = text("SELECT LAST_INSERT_ID()")
             last_id_result = connection.execute(last_id_query)
             last_id = last_id_result.scalar()
@@ -212,7 +212,7 @@ def insert_prolific_id(pool, participant_id, prolific_id):
 
         with pool.connect() as db_conn:
             db_conn.execute(insert_query, parameters)
-            db_conn.commit()
+            # db_conn.commit()
 
     except SQLAlchemyError as e:
         st.error(f"Failed to insert Prolific ID: {e}")
