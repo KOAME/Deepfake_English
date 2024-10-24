@@ -156,7 +156,7 @@ def insert_rating(participant_id, audio_clip_id, realness, confidence, speech_sp
                              'intonation_honesty_influence': intonation_honesty_influence,
                              'speaker_trustworthiness': speaker_trustworthiness,
                              'speech_genuineness': speech_genuineness})
-            db_conn.commit()
+            # db_conn.commit()
 
     except SQLAlchemyError as e:
         st.error(f"Database insertion failed: {e}")
@@ -180,7 +180,7 @@ def insert_participant_and_get_id():
                 "listening_habits, tech_savy, ai_experience, media_consumption) VALUES (NULL, NULL, NULL, NULL, NULL, "
                 "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)")
             connection.execute(insert_query)
-            connection.commit()
+            # connection.commit()
             last_id_query = text("SELECT LAST_INSERT_ID()")
             last_id_result = connection.execute(last_id_query)
             return last_id_result.scalar()
@@ -195,7 +195,7 @@ def mark_as_rated(audio_clip_id):
         with pool.connect() as db_conn:
             query = text("UPDATE audio_clips SET rated = 1 WHERE audio_clip_id = :audio_clip_id")
             db_conn.execute(query, {'audio_clip_id': audio_clip_id})
-            db_conn.commit()
+            # db_conn.commit()
     except SQLAlchemyError as e:
         st.error(f"Failed to mark prompt as rated: {e}")
         raise

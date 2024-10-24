@@ -306,7 +306,7 @@ def update_participant(participant_id, age_group, gender, education, occupation,
                 'media_consumption': media_consumption
             })
 
-            connection.commit()
+            # connection.commit()
 
     except SQLAlchemyError as e:
         st.error(f"Database update failed: {e}")
