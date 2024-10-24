@@ -189,7 +189,7 @@ def insert_participant_and_get_id(pool):
                 "listening_habits, tech_savy, ai_experience, media_consumption) VALUES (NULL, NULL, NULL, NULL, NULL, "
                 "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)")
             result = connection.execute(insert_query)
-            connection.commit()
+            # connection.commit()
             last_id_query = text("SELECT LAST_INSERT_ID()")
             last_id_result = connection.execute(last_id_query)
             last_id = last_id_result.scalar()
