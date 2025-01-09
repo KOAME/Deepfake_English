@@ -310,8 +310,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_q4"
         )
 
-       st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',
-                    unsafe_allow_html=True)
+        st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',unsafe_allow_html=True)
         q3 = st.radio(
             "The speech made you doubt the speaker’s competence?",
             options=["Yes", "No"],
