@@ -158,7 +158,7 @@ def insert_rating(participant_id, audio_clip_id, realness, confidence, speech_sp
     try:
         with pool.connect() as db_conn:
             db_conn.execute(insert_query,
-                            {'participant_id': participant_id, 'audio_clip_id': audio_clip_id, 'realness': realness,
+                            {'participant_id': participant_id, 'audio_clip_id': audio_clip_id, 'clear': realness,
                              'confidence': confidence, 'speech_speed_influence': speech_speed_influence,
                              'speech_pace_engagement': speech_pace_engagement,
                              'speech_smoothness': speech_smoothness,
@@ -223,33 +223,32 @@ def save_to_db():
         participant_id = st.session_state['participant_id']
 
     # Map the selection to 1 if "Real" is selected, otherwise 0
-    res_q0 = 1 if st.session_state.key_q0 == "Real" else 0
+    res_q10 = 1 if st.session_state.key_q10 == "Real" else 0
 
     # Map the selection to 1 if "Engaging" is selected, otherwise 0
-    res_q3 = 1 if st.session_state.key_q3 == "Engaging" else 0
+    res_q2 = 1 if st.session_state.key_q2 == "Engaging" else 0
 
     # Map the selection to 1 if Speaker's competence doubt is selected, otherwise 0
-    res_q5 = 1 if st.session_state.key_q5 == "Yes" else 0
+    res_q4 = 1 if st.session_state.key_q4 == "Yes" else 0
 
     res_q1 = st.session_state.key_q1
-    res_q2 = st.session_state.key_q2
-    res_q4 = st.session_state.key_q4
+    res_q3 = st.session_state.key_q1
+    res_q5 = st.session_state.key_q1
     res_q6 = st.session_state.key_q6
     res_q7 = st.session_state.key_q7
     res_q8 = st.session_state.key_q8
     res_q9 = st.session_state.key_q9
-    res_q10 = st.session_state.key_q10
     res_q11 = st.session_state.key_q11
 
-    print("Results", [res_q0, res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11])
+    print("Results", [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11])
 
-    if all([res_q0, res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11]):
+    if all([res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11]):
         st.session_state['count'] += 1
 
     insert_rating(
         participant_id,
         sample_row[0],  # audio_clip_id
-        res_q0,
+        
         res_q1,
         res_q2,
         res_q3,
