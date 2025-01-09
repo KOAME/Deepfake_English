@@ -16,7 +16,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 # Set the page config at the top of the file
 st.set_page_config(
-    page_title="Deepfake",
+    page_title="Audio Persuasiveness",
     page_icon="🔍",
     initial_sidebar_state="collapsed"  # Collapsed sidebar by default
 )
@@ -48,17 +48,17 @@ if st.session_state.sidebar_state == 'collapsed':
     collapse_sidebar()
 
 ##start survey
-survey = ss.StreamlitSurvey("Survey Deepfake")
+survey = ss.StreamlitSurvey("Survey Audio Persuasiveness")
 
 st.title("Welcome, Audio Explorer! 🎧‍")
 
 # text1 = "We've got 10 sneaky audio snippets, some from real politicians and some crafted by masterful tricksters. Your mission? Separate fact from fiction!"
 # st.write(text1)
 
-text2 = "**How to Play**: Listen to each clip and share your thoughts."
+text2 = "**How to Play**: Listen to each audio clip and share your thoughts."
 st.markdown(text2)
 
-text3 = "Enjoy the journey! This challenge lasts 15 minutes."
+text3 = "Enjoy the journey! This challenge lasts 10 minutes."
 st.write(text3)
 
 st.divider()
