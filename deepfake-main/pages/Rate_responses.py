@@ -177,7 +177,7 @@ def insert_rating(participant_id, audio_clip_id, realness, confidence, speech_sp
 
 
 st.title("Welcome, Audio Explorer! 🎧‍")
-st.write("Listen to each clip and share your thoughts")
+#st.write("Listen to each clip and share your thoughts")
 
 # Start Survey
 survey = ss.StreamlitSurvey("rate_survey")
