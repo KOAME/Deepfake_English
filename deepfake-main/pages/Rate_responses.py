@@ -289,8 +289,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_q2"
         )
 
-       st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>',
-                    unsafe_allow_html=True)
+        st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>', unsafe_allow_html=True)
         q3 = st.radio(
             "Was the pace of the speech engaging or distracting?",
             options=["Engaging", "Distracting"],
