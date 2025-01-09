@@ -41,8 +41,8 @@ def collapse_sidebar():
             /* Center the main content with padding and border */
     div[data-testid="stMainBlockContainer"] {
         margin: 0 auto;            /* Center the container horizontally */
-        padding: 40px;             /* Add padding inside the container */
-        max-width: 1200px;          /* Set a maximum width for the content */
+        padding: 400px;             /* Add padding inside the container */
+        max-width: 800px;          /* Set a maximum width for the content */
         border: 4px solid #4CAF50; /* Add a thick border around the container */
         border-radius: 15px;       /* Round the corners of the container */
         box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
