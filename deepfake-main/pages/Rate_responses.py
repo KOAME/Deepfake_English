@@ -38,11 +38,12 @@ def collapse_sidebar():
             font-size: 18px !important;  /* Set desired slider label size */
         }
 
-        /* Adjust the video size */
-        iframe, video {
-            width: 800px !important;
-            height: 225px !important;
-        }
+    /* Adjust the audio player and center it */
+    audio {
+        display: block;           /* Make it a block-level element */
+        margin: 20px auto;        /* Center the audio player horizontally */
+        width: 400px !important;  /* Set the width of the audio player */
+    }
         </style>
         """, unsafe_allow_html=True)
 
