@@ -271,7 +271,7 @@ def save_to_db():
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
 
-slider_options = [None] + list(range(1, 5))
+slider_options = [None] + list(range(1, 6))
 with st.form(key="form_rating", clear_on_submit=True):
     try:
         with pool.connect() as db_conn:
@@ -416,7 +416,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
-        if all([q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11]):
+        if all([ q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11,q12]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
@@ -424,11 +424,11 @@ with st.form(key="form_rating", clear_on_submit=True):
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
 # test
-# if st.session_state['count'] < 10:
+# if st.session_state['count'] < 5:
 if st.session_state['count'] < 1:
-    st.write("Please rate 10 audios to finish the survey.")
+    st.write("Please rate 5 audios to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 
 else:
-    st.write("You have rated 10 audios and you can finish your participation now.")
+    st.write("You have rated 5 audios and you can finish your participation now.")
     st.switch_page("pages/Demographics.py")
