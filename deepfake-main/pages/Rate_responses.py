@@ -282,20 +282,22 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">How clear and persuasive was the speech? </div>',
             unsafe_allow_html=True)
-        q2 = st.select_slider(
+        q1 = st.select_slider(
             "1 (Not clear at all) to 5 (Extremely clear) (default value None means no rating)",
              options=slider_options,
             value=None,
-            key="key_q2"
+            key="key_q1"
         )
+        #st.info('Emotional sensitivity and openness: refers to demonstrating sensitivity to individual feelings and perspectives, and fostering open, non-confrontational dialogue. [Source](https://arxiv.org/pdf/2402.11886)', icon="ℹ️")
+
 
         st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>', unsafe_allow_html=True)
-        q3 = st.radio(
+        q2 = st.radio(
             "Was the pace of the speech engaging or distracting?",
             options=["Engaging", "Distracting"],
             horizontal=True,
             index=None,
-            key="key_q3",
+            key="key_q2",
             label_visibility="collapsed"
         )
         
@@ -303,120 +305,97 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">The speaker seemed trustworthy?</div>',
             unsafe_allow_html=True)
-        q4 = st.select_slider(
+        q3 = st.select_slider(
             "1 (Not at all) to 5 (Very much) (default value None means no rating)",
             options=slider_options,
             value=None,
-            key="key_q4"
+            key="key_q3"
         )
 
         st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',unsafe_allow_html=True)
-        q3 = st.radio(
+        q4 = st.radio(
             "The speech made you doubt the speaker’s competence?",
             options=["Yes", "No"],
             horizontal=True,
             index=None,
-            key="key_q3",
+            key="key_q4",
             label_visibility="collapsed"
         )
 
-
-
         st.markdown(
-            '<div class="slider-label">🧐 Were there any moments that made you question the speaker\'s competence?</div>',
+            '<div class="slider-label">The speech speed affected my understanding</div>',
             unsafe_allow_html=True)
-        q5 = st.radio(
-            "Were there any moments that made you question the speaker's competence?",
-            options=["Yes", "No"],
-            horizontal=True,
-            index=None,
+        q5 = st.select_slider(
+          "1 (Very negatively) to 5 (Very positively) (default value None means no rating)",
+            options=slider_options,
+            value=None,
             key="key_q5",
             label_visibility="collapsed"
         )
 
-        st.divider()  # Add a divider line
-        st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="slider-label">📈🎵 How did changes in pitch affect your feelings about the speaker\'s sincerity?</div>',
-            unsafe_allow_html=True)
 
+        st.markdown(
+            '<div class="slider-label">Variations in pitch affected the speaker’s sincerity?</div>',
+            unsafe_allow_html=True)
         q6 = st.select_slider(
-            "Scale: 1 - Not sincere at all to 10 - Extremely sincere (default value None means no rating)",
+            "1 (Not at all) to 5 (Very much) (default value None means no rating)",
             options=slider_options,
             value=None,
-            key="key_q6"
+            key="key_q6",
+            label_visibility="collapsed"
         )
 
+     #   st.divider()  # Add a divider line
+      #  st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="slider-label">📈🔊 How effective were changes in loudness and emphasis in grabbing your attention?</div>',
+            '<div class="slider-label"> Changes in loudness and emphasis grabbed my attention.</div>',
             unsafe_allow_html=True)
+
         q7 = st.select_slider(
-            "Scale: 1 - Not at all to 10 - Completely (default value None means no rating)",
+            "1 (Not at all) to 5 (Completely) (default value None means no rating)",
             options=slider_options,
             value=None,
             key="key_q7"
         )
 
         st.markdown(
-            '<div class="slider-label">📈🎭 Did the variations in volume and stress add to the emotional impact of the speech?</div>',
+            '<div class="slider-label">The speech felt genuine.</div>',
             unsafe_allow_html=True)
         q8 = st.select_slider(
-            "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
+            "1 (Not at all) to 5 (Completely) (default value None means no rating)",
             options=slider_options,
             value=None,
             key="key_q8"
         )
 
-        st.markdown('<div class="slider-label">🤔 Did the intonation influence how honest the speaker seemed?</div>',
-                    unsafe_allow_html=True)
-        q9 = st.select_slider(
-            "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
-            options=slider_options,
-            value=None,
-            key="key_q9"
-        )
-
-        st.divider()  # Add a divider line
-        st.markdown('<h4>Speaker Trustworthiness and Genuineness</h4>', unsafe_allow_html=True)
-        st.markdown('<div class="slider-label">🤝 How trustworthy did you find the speaker\'s delivery?</div>',
-                    unsafe_allow_html=True)
-
-        q10 = st.select_slider(
-            "Scale: 1 - Not at all to 10 - Very much (default value None means no rating)",
-            options=slider_options,
-            value=None,
-            key="key_q10"
-        )
-
-        st.markdown('<div class="slider-label">🤗 How genuine did the speech feel to you?</div>',
-                    unsafe_allow_html=True)
-        q11 = st.select_slider(
-            "Scale: 1 - Not genuine at all to 10 - Very genuine (default value None means no rating)",
-            options=slider_options,
-            value=None,
-            key="key_q11"
-        )
-
-        st.divider()  # Add a divider line
-        st.markdown('<h4>Audio Authenticity</h4>', unsafe_allow_html=True)
-        st.markdown('<div class="slider-label">🔍 Is it Real or Fake?</div>', unsafe_allow_html=True)
-        q0 = st.radio(
-            label="Is it Real or Fake?",
+        st.markdown(
+            '<div class="slider-label">Do you think the speech is real or fake?</div>',
+            unsafe_allow_html=True)
+        q9 = st.radio(
+            "Do you think the speech is real or fake?",
             options=["Real", "Fake"],
             horizontal=True,
             index=None,
-            key="key_q0",
+            key="key_q9",
             label_visibility="collapsed"
         )
 
-        st.markdown('<div class="slider-label">🎯 How confident are you that this audio clip is real/fake?</div>',
+        st.markdown('<div class="slider-label">How confident are you that this audio clip is real/fake?</div>',
                     unsafe_allow_html=True)
-        q1 = st.select_slider(
-            "Scale: 1 - Not at all confident  to 10 - Extremely confident (default value None means no rating)",
+        q11 = st.select_slider(
+            "1 (Not at all) to 5 (Completely) (default value None means no rating)",
             options=slider_options,
             value=None,
-            key="key_q1",
+            key="key_q11",
         )
+
+        st.markdown("<h4>Optional Open-Ended Question</h4>", unsafe_allow_html=True)
+        q12 =   st.text_area(
+        "Do you think this audio was generated by AI? If so, why?",
+        help="Share your thoughts about whether this audio might be AI-generated and provide reasons for your opinion.",
+        key="key_q12"
+        )
+
 
         st.divider()  # Add a divider line
 
