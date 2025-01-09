@@ -54,7 +54,7 @@ def collapse_sidebar():
     audio {
         display: block;           /* Make it a block-level element */
         margin: 20px auto;        /* Center the audio player horizontally */
-        width: 400px !important;  /* Set the width of the audio player */
+        width: 200px !important;  /* Set the width of the audio player */
     }
         </style>
         """, unsafe_allow_html=True)
