@@ -43,7 +43,7 @@ def collapse_sidebar():
         margin: 0 auto;             /* Center the content horizontally */
         padding: 20px;             /* Add space inside the container */
         max-width: 800px;          /* Set maximum width for the content */
-        border: 2px solid #E0E0E0; /* Add a light border around the content */
+        border: 2px solid red ; /* Add a light #E0E0E0 border around the content */
         border-radius: 10px;       /* Round the corners of the border */
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
         background-color: #F9F9F9; /* Set a light background color */
