@@ -40,7 +40,7 @@ def collapse_sidebar():
 
         /* Adjust the video size */
         iframe, video {
-            width: 400px !important;
+            width: 800px !important;
             height: 225px !important;
         }
         </style>
