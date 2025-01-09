@@ -30,7 +30,7 @@ def collapse_sidebar():
         }
         
         div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
-            font-size: 18px;
+            font-size: 198px;
         }
         
         /* Custom class for markdown labels */
