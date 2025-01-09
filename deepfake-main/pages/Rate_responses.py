@@ -258,7 +258,7 @@ def save_to_db():
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
 
-slider_options = [None] + list(range(1, 11))
+slider_options = [None] + list(range(1, 5))
 with st.form(key="form_rating", clear_on_submit=True):
     try:
         with pool.connect() as db_conn:
@@ -273,24 +273,23 @@ with st.form(key="form_rating", clear_on_submit=True):
         url = sample_row[1]
 
         st.subheader("Listen to the audio clip")
-        st.write("Sample audio clip here.")
         st.video(url)
 
         st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
 
         st.divider()  # Add a divider line
-        st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
+      #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="slider-label">🚀 How did the speed of the speech influence your overall impression of the message?</div>',
+            '<div class="slider-label">How clear and persuasive was the speech? </div>',
             unsafe_allow_html=True)
         q2 = st.select_slider(
-            "Scale: 1 - Very negatively to 10 - Very positively (default value None means no rating)",
-            options=slider_options,
+            "1 (Not clear at all) to 5 (Extremely clear) (default value None means no rating)",
+             options=slider_options,
             value=None,
             key="key_q2"
         )
 
-        st.markdown('<div class="slider-label">🎶 Was the pace of the speech engaging or distracting?</div>',
+       st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>',
                     unsafe_allow_html=True)
         q3 = st.radio(
             "Was the pace of the speech engaging or distracting?",
@@ -300,17 +299,30 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_q3",
             label_visibility="collapsed"
         )
-
-        st.markdown('<h4>Speech Clarity and Persuasiveness</h4>', unsafe_allow_html=True)
+        
+       # st.markdown('<h4>Speech Clarity and Persuasiveness</h4>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="slider-label">🗣️ How smoothly was the speech delivered, and how did this affect its clarity and persuasiveness?</div>',
+            '<div class="slider-label">The speaker seemed trustworthy?</div>',
             unsafe_allow_html=True)
         q4 = st.select_slider(
-            "Scale: 1 - Not clear at all to 10 - Extremely clear (default value None means no rating)",
+            "1 (Not at all) to 5 (Very much) (default value None means no rating)",
             options=slider_options,
             value=None,
             key="key_q4"
         )
+
+       st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',
+                    unsafe_allow_html=True)
+        q3 = st.radio(
+            "The speech made you doubt the speaker’s competence?",
+            options=["Yes", "No"],
+            horizontal=True,
+            index=None,
+            key="key_q3",
+            label_visibility="collapsed"
+        )
+
+
 
         st.markdown(
             '<div class="slider-label">🧐 Were there any moments that made you question the speaker\'s competence?</div>',
