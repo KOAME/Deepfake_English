@@ -140,40 +140,46 @@ pool = get_sqlalchemy_engine(tunnel)
 
 
 # Insert a rating into the database
-def insert_rating(participant_id, audio_clip_id, realness, confidence, speech_speed_influence, speech_pace_engagement,
-                  speech_smoothness, speaker_competence_doubt, pitch_sincerity_effect,
-                  loudness_attention_effectiveness,
-                  volume_emotional_impact,
-                  intonation_honesty_influence,
-                  speaker_trustworthiness,
-                  speech_genuineness):
-    insert_query = text("""INSERT INTO ratings (participant_id, audio_clip_id, realness, confidence, 
-    speech_speed_influence, speech_pace_engagement, speech_smoothness, speaker_competence_doubt, 
-    pitch_sincerity_effect, loudness_attention_effectiveness, volume_emotional_impact, intonation_honesty_influence, 
-    speaker_trustworthiness, speech_genuineness) VALUES (:participant_id, :audio_clip_id, :realness, :confidence, 
-    :speech_speed_influence, :speech_pace_engagement, :speech_smoothness, :speaker_competence_doubt, 
-    :pitch_sincerity_effect, :loudness_attention_effectiveness, :volume_emotional_impact, 
-    :intonation_honesty_influence, :speaker_trustworthiness, :speech_genuineness)""")
-
+def insert_rating(participant_id, audio_clip_id, speech_clarity_persuasiveness, speech_pace_engagement,
+                  speaker_trustworthiness, speaker_competence_doubt, speech_speed_influence,
+                  pitch_sincerity_effect, loudness_attention_effectiveness, speech_genuineness,
+                  realness_judgment, confidence_level, open_ended_response):
+    insert_query = text("""
+    INSERT INTO new_ratings (
+        participant_id, audio_clip_id, speech_clarity_persuasiveness, speech_pace_engagement,
+        speaker_trustworthiness, speaker_competence_doubt, speech_speed_influence,
+        pitch_sincerity_effect, loudness_attention_effectiveness, speech_genuineness,
+        realness_judgment, confidence_level, open_ended_response
+    ) VALUES (
+        :participant_id, :audio_clip_id, :speech_clarity_persuasiveness, :speech_pace_engagement,
+        :speaker_trustworthiness, :speaker_competence_doubt, :speech_speed_influence,
+        :pitch_sincerity_effect, :loudness_attention_effectiveness, :speech_genuineness,
+        :realness_judgment, :confidence_level, :open_ended_response
+    )
+    """)
+    
     try:
         with pool.connect() as db_conn:
-            db_conn.execute(insert_query,
-                            {'participant_id': participant_id, 'audio_clip_id': audio_clip_id, 'clear': realness,
-                             'confidence': confidence, 'speech_speed_influence': speech_speed_influence,
-                             'speech_pace_engagement': speech_pace_engagement,
-                             'speech_smoothness': speech_smoothness,
-                             'speaker_competence_doubt': speaker_competence_doubt,
-                             'pitch_sincerity_effect': pitch_sincerity_effect,
-                             'loudness_attention_effectiveness': loudness_attention_effectiveness,
-                             'volume_emotional_impact': volume_emotional_impact,
-                             'intonation_honesty_influence': intonation_honesty_influence,
-                             'speaker_trustworthiness': speaker_trustworthiness,
-                             'speech_genuineness': speech_genuineness})
-            # db_conn.commit()
-
+            db_conn.execute(insert_query, {
+                'participant_id': participant_id,
+                'audio_clip_id': audio_clip_id,
+                'speech_clarity_persuasiveness': speech_clarity_persuasiveness,
+                'speech_pace_engagement': speech_pace_engagement,
+                'speaker_trustworthiness': speaker_trustworthiness,
+                'speaker_competence_doubt': speaker_competence_doubt,
+                'speech_speed_influence': speech_speed_influence,
+                'pitch_sincerity_effect': pitch_sincerity_effect,
+                'loudness_attention_effectiveness': loudness_attention_effectiveness,
+                'speech_genuineness': speech_genuineness,
+                'realness_judgment': realness_judgment,
+                'confidence_level': confidence_level,
+                'open_ended_response': open_ended_response
+            })
     except SQLAlchemyError as e:
         st.error(f"Database insertion failed: {e}")
         raise
+
+
 
 
 st.title("Welcome, Audio Explorer! 🎧‍")
@@ -214,7 +220,6 @@ def mark_as_rated(audio_clip_id):
         raise
 
 
-# Save data to the database
 def save_to_db():
     if 'participant_id' not in st.session_state:
         participant_id = insert_participant_and_get_id()
@@ -222,22 +227,19 @@ def save_to_db():
     else:
         participant_id = st.session_state['participant_id']
 
-    # Map the selection to 1 if "Real" is selected, otherwise 0
-    res_q10 = 1 if st.session_state.key_q10 == "Real" else 0
+    # Map selections to corresponding values
+    res_q2 = "Engaging" if st.session_state.key_q2 == "Engaging" else "Distracting"
+    res_q4 = "Yes" if st.session_state.key_q4 == "Yes" else "No"
+    res_q9 = "Real" if st.session_state.key_q9 == "Real" else "Fake"
 
-    # Map the selection to 1 if "Engaging" is selected, otherwise 0
-    res_q2 = 1 if st.session_state.key_q2 == "Engaging" else 0
-
-    # Map the selection to 1 if Speaker's competence doubt is selected, otherwise 0
-    res_q4 = 1 if st.session_state.key_q4 == "Yes" else 0
-
+    # Get other slider values
     res_q1 = st.session_state.key_q1
-    res_q3 = st.session_state.key_q1
-    res_q5 = st.session_state.key_q1
+    res_q3 = st.session_state.key_q3
+    res_q5 = st.session_state.key_q5
     res_q6 = st.session_state.key_q6
     res_q7 = st.session_state.key_q7
     res_q8 = st.session_state.key_q8
-    res_q9 = st.session_state.key_q9
+    res_q10 = st.session_state.key_q10
     res_q11 = st.session_state.key_q11
 
     print("Results", [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11])
@@ -248,18 +250,17 @@ def save_to_db():
     insert_rating(
         participant_id,
         sample_row[0],  # audio_clip_id
-        
-        res_q1,
-        res_q2,
-        res_q3,
-        res_q4,
-        res_q5,
-        res_q6,
-        res_q7,
-        res_q8,
-        res_q9,
-        res_q10,
-        res_q11
+        res_q1,         # speech_clarity_persuasiveness
+        res_q2,         # speech_pace_engagement
+        res_q3,         # speaker_trustworthiness
+        res_q4,         # speaker_competence_doubt
+        res_q5,         # speech_speed_influence
+        res_q6,         # pitch_sincerity_effect
+        res_q7,         # loudness_attention_effectiveness
+        res_q8,         # speech_genuineness
+        res_q9,         # realness_judgment
+        res_q10,        # confidence_level
+        res_q11         # open_ended_response
     )
 
     # Closed for testing
