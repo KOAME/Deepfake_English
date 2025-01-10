@@ -295,16 +295,17 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">How clear and persuasive was the speech? </div>',
             unsafe_allow_html=True)
+        st.info("Clarity refers to how easily the speech can be understood. Persuasiveness evaluates the effectiveness of the speech in convincing the listener.")
         q1 = st.select_slider(
-            "1 (Not clear at all) to 5 (Extremely clear) (default value None means no rating)",
+            "1 (Not at all) to 5 (Very much) (default value None means no rating)",
              options=slider_options,
             value=None,
             key="key_q1"
         )
-        #st.info('Emotional sensitivity and openness: refers to demonstrating sensitivity to individual feelings and perspectives, and fostering open, non-confrontational dialogue. [Source](https://arxiv.org/pdf/2402.11886)', icon="ℹ️")
 
 
         st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>', unsafe_allow_html=True)
+        st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
         q2 = st.radio(
             "Was the pace of the speech engaging or distracting?",
             options=["Engaging", "Distracting"],
@@ -318,6 +319,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">The speaker seemed trustworthy?</div>',
             unsafe_allow_html=True)
+        st.info("Trustworthiness measures the credibility and reliability conveyed by the speaker.")
         q3 = st.select_slider(
             "1 (Not at all) to 5 (Very much) (default value None means no rating)",
             options=slider_options,
@@ -326,6 +328,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',unsafe_allow_html=True)
+        st.info("Competence refers to the speaker's ability to deliver the speech effectively and convincingly.")
         q4 = st.radio(
             "The speech made you doubt the speaker’s competence?",
             options=["Yes", "No"],
@@ -338,6 +341,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">The speech speed affected my understanding</div>',
             unsafe_allow_html=True)
+        st.info("This evaluates the impact of the speech speed on your ability to comprehend the message.")
         q5 = st.select_slider(
           "1 (Very negatively) to 5 (Very positively) (default value None means no rating)",
             options=slider_options,
@@ -350,6 +354,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">Variations in pitch affected the speaker’s sincerity?</div>',
             unsafe_allow_html=True)
+        st.info("Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity.")
         q6 = st.select_slider(
             "1 (Not at all) to 5 (Very much) (default value None means no rating)",
             options=slider_options,
@@ -363,6 +368,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label"> Changes in loudness and emphasis grabbed my attention.</div>',
             unsafe_allow_html=True)
+        st.info("Loudness and emphasis refer to how well volume variations captured and maintained your attention.")
 
         q7 = st.select_slider(
             "1 (Not at all) to 5 (Completely) (default value None means no rating)",
@@ -374,6 +380,8 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             '<div class="slider-label">The speech felt genuine.</div>',
             unsafe_allow_html=True)
+        st.info("Genuineness evaluates whether the speech felt authentic and heartfelt.")
+
         q8 = st.select_slider(
             "1 (Not at all) to 5 (Completely) (default value None means no rating)",
             options=slider_options,
