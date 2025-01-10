@@ -16,48 +16,21 @@ st.set_page_config(
 if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
 
-
-# Function to collapse the sidebar
 def collapse_sidebar():
-    st.markdown("""
+    st.markdown(
+        """
         <style>
-        /* Collapse the sidebar */
-        [data-testid="collapsedControl"] {
-            display: none;
-        }
-        [data-testid="stSidebar"] {
-            display: none;
-        }
-        
-        div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
-            font-size: 198px;
-        }
-        
-        /* Custom class for markdown labels */
-        .slider-label {
-            font-size: 18px !important;  /* Set desired slider label size */
-        }
-
-            /* Center the main content with padding and border */
-    div[data-testid="stMainBlockContainer"] {
-        margin: 0 auto;            /* Center the container horizontally */
-        padding: 40px;             /* Add padding inside the container */
-        max-width: 800px;          /* Set a maximum width for the content */
-        border: 4px solid #4CAF50; /* Add a thick border around the container */
-        border-radius: 15px;       /* Round the corners of the container */
-        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
-        background-color: #F9F9F9; /* Set a light background color */
-    }
-
-
-    /* Adjust the audio player and center it */
-    audio {
-        display: block;           /* Make it a block-level element */
-        margin: 20px auto;        /* Center the audio player horizontally */
-        width: 200px !important;  /* Set the width of the audio player */
-    }
+            [data-testid="collapsedControl"] {
+                display: none;
+            }
+            [data-testid="stSidebar"] {
+                display: none;
+            }
         </style>
-        """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 
 # Apply the sidebar collapse dynamically based on session state
