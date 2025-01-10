@@ -145,7 +145,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity_persuasiveness, 
                   pitch_sincerity_effect, loudness_attention_effectiveness, speech_genuineness,
                   realness_judgment, confidence_level, open_ended_response):
     insert_query = text("""
-    INSERT INTO new_ratings (
+    INSERT INTO english_ratings (
         participant_id, audio_clip_id, speech_clarity_persuasiveness, speech_pace_engagement,
         speaker_trustworthiness, speaker_competence_doubt, speech_speed_influence,
         pitch_sincerity_effect, loudness_attention_effectiveness, speech_genuineness,
