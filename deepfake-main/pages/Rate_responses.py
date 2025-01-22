@@ -249,17 +249,21 @@ with st.form(key="form_rating", clear_on_submit=True):
     try:
         with pool.connect() as db_conn:
 
-            # TODO originally the number is 42, change it back when there are enough audio clips
             query = text(
-                "SELECT * FROM audio_clips WHERE rated = 0 AND audio_clip_id >= FLOOR(2 + (RAND() * (SELECT MAX("
-                "audio_clip_id) - 2 FROM audio_clips))) LIMIT 1;")
+                "SELECT * FROM audio_clips WHERE rated = 0 AND audio_clip_id >= FLOOR(42 + (RAND() * (SELECT MAX("
+                "audio_clip_id) - 42 FROM audio_clips))) LIMIT 1;")
             result = db_conn.execute(query)
 
         sample_row = result.fetchone()
         url = sample_row[1]
 
+        print (url)
+
         st.subheader("Listen to the audio clip")
-        st.video(url)
+        st.audio(url, format="audio/wav")
+
+        # Render the iframe in Streamlit
+        #st.markdown(audio_html, unsafe_allow_html=True)
 
         st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
 
