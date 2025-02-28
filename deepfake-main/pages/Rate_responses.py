@@ -16,6 +16,7 @@ st.set_page_config(
 if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
 
+
 def collapse_sidebar():
     st.markdown(
         """
@@ -30,7 +31,6 @@ def collapse_sidebar():
         """,
         unsafe_allow_html=True,
     )
-
 
 
 # Apply the sidebar collapse dynamically based on session state
@@ -130,7 +130,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity_persuasiveness, 
         :realness_judgment, :confidence_level, :open_ended_response
     )
     """)
-    
+
     try:
         with pool.connect() as db_conn:
             db_conn.execute(insert_query, {
@@ -153,10 +153,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity_persuasiveness, 
         raise
 
 
-
-
 st.title("Welcome, Audio Explorer! 🎧‍")
-#st.write("Listen to each clip and share your thoughts")
+# st.write("Listen to each clip and share your thoughts")
 
 # Start Survey
 survey = ss.StreamlitSurvey("rate_survey")
@@ -206,7 +204,7 @@ def save_to_db():
     res_q9 = "Real" if st.session_state.key_q9 == "Real" else "Fake"
 
     # Get other slider values
-    res_q1 = st.session_state.key_q1
+    res_q1 = persuasiveness_likert_options[st.session_state.key_q1]
     res_q3 = st.session_state.key_q3
     res_q5 = st.session_state.key_q5
     res_q6 = st.session_state.key_q6
@@ -223,17 +221,17 @@ def save_to_db():
     insert_rating(
         participant_id,
         sample_row[0],  # audio_clip_id
-        res_q1,         # speech_clarity_persuasiveness
-        res_q2,         # speech_pace_engagement
-        res_q3,         # speaker_trustworthiness
-        res_q4,         # speaker_competence_doubt
-        res_q5,         # speech_speed_influence
-        res_q6,         # pitch_sincerity_effect
-        res_q7,         # loudness_attention_effectiveness
-        res_q8,         # speech_genuineness
-        res_q9,         # realness_judgment
-        res_q10,        # confidence_level
-        res_q11         # open_ended_response
+        res_q1,  # speech_clarity_persuasiveness
+        res_q2,  # speech_pace_engagement
+        res_q3,  # speaker_trustworthiness
+        res_q4,  # speaker_competence_doubt
+        res_q5,  # speech_speed_influence
+        res_q6,  # pitch_sincerity_effect
+        res_q7,  # loudness_attention_effectiveness
+        res_q8,  # speech_genuineness
+        res_q9,  # realness_judgment
+        res_q10,  # confidence_level
+        res_q11  # open_ended_response
     )
 
     # Closed for testing
@@ -257,32 +255,46 @@ with st.form(key="form_rating", clear_on_submit=True):
         sample_row = result.fetchone()
         url = sample_row[1]
 
-        print (url)
+        print(url)
 
         st.subheader("Listen to the audio clip")
         st.audio(url, format="audio/wav")
 
         # Render the iframe in Streamlit
-        #st.markdown(audio_html, unsafe_allow_html=True)
+        # st.markdown(audio_html, unsafe_allow_html=True)
 
         st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
 
         st.divider()  # Add a divider line
-      #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
+        #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
             '<div class="slider-label">How clear and persuasive was the speech? </div>',
             unsafe_allow_html=True)
-        st.info("Clarity refers to how easily the speech can be understood. Persuasiveness evaluates the effectiveness of the speech in convincing the listener.")
-        q1 = st.select_slider(
-            "1 (Not at all) to 5 (Very much) (default value None means no rating)",
-             options=slider_options,
-            value=None,
-            key="key_q1"
+        st.info(
+            "Clarity refers to how easily the speech can be understood. Persuasiveness evaluates the effectiveness of the speech in convincing the listener.")
+
+        persuasiveness_likert_options = {
+            "Not clear or persuasive at all": 1,
+            "Slightly clear and persuasive": 2,
+            "Somewhat clear and persuasive": 3,
+            "Neutral": 4,
+            "Fairly clear and persuasive": 5,
+            "Very clear and persuasive": 6,
+            "Extremely clear and persuasive": 7
+        }
+
+        q1 = st.radio(
+            label="How clear and persuasive was the speech?",
+            options=persuasiveness_likert_options.keys(),
+            index=None,
+            key="key_q1",
+            label_visibility="collapsed"
         )
 
-
-        st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>', unsafe_allow_html=True)
-        st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
+        st.markdown('<div class="slider-label">Was the pace of the speech engaging or distracting?</div>',
+                    unsafe_allow_html=True)
+        st.info(
+            "Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
         q2 = st.radio(
             "Was the pace of the speech engaging or distracting?",
             options=["Engaging", "Distracting"],
@@ -291,8 +303,8 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_q2",
             label_visibility="collapsed"
         )
-        
-       # st.markdown('<h4>Speech Clarity and Persuasiveness</h4>', unsafe_allow_html=True)
+
+        # st.markdown('<h4>Speech Clarity and Persuasiveness</h4>', unsafe_allow_html=True)
         st.markdown(
             '<div class="slider-label">The speaker seemed trustworthy?</div>',
             unsafe_allow_html=True)
@@ -304,7 +316,8 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_q3"
         )
 
-        st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',unsafe_allow_html=True)
+        st.markdown('<div class="slider-label">The speech made you doubt the speakers competence?</div>',
+                    unsafe_allow_html=True)
         st.info("Competence refers to the speaker's ability to deliver the speech effectively and convincingly.")
         q4 = st.radio(
             "The speech made you doubt the speaker’s competence?",
@@ -320,18 +333,18 @@ with st.form(key="form_rating", clear_on_submit=True):
             unsafe_allow_html=True)
         st.info("This evaluates the impact of the speech speed on your ability to comprehend the message.")
         q5 = st.select_slider(
-          "1 (Very negatively) to 5 (Very positively) (default value None means no rating)",
+            "1 (Very negatively) to 5 (Very positively) (default value None means no rating)",
             options=slider_options,
             value=None,
             key="key_q5",
             label_visibility="collapsed"
         )
 
-
         st.markdown(
             '<div class="slider-label">Variations in pitch affected the speaker’s sincerity?</div>',
             unsafe_allow_html=True)
-        st.info("Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity.")
+        st.info(
+            "Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity.")
         q6 = st.select_slider(
             "1 (Not at all) to 5 (Very much) (default value None means no rating)",
             options=slider_options,
@@ -340,8 +353,8 @@ with st.form(key="form_rating", clear_on_submit=True):
             label_visibility="collapsed"
         )
 
-     #   st.divider()  # Add a divider line
-      #  st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
+        #   st.divider()  # Add a divider line
+        #  st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
         st.markdown(
             '<div class="slider-label"> Changes in loudness and emphasis grabbed my attention.</div>',
             unsafe_allow_html=True)
@@ -388,12 +401,11 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.markdown("<h4>Optional Open-Ended Question</h4>", unsafe_allow_html=True)
-        q11 =   st.text_area(
-        "Do you think this audio was generated by AI? If so, why?",
-        help="Share your thoughts about whether this audio might be AI-generated and provide reasons for your opinion.",
-        key="key_q11"
+        q11 = st.text_area(
+            "Do you think this audio was generated by AI? If so, why?",
+            help="Share your thoughts about whether this audio might be AI-generated and provide reasons for your opinion.",
+            key="key_q11"
         )
-
 
         st.divider()  # Add a divider line
 
@@ -401,7 +413,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
-        if all([ q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11]):
+        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
