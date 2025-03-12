@@ -9,13 +9,6 @@ from sshtunnel import SSHTunnelForwarder
 from sqlalchemy.exc import SQLAlchemyError
 
 
-# Function to create buttons
-def create_button(value, color):
-    return st.markdown(f"""
-        <button class="rating-button {color}" onclick="fetch('/?selected={value}')">{value}</button>
-    """, unsafe_allow_html=True)
-
-
 st.set_page_config(
     initial_sidebar_state="collapsed",  # Collapsed sidebar by default
     layout="wide"
@@ -25,7 +18,7 @@ st.set_page_config(
 st.markdown(f"""
     <style>
     .block-container {{
-        max-width: {50}%;
+        max-width: {75}%;
         margin: auto;
     }}
     </style>

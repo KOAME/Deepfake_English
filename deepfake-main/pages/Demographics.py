@@ -96,6 +96,9 @@ mother_tongue_list = [
 
 languages_spoken_list = ["I wish not to declare", "1", "2", "3", "4", "5", "More than 5"]
 
+english_fluency_list = ["Beginner (A1)", "Elementary (A2)", "Intermediate (B1)",
+                        "Upper-Intermediate (B2)", "Advanced (C1)", "Proficient (C2)"]
+
 political_party_list = [
     "I wish not to declare",
     "Democrats",
@@ -266,7 +269,8 @@ pool = create_engine_with_pool(tunnel)
 def update_participant(participant_id, age_group, gender, education, occupation,
                        country_of_residence,
                        nationality, race,
-                       native_tongue, languages_spoken, political_party,
+                       native_tongue, languages_spoken, english_fluency,
+                       political_party,
                        political_inclination,
                        listening_habits,
                        tech_savy,
@@ -283,6 +287,7 @@ def update_participant(participant_id, age_group, gender, education, occupation,
         race = :race,
         native_tongue = :native_tongue,
         languages_spoken = :languages_spoken,
+        english_fluency = :english_fluency,
         political_party = :political_party,
         political_inclination = :political_inclination,
         listening_habits = :listening_habits,
@@ -306,6 +311,7 @@ def update_participant(participant_id, age_group, gender, education, occupation,
                 'race': race,
                 'native_tongue': native_tongue,
                 'languages_spoken': languages_spoken,
+                'english_fluency': english_fluency,
                 'political_party': political_party,
                 'political_inclination': political_inclination,
                 'listening_habits': listening_habits,
@@ -314,7 +320,7 @@ def update_participant(participant_id, age_group, gender, education, occupation,
                 'media_consumption': media_consumption
             })
 
-            # connection.commit()
+            connection.commit()
 
     except SQLAlchemyError as e:
         st.error(f"Database update failed: {e}")
@@ -351,45 +357,78 @@ q_occupation = survey.selectbox("What's your profession?", options=occupation_li
                                 id="q_occupation", index=None)
 
 # Country of Residence
-q_residence = survey.selectbox("Which is your country of residence?", options=country_list,
-                               id="q_residence", index=None)
+# q_residence = survey.selectbox("Which is your country of residence?", options=country_list,
+#                               id="q_residence", index=None)
 
 # Nationality
 q_nationality = survey.multiselect("Where do your ancestors (e.g., great-grandparents) come from?",
                                    options=country_list,
                                    id="q_nationality", max_selections=3)
-q_nationality_str = json.dumps(q_nationality)
+
 
 # Race
 q_race = survey.multiselect("Which racial group(s) do you identify with?", options=race_list,
                             id="q_race",
                             max_selections=3)
-q_race_str = json.dumps(q_race)
+
 
 # Native Tongue
 q_native_tongue = survey.multiselect("What's your mother tongue?", options=mother_tongue_list,
                                      id="q_native_tongue",
                                      max_selections=3)
-q_native_tongue_str = json.dumps(q_native_tongue)
+
 
 # Languages Spoken
 q_languages_spoken = survey.selectbox("How many languages can you speak fluently?",
                                       options=languages_spoken_list, id="q_languages_spoken", index=None)
+
+# English Level
+q_english_fluency = survey.selectbox("How would you rate your English fluency?", options=english_fluency_list,
+                                     id="q_english_fluency", index=None)
 
 # Political Party
 q_political_party = survey.selectbox("Which political party would you be most likely to vote for?",
                                      options=political_party_list,
                                      id="q_political_party", index=None)
 
+# Inject CSS to center radio button captions
+st.markdown("""
+            <style>
+            /* Ensure the radio buttons stay in a horizontal line */
+            div[role="radiogroup"] {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px; /* Adjust spacing between buttons */
+            }
+
+            /* Center the text under each radio button */
+            div[role="radiogroup"] label {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
 # Political Inclination
-q_political_inclination = survey.select_slider("Where do you see yourself on the political spectrum?",
-                                               options=political_inclination_list,
-                                               id="q_political_inclination")
+q_political_inclination= st.radio(
+    "Where do you see yourself on the political spectrum?",
+    options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    horizontal=True,
+    index=None,
+    key="q_political_inclination",
+    #label_visibility="collapsed",
+    captions=["Extremely Liberal", "", "", "", "", "", "", "", "", "Extremely Conservative"]
+)
 
 # Listening Habits
-q_listening_habits = survey.selectbox(
+q_listening_habits = survey.multiselect(
     "What's your preferred listening pleasure? Symphonies, audiobooks, or something else?",
-    options=listening_habit_list, id="q_listening_habits", index=None)
+    options=listening_habit_list, id="q_listening_habits", max_selections=3)
+
 
 # Tech Savy
 q_tech_savy = survey.selectbox("How comfortable are you with technology?", options=tech_savy_list,
@@ -425,30 +464,42 @@ if 'participant_id' not in st.session_state:
     st.session_state['participant_id'] = last_id
 
 if not all(
-        [q_age, q_gender, q_education, q_occupation, q_residence, q_nationality_str, q_race_str, q_native_tongue,
-         q_languages_spoken, q_political_party, q_political_inclination, q_listening_habits, q_tech_savy,
-         q_ai_experience, q_media_consumption]):
+        [q_age, q_gender, q_education, q_occupation, q_nationality, q_race, q_native_tongue,
+         q_languages_spoken, q_english_fluency, q_political_party, q_political_inclination, q_listening_habits,
+         q_tech_savy, q_ai_experience, q_media_consumption]):
     st.write("Please select at least one option for every question.")
 
-elif all([q_age, q_gender, q_education, q_occupation, q_residence, q_nationality_str, q_race_str, q_native_tongue,
-          q_languages_spoken, q_political_party, q_political_inclination, q_listening_habits, q_tech_savy,
-          q_ai_experience, q_media_consumption]):
+elif all([q_age, q_gender, q_education, q_occupation, q_nationality, q_race, q_native_tongue,
+          q_languages_spoken, q_english_fluency, q_political_party, q_political_inclination, q_listening_habits,
+          q_tech_savy, q_ai_experience, q_media_consumption]):
+
+    print([q_age, q_gender, q_education, q_occupation, q_nationality, q_race, q_native_tongue,
+           q_languages_spoken, q_english_fluency, q_political_party, q_political_inclination, q_listening_habits,
+           q_tech_savy, q_ai_experience, q_media_consumption])
 
     if st.button("Submit"):
+
+        q_nationality_str = json.dumps(q_nationality)
+        q_race_str = json.dumps(q_race)
+        q_native_tongue_str = json.dumps(q_native_tongue)
+        q_listening_habits_str = json.dumps(q_listening_habits)
+        res_political_inclination = st.session_state.q_political_inclination
+
         update_participant(
             st.session_state['participant_id'],  # participant
             q_age,  # Age Group
             q_gender,  # Gender
             q_education,  # Education
             q_occupation,  # Occupation
-            q_residence,  # Country of Residence
+            "US",  # Country of Residence
             q_nationality_str,  # Nationality
             q_race_str,  # Race
             q_native_tongue_str,  # Native Tongue
             q_languages_spoken,  # Languages Spoken
+            q_english_fluency,  # English fluency
             q_political_party,  # Political Party
-            q_political_inclination,  # Political Inclination
-            q_listening_habits,  # Listening Habits
+            res_political_inclination,  # Political Inclination
+            q_listening_habits_str,  # Listening Habits
             q_tech_savy,  # Tech Savy
             q_ai_experience,  # AI Experience
             q_media_consumption,  # Media Consumption
