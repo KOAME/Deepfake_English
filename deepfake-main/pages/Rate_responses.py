@@ -162,7 +162,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity_persuasiveness, 
                 'likelihood_to_vote': likelihood_to_vote,
                 'open_ended_response': open_ended_response
             })
-            db_conn.commit()
+            # db_conn.commit()
     except SQLAlchemyError as e:
         st.error(f"Database insertion failed: {e}")
         raise
