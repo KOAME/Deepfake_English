@@ -304,6 +304,12 @@ def save_to_db():
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
 
+
+# CONTROL GROUP_NO HERE
+# Control group -> group_no: 1
+# Treatment group-1 ->  group_no: 2
+# Treatment group-2 ->  group_no: 3
+
 with ((st.form(key="form_rating", clear_on_submit=True))):
     try:
         with pool.connect() as db_conn:
