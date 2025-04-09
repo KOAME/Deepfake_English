@@ -298,7 +298,7 @@ def save_to_db():
 
     # Closed for testing
     # TODO open when more audios
-    # mark_as_rated(sample_row[0])
+    mark_as_rated(sample_row[0])
 
 
 if 'count' not in st.session_state:
