@@ -580,9 +580,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.error(f"Database query failed: {e}")
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
-# test
-# if st.session_state['count'] < 5:
-if st.session_state['count'] < 1:
+
+if st.session_state['count'] < 5:
+# if st.session_state['count'] < 1:
     st.write("Please rate 5 audios to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 
