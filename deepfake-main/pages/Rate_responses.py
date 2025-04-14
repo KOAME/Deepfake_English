@@ -320,7 +320,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
             query = text(
                 "SELECT * FROM audio_clips WHERE rated = 0 AND group_no = 1 AND audio_clip_id >= FLOOR(42 + (RAND() * "
-                "(SELECT MAX(audio_clip_id) - 42 FROM audio_clips))) LIMIT 1;")
+                "(SELECT MAX(audio_clip_id) - 400 FROM audio_clips))) LIMIT 1;")
             result = db_conn.execute(query)
 
         sample_row = result.fetchone()
