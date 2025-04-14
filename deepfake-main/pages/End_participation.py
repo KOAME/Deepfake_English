@@ -36,4 +36,4 @@ st.balloons()
 st.write("By clicking the following button, you will be redirected back to Prolifics such that your submission can be counted.")
 st.link_button("Redirect to Prolifics", "https://app.prolific.com/submissions/complete?cc=CGNYTYYO")
 
-st.write("Or you can copy the following code: CXUNA9UH")
+st.write("Or you can copy the following code: CXUNA9UH ")
