@@ -165,7 +165,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :speaker_competence, :speech_speed_influence, :pitch_sincerity_effect,
                   :loudness_attention_influence, :speech_genuineness, :realness_perception,
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
-                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check
+                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1
     )
     """)
 
