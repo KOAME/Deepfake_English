@@ -533,9 +533,13 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
         )
+        st.markdown("<br><br>", unsafe_allow_html=True)
+
+        st.markdown('<h7>I am carefully rating, select 4 if yes</h7>',
+                    unsafe_allow_html=True)
 
         check = st.radio(
-            "I am carefully rating, select 4 if yes",
+            "",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal=True,
             index=None,
