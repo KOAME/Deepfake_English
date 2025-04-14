@@ -151,21 +151,21 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, speech_genuineness, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response):
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, speech_genuineness, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
                   :speaker_competence, :speech_speed_influence, :pitch_sincerity_effect,
                   :loudness_attention_influence, :speech_genuineness, :realness_perception,
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
-                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response
+                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check
     )
     """)
 
@@ -191,7 +191,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'confidence_level': confidence_level,
                 'policy_agreement': policy_agreement,
                 'likelihood_to_vote': likelihood_to_vote,
-                'open_ended_response': open_ended_response
+                'open_ended_response': open_ended_response,
+                'check_1':check
             })
             # db_conn.commit()
     except SQLAlchemyError as e:
@@ -264,13 +265,15 @@ def save_to_db():
     res_q16 = st.session_state.key_q16  # policy_agreement
     res_q17 = st.session_state.key_q17  # likelihood_to_vote
     res_q18 = st.session_state.key_q18  # open_ended_response
+    check = st.session_state.key_check  # open_ended_response
+    
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-           res_q14, res_q15, res_q16, res_q17, res_q18])
+           res_q14, res_q15, res_q16, res_q17, res_q18,check])
 
     if all([res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-            res_q14, res_q15, res_q16, res_q17, res_q18]):
+            res_q14, res_q15, res_q16, res_q17, res_q18,check]):
         st.session_state['count'] += 1
 
     insert_rating(
@@ -293,7 +296,8 @@ def save_to_db():
         res_q15,  # confidence_level
         res_q16,  # policy_agreement
         res_q17,  # likelihood_to_vote
-        res_q18  # open_ended_response
+        res_q18,  # open_ended_response
+        check
     )
 
     # Closed for testing
@@ -529,6 +533,17 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
         )
+
+        check = st.radio(
+            "I am carefully rating, select 4 if yes",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_check",
+            label_visibility="collapsed",
+            captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
+        )
+        check = check if check is not None else 10
 
         st.divider()  # Add a divider line
 
