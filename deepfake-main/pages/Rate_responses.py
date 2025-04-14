@@ -582,7 +582,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.error(f"An unexpected error occurred: {e}")
 
 #if st.session_state['count'] < 5:
- if st.session_state['count'] < 1:
+if st.session_state['count'] < 1:
     st.write("Please rate the audio and answer all question to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 
