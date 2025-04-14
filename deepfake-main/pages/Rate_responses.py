@@ -581,11 +581,11 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
 
-if st.session_state['count'] < 5:
-# if st.session_state['count'] < 1:
-    st.write("Please rate 5 audios to finish the survey.")
+#if st.session_state['count'] < 5:
+ if st.session_state['count'] < 1:
+    st.write("Please rate the audio and answer all question to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 
 else:
-    st.write("You have rated 5 audios and you can finish your participation now.")
+    st.write("You have rated the audio and you can finish your participation now.")
     st.switch_page("pages/Demographics.py")
