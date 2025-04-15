@@ -151,21 +151,21 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, speech_genuineness, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response):
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, speech_genuineness, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
                   :speaker_competence, :speech_speed_influence, :pitch_sincerity_effect,
                   :loudness_attention_influence, :speech_genuineness, :realness_perception,
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
-                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response
+                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1
     )
     """)
 
@@ -191,7 +191,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'confidence_level': confidence_level,
                 'policy_agreement': policy_agreement,
                 'likelihood_to_vote': likelihood_to_vote,
-                'open_ended_response': open_ended_response
+                'open_ended_response': open_ended_response,
+                'check_1': check
             })
             # db_conn.commit()
     except SQLAlchemyError as e:
@@ -264,13 +265,14 @@ def save_to_db():
     res_q16 = st.session_state.key_q16  # policy_agreement
     res_q17 = st.session_state.key_q17  # likelihood_to_vote
     res_q18 = st.session_state.key_q18  # open_ended_response
+    check = st.session_state.key_check  # open_ended_response
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-           res_q14, res_q15, res_q16, res_q17, res_q18])
+           res_q14, res_q15, res_q16, res_q17, res_q18, check])
 
     if all([res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-            res_q14, res_q15, res_q16, res_q17, res_q18]):
+            res_q14, res_q15, res_q16, res_q17, res_q18, check]):
         st.session_state['count'] += 1
 
     insert_rating(
@@ -293,7 +295,8 @@ def save_to_db():
         res_q15,  # confidence_level
         res_q16,  # policy_agreement
         res_q17,  # likelihood_to_vote
-        res_q18  # open_ended_response
+        res_q18,  # open_ended_response
+        check
     )
 
     # Closed for testing
@@ -314,8 +317,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         with pool.connect() as db_conn:
 
             query = text(
-                "SELECT * FROM audio_clips WHERE rated = 0 AND group_no = 1 AND audio_clip_id >= FLOOR(42 + (RAND() * "
-                "(SELECT MAX(audio_clip_id) - 42 FROM audio_clips))) LIMIT 1;")
+                "SELECT * FROM audio_clips WHERE rated = 0 AND group_no = 3 ORDER BY RAND() LIMIT 1;")
             result = db_conn.execute(query)
 
         sample_row = result.fetchone()
@@ -528,6 +530,21 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
         )
+        st.markdown("<br><br>", unsafe_allow_html=True)
+
+        st.markdown('<h7>I am carefully rating, select 4 if yes</h7>',
+                    unsafe_allow_html=True)
+
+        check = st.radio(
+            "",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_check",
+            label_visibility="collapsed",
+            captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
+        )
+        check = check if check is not None else 10
 
         st.divider()  # Add a divider line
 
@@ -580,11 +597,11 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
 
-if st.session_state['count'] < 5:
-    # if st.session_state['count'] < 1:
-    st.write("Please rate 5 audios to finish the survey.")
+# if st.session_state['count'] < 5:
+if st.session_state['count'] < 1:
+    st.write("Please rate the audio and answer all question to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 
 else:
-    st.write("You have rated 5 audios and you can finish your participation now.")
+    st.write("You have rated the audio and you can finish your participation now.")
     st.switch_page("pages/Demographics.py")
