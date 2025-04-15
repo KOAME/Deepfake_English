@@ -151,21 +151,21 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, speech_genuineness, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check):
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, speech_genuineness, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
                   :speaker_competence, :speech_speed_influence, :pitch_sincerity_effect,
                   :loudness_attention_influence, :speech_genuineness, :realness_perception,
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
-                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1
+                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1, :group_no
     )
     """)
 
@@ -192,7 +192,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'policy_agreement': policy_agreement,
                 'likelihood_to_vote': likelihood_to_vote,
                 'open_ended_response': open_ended_response,
-                'check_1': check
+                'check_1': check,
+                'group_no': group_no
             })
             # db_conn.commit()
     except SQLAlchemyError as e:
@@ -269,7 +270,7 @@ def save_to_db():
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-           res_q14, res_q15, res_q16, res_q17, res_q18, check])
+           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no])
 
     if all([res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
             res_q14, res_q15, res_q16, res_q17, res_q18, check]):
@@ -296,7 +297,8 @@ def save_to_db():
         res_q16,  # policy_agreement
         res_q17,  # likelihood_to_vote
         res_q18,  # open_ended_response
-        check
+        check,
+        group_no
     )
 
     # Closed for testing
@@ -312,12 +314,14 @@ if 'count' not in st.session_state:
 # Treatment group-1 ->  group_no: 2
 # Treatment group-2 ->  group_no: 3
 
+group_no = 3
+
 with ((st.form(key="form_rating", clear_on_submit=True))):
     try:
         with pool.connect() as db_conn:
 
             query = text(
-                "SELECT * FROM audio_clips WHERE rated = 0 AND group_no = 3 ORDER BY RAND() LIMIT 1;")
+                f"SELECT * FROM audio_clips WHERE rated = 0 AND group_no = {group_no} ORDER BY RAND() LIMIT 1;")
             result = db_conn.execute(query)
 
         sample_row = result.fetchone()
@@ -532,7 +536,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
         st.markdown("<br><br>", unsafe_allow_html=True)
 
-        st.markdown('<h7>I am carefully rating, select 4 if yes</h7>',
+        st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>',
                     unsafe_allow_html=True)
 
         check = st.radio(
