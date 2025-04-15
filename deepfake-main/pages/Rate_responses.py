@@ -256,9 +256,9 @@ def save_to_db():
     res_q10 = st.session_state.key_q10  # speech_genuineness
 
     res_q11 = 1 if st.session_state.key_q11 == "Real" else 0  # realness_perception
-    res_q12 = 1 if st.session_state.key_q12 == "True" else 0  # influenced_by_tone
-    res_q13 = 1 if st.session_state.key_q13 == "True" else 0  # influenced_by_quality
-    res_q14 = 1 if st.session_state.key_q14 == "True" else 0  # influenced_by_content
+    res_q12 = 1 if st.session_state.key_q12 else 0  # influenced_by_tone
+    res_q13 = 1 if st.session_state.key_q13 else 0  # influenced_by_quality
+    res_q14 = 1 if st.session_state.key_q14 else 0  # influenced_by_content
 
     res_q15 = st.session_state.key_q15  # confidence_level
     res_q16 = st.session_state.key_q16  # policy_agreement
@@ -303,7 +303,6 @@ def save_to_db():
 
 if 'count' not in st.session_state:
     st.session_state['count'] = 0
-
 
 # CONTROL GROUP_NO HERE
 # Control group -> group_no: 1
@@ -582,7 +581,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.error(f"An unexpected error occurred: {e}")
 
 if st.session_state['count'] < 5:
-# if st.session_state['count'] < 1:
+    # if st.session_state['count'] < 1:
     st.write("Please rate 5 audios to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 
