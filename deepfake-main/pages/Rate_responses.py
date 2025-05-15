@@ -329,7 +329,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         print(url)
 
-        st.subheader("Listen to the audio clip")
+        st.subheader("Listen to the audio clip of Kamala Harris or Donald Trump")
         st.audio(url, format="audio/wav")
 
         # Render the iframe in Streamlit
