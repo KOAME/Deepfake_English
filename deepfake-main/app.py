@@ -107,10 +107,10 @@ consent3 = survey.checkbox("I confirm that I am at least 18 years old.")
 #######################################################################################################
 
 # # SSH and Database credentials
-ssh_host = st.secrets["ssh_host"]
-ssh_port = st.secrets["ssh_port"]
-ssh_user = st.secrets["ssh_user"]
-ssh_password = st.secrets["ssh_password"]
+#ssh_host = st.secrets["ssh_host"]
+#ssh_port = st.secrets["ssh_port"]
+#ssh_user = st.secrets["ssh_user"]
+#ssh_password = st.secrets["ssh_password"]
 
 #db_host = st.secrets["db_host"]
 #db_user = st.secrets["db_user"]
@@ -172,7 +172,7 @@ def get_connection(tunnel, retries=3, delay=5):
     # SQLAlchemy connection pool with pre-ping and recycling for better connection management
 
 
-def get_sqlalchemy_engine(tunnel):
+'''def get_sqlalchemy_engine(tunnel):
     pool = create_engine(
         "mysql+pymysql://",
         creator=lambda: get_connection(tunnel),
@@ -181,8 +181,17 @@ def get_sqlalchemy_engine(tunnel):
         pool_size=4000,  # Set pool size to handle multiple connections
         max_overflow=3000  # Allow 10 extra simultaneous connections if needed
     )
-    return pool
+    return pool'''
 
+def get_sqlalchemy_engine():
+    engine = create_engine(
+        f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}",
+        pool_pre_ping=True,
+        pool_recycle=3600,
+        pool_size=20,
+        max_overflow=10
+    )
+    return engine
 
 # Database insertions
 def insert_participant_and_get_id(pool):
@@ -234,8 +243,10 @@ elif all([consent1, consent2, consent3]):
 
     if st.button("Submit ID"):
         if prolific_id:
-            tunnel = start_ssh_tunnel()
-            pool = get_sqlalchemy_engine(tunnel)
+            #tunnel = start_ssh_tunnel()
+           # pool = get_sqlalchemy_engine(tunnel)
+            pool = get_sqlalchemy_engine()
+
 
             last_inserted_id = insert_participant_and_get_id(pool)
             insert_prolific_id(pool, last_inserted_id, prolific_id)
