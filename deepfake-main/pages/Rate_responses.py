@@ -75,12 +75,17 @@ ssh_port = st.secrets["ssh_port"]
 ssh_user = st.secrets["ssh_user"]
 ssh_password = st.secrets["ssh_password"]
 
-db_host = st.secrets["db_host"]
-db_user = st.secrets["db_user"]
-db_password = st.secrets["db_password"]
-db_name = st.secrets["db_name"]
-db_port = st.secrets["db_port"]
+#db_host = st.secrets["db_host"]
+#db_user = st.secrets["db_user"]
+#db_password = st.secrets["db_password"]
+#db_name = st.secrets["db_name"]
+#db_port = st.secrets["db_port"]
 
+db_user = "sc_team"
+db_password = "societalcomputing2025"
+db_host = "127.0.0.1"
+db_name = "deepfakes"
+db_port = 3306
 
 # Set up SSH connection and tunnel
 def start_ssh_tunnel():
