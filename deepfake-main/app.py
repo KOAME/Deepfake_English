@@ -251,7 +251,7 @@ elif all([consent1, consent2, consent3]):
             last_inserted_id = insert_participant_and_get_id(pool)
             insert_prolific_id(pool, last_inserted_id, prolific_id)
             st.session_state['participant_id'] = last_inserted_id
-            tunnel.stop()  # Stop tunnel when done
+            #tunnel.stop()  # Stop tunnel when done
         else:
             st.write("Please enter your Prolific ID to continue.")
 
