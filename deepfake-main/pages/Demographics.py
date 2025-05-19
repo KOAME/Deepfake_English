@@ -18,9 +18,10 @@ if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
 
 ###################################################################################
-age_group_list = ["I wish not to declare", "18-30", "31-40", "41-50", "51-60", "60<"]
+#age_group_list = ["I wish not to declare", "18-30", "31-40", "41-50", "51-60", "60<"]
+age_group_list = ["18-30", "31-40", "41-50", "51-60", "60<"]
 
-pronoun_list = [
+pronoun_list_ignore = [
     "I wish not to declare",
     "she/her/hers",
     "he/him/his",
@@ -32,8 +33,20 @@ pronoun_list = [
     "per/pers/perself"
 ]
 
+pronoun_list = [
+   
+    "she/her/hers",
+    "he/him/his",
+    "they/them/theirs",
+    "ze/hir/hirs",
+    "xe/xem/xyrs",
+    "ey/em/eirs",
+    "ve/ver/vis",
+    "per/pers/perself"
+]
+
 educational_background_list = [
-    "I wish not to declare",
+  
     "High school or equivalent",
     "Associate degree",
     "Bachelor's degree",
@@ -44,7 +57,7 @@ educational_background_list = [
 ]
 
 occupation_list = [
-    "I wish not to declare",
+  
     "Information Technology (IT) & Software",
     "Healthcare & Medical",
     "Education & Training",
@@ -69,7 +82,7 @@ occupation_list = [
 ]
 
 race_list = [
-    "I wish not to declare",
+ 
     "American Indian or Alaska Native",
     "Asian",
     "Black or African American",
@@ -80,7 +93,7 @@ race_list = [
 ]
 
 mother_tongue_list = [
-    "I wish not to declare",
+
     "English", "Spanish", "Chinese (Mandarin)", "Hindi", "Arabic", "French",
     "Bengali", "Russian", "Portuguese", "Indonesian", "Japanese", "German",
     "Korean", "Turkish", "Vietnamese", "Italian", "Tamil", "Urdu", "Persian (Farsi)",
@@ -91,28 +104,28 @@ mother_tongue_list = [
     "Khmer", "Lao", "Finnish", "Danish", "Norwegian", "Slovak", "Croatian",
     "Bulgarian", "Serbian", "Lithuanian", "Latvian", "Estonian", "Georgian",
     "Armenian", "Mongolian", "Bosnian", "Azerbaijani", "Macedonian", "Albanian",
-    "Malayalam", "Kannada", "Gujarati", "Oriya (Odia)", "Other (Please Specify)",
+    "Malayalam", "Kannada", "Gujarati", "Oriya (Odia)", "Other",
 ]
 
-languages_spoken_list = ["I wish not to declare", "1", "2", "3", "4", "5", "More than 5"]
+languages_spoken_list = [ "1", "2", "3", "4", "5", "More than 5"]
 
 english_fluency_list = ["Beginner (A1)", "Elementary (A2)", "Intermediate (B1)",
                         "Upper-Intermediate (B2)", "Advanced (C1)", "Proficient (C2)"]
 
 political_party_list = [
-    "I wish not to declare",
     "Democrats",
-    "Republicans"
+    "Republicans",
+    "Independent",
 ]
 
 political_inclination_list = [
     "Liberal",
-    "Center",
+    "Centre",
     "Conservative"
 ]
 
 listening_habit_list = [
-    "I wish not to declare",
+
     "Symphonies",
     "Audiobooks",
     "Podcasts",
@@ -123,7 +136,7 @@ listening_habit_list = [
 ]
 
 tech_savy_list = [
-    "I wish not to declare",
+
     "Very comfortable",
     "Comfortable",
     "Somewhat comfortable",
@@ -132,7 +145,7 @@ tech_savy_list = [
 ]
 
 ai_level_list = [
-    "I wish not to declare",
+  
     "No Experience",
     "Beginner",
     "Intermediate",
@@ -141,7 +154,7 @@ ai_level_list = [
 ]
 
 media_consumption_list = [
-    "I wish not to declare",
+   
     "News junkie",
     "Series binge-watcher",
     "Bookworm",
