@@ -321,7 +321,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         with pool.connect() as db_conn:
 
             query = text(
-                f"SELECT * FROM audio_clips WHERE rated = 0 AND group_no = {group_no} ORDER BY RAND() LIMIT 1;")
+                f"SELECT * FROM audio_clips WHERE  group_no = {group_no} ORDER BY RAND() LIMIT 1;")
             result = db_conn.execute(query)
 
         sample_row = result.fetchone()
