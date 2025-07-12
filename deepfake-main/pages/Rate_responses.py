@@ -314,7 +314,7 @@ if 'count' not in st.session_state:
 # Treatment group-1 ->  group_no: 2
 # Treatment group-2 ->  group_no: 3
 
-group_no = 2
+group_no = 1
 
 with ((st.form(key="form_rating", clear_on_submit=True))):
     try:
