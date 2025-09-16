@@ -49,13 +49,7 @@ st.markdown("""
 if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
 
-def answered(value):
-    """Return True if a widget has been answered (None means not answered)."""
-    return value is not None
 
-def answered_text(value):
-    """For text inputs; empty string counts as not answered."""
-    return value is not None and value.strip() != ""
 
 def collapse_sidebar():
     st.markdown(
