@@ -353,7 +353,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # st.markdown(audio_html, unsafe_allow_html=True)
 
         st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
-        st.markdown('<h5>🔊 If the audio isn't playing, refresh the page or try a different browser.</h5>', unsafe_allow_html=True)
+        st.markdown('🔊 If the audio isn't playing, refresh the page or try a different browser.')
 
         st.markdown('<h5>.</h5>', unsafe_allow_html=True)
 
