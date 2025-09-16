@@ -149,23 +149,27 @@ pool = get_sqlalchemy_engine(tunnel)
 def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
-                  loudness_attention_influence, speech_genuineness, realness_perception,
+                  loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no):
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no,share_likely_private, 
+                  share_likely_public, report_misleading, downrank_agree, watermark_action):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
-                  loudness_attention_influence, speech_genuineness, realness_perception,
+                  loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no, group_no,share_likely_private, 
+                  share_likely_public, report_misleading, downrank_agree, watermark_action
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
                   :speaker_competence, :speech_speed_influence, :pitch_sincerity_effect,
-                  :loudness_attention_influence, :speech_genuineness, :realness_perception,
+                  :loudness_attention_influence, :realness_scale, :realness_perception,
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
-                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1, :group_no
+                  :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1, :group_no,    
+                  :share_likely_private, :share_likely_public, :report_misleading,
+                  :downrank_agree, :watermark_action
     )
     """)
 
@@ -183,7 +187,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'speech_speed_influence': speech_speed_influence,
                 'pitch_sincerity_effect': pitch_sincerity_effect,
                 'loudness_attention_influence': loudness_attention_influence,
-                'speech_genuineness': speech_genuineness,
+                'realness_scale': realness_scale,
                 'realness_perception': realness_perception,
                 'influenced_by_tone': influenced_by_tone,
                 'influenced_by_quality': influenced_by_quality,
@@ -193,7 +197,12 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'likelihood_to_vote': likelihood_to_vote,
                 'open_ended_response': open_ended_response,
                 'check_1': check,
-                'group_no': group_no
+                'group_no': group_no,
+                'share_likely_private': share_likely_private,
+                'share_likely_public': share_likely_public,
+                'report_misleading': report_misleading,
+                'downrank_agree': downrank_agree,
+                'watermark_action': watermark_action
             })
             # db_conn.commit()
     except SQLAlchemyError as e:
@@ -288,7 +297,7 @@ def save_to_db():
         res_q7,  # speech_speed_influence
         res_q8,  # pitch_sincerity_effect
         res_q9,  # loudness_attention_influence
-        res_q10,  # speech_genuineness
+        res_q10,  # speech_realness_scale
         res_q11,  # realness_perception
         res_q12,  # influenced_by_tone
         res_q13,  # influenced_by_quality
@@ -298,7 +307,9 @@ def save_to_db():
         res_q17,  # likelihood_to_vote
         res_q18,  # open_ended_response
         check,
-        group_no
+        group_no,
+        share_likely_private, share_likely_public, report_misleading,
+        downrank_agree, watermark_action
     )
 
     # Closed for testing
@@ -477,20 +488,20 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         st.divider()  # Add a divider line
 
-        st.markdown('<h5>To what extent do you agree that the speech felt genuine?</h5>', unsafe_allow_html=True)
-        st.info("Genuineness evaluates whether the speech felt authentic and heartfelt.")
+    #    st.markdown('<h5>To what extent do you agree that the speech felt genuine?</h5>', unsafe_allow_html=True)
+     #   st.info("Genuineness evaluates whether the speech felt authentic and heartfelt.")
 
-        q10 = st.radio(
-            "To what extent do you agree that the speech felt genuine?",
-            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            horizontal=True,
-            index=None,
-            key="key_q10",
-            label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
-        )
+      #  q10 = st.radio(
+          #  "To what extent do you agree that the speech felt genuine?",
+          #  options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+         #   horizontal=True,
+           # index=None,
+          #  key="key_q10",
+          #  label_visibility="collapsed",
+           # captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
+     #   )
 
-        st.divider()  # Add a divider line
+   #     st.divider()  # Add a divider line
 
         st.markdown('<h5>Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
         q11 = st.radio(
@@ -520,6 +531,16 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         q14 = st.checkbox(
             "The content of the audio clip",
             key="key_q14"
+        )
+        st.markdown('<h5>On a scale from fake to real, how would you rate this audio?</h5>', unsafe_allow_html=True)
+        q10 = st.radio(
+            "How real does the audio seem?",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_q10",
+            label_visibility="collapsed",
+            captions=["Definitely Fake","","","","","","","","","Definitely Real"]
         )
 
         st.divider()  # Add a divider line
@@ -580,6 +601,89 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         st.divider()  # Add a divider line
 
+                # --- Sharing privately ---
+        st.divider()
+        st.markdown(
+            '<h5>How likely are you to share this clip <i>privately</i> (e.g., WhatsApp, DM)?</h5>',
+            unsafe_allow_html=True
+        )
+        q19_private = st.radio(
+            "How likely are you to share this clip privately?",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_q19_private",
+            label_visibility="collapsed",
+            captions=["Not at all", "", "", "", "", "", "", "", "", "Very likely"]
+        )
+
+        # --- Sharing publicly ---
+        st.divider()
+        st.markdown(
+            '<h5>How likely are you to share this clip <i>publicly</i> (e.g., a post/story)?</h5>',
+            unsafe_allow_html=True
+        )
+        q20_public = st.radio(
+            "How likely are you to share this clip publicly?",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_q20_public",
+            label_visibility="collapsed",
+            captions=["Not at all", "", "", "", "", "", "", "", "", "Very likely"]
+        )
+
+        # --- Report misleading ---
+        st.divider()
+        st.markdown(
+            '<h5>Would you report this clip as misleading on platform X?</h5>',
+            unsafe_allow_html=True
+        )
+        q21_report = st.radio(
+            "Would you report this clip as misleading on platform X?",
+            options=["Yes", "No"],
+            horizontal=True,
+            index=None,
+            key="key_q21_report",
+            label_visibility="collapsed"
+        )
+
+        # --- Downrank policy ---
+        st.divider()
+        st.markdown(
+            '<h5>Platforms should downrank content flagged as AI-generated even if not deceptive.</h5>',
+            unsafe_allow_html=True
+        )
+        q22_downrank = st.radio(
+            "Platforms should downrank AI-generated content even if not deceptive.",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_q22_downrank",
+            label_visibility="collapsed",
+            captions=["Strongly Disagree", "", "", "", "", "", "", "", "", "Strongly Agree"]
+        )
+
+        # --- Watermark action ---
+        st.divider()
+        st.markdown(
+            '<h5>If a watermark indicated this was synthetic, I would…</h5>',
+            unsafe_allow_html=True
+        )
+        q23_watermark = st.radio(
+            "If a watermark indicated this was synthetic, I would…",
+            options=[
+                "Ignore",
+                "Be cautious but still share",
+                "Not share",
+                "Report as misleading"
+            ],
+            horizontal=False,
+            index=None,
+            key="key_q23_watermark"
+        )
+
+
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         q18 = st.text_area(
             "Did anything stand out or seem interesting to you? If so, why?",
@@ -593,7 +697,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
-        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17]):
+        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17,q18,q19,q20,q21,q22,q23]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
