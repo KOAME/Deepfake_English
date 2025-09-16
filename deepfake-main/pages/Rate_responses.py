@@ -700,7 +700,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
 
-        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q18, q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
+        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
