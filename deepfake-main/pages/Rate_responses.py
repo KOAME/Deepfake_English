@@ -611,7 +611,6 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             captions=["Not at all", "", "", "", "", "", "", "", "", "Very much"]
         )
 
-        st.divider()  # Add a divider line
 
                 # --- Sharing privately ---
         st.divider()
