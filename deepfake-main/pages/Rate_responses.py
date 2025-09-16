@@ -683,7 +683,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                 "Not share",
                 "Report as misleading"
             ],
-            horizontal=False,
+            horizontal=True,
             index=None,
             key="key_q23_watermark"
         )
