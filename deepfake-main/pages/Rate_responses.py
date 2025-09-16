@@ -49,6 +49,13 @@ st.markdown("""
 if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
 
+def answered(value):
+    """Return True if a widget has been answered (None means not answered)."""
+    return value is not None
+
+def answered_text(value):
+    """For text inputs; empty string counts as not answered."""
+    return value is not None and value.strip() != ""
 
 def collapse_sidebar():
     st.markdown(
@@ -701,9 +708,30 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.warning("Please pick a single option for each criterion. Only complete submissions will be counted.")
 
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
+        submitted = st.form_submit_button("**Submit and View Next**")
 
-        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17,q18,q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
-            st.session_state['count'] += 1
+        if submitted:
+            # validate required fields (do NOT use truthiness)
+            required_keys = [
+                "key_q1","key_q2","key_q3","key_q4","key_q5","key_q6","key_q7","key_q8","key_q9",
+                "key_q10",     # realness scale 1–10
+                "key_q11",     # Real/Fake
+                "key_q15","key_q16","key_q17",
+                "key_q19_private","key_q20_public","key_q21_report","key_q22_downrank","key_q23_watermark",
+                "key_check"
+            ]
+
+            required_ok = all(answered(st.session_state.get(k)) for k in required_keys)
+
+            # If you want q18 required, add:  and answered_text(st.session_state.get("key_q18"))
+            if not required_ok:
+                st.warning("Please complete all required questions before submitting.")
+            else:
+                save_to_db()
+                st.session_state['count'] += 1
+
+      #  if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17,q18,q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
+       #     st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
