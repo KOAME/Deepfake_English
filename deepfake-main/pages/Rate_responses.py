@@ -159,7 +159,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   speaker_competence, speech_speed_influence, pitch_sincerity_effect,
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
-                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no, group_no,share_likely_private, 
+                  confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no,share_likely_private, 
                   share_likely_public, report_misleading, downrank_agree, watermark_action
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
@@ -276,6 +276,11 @@ def save_to_db():
     res_q17 = st.session_state.key_q17  # likelihood_to_vote
     res_q18 = st.session_state.key_q18  # open_ended_response
     check = st.session_state.key_check  # open_ended_response
+    share_likely_private = st.session_state.key_q19_private   # 1–10
+    share_likely_public  = st.session_state.key_q20_public    # 1–10
+    report_misleading    = 1 if st.session_state.key_q21_report == "Yes" else 0
+    downrank_agree       = st.session_state.key_q22_downrank  # 1–10
+    watermark_action     = st.session_state.key_q23_watermark # string
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
@@ -697,7 +702,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
-        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17,q18,q19,q20,q21,q22,q23]):
+        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17,q18,q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
