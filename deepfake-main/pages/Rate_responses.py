@@ -365,7 +365,8 @@ def save_to_db():
 
         res_q0, anger_val, fear_val, disgust_val, 
         sadness_val, enthusiasm_val, pride_val,
-         mip_str , perceived_threat, identity_threat 
+         mip_str , perceived_threat, identity_threat ,
+          salience_before, salience_after
     )
 
     # Closed for testing
