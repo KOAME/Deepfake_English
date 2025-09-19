@@ -413,7 +413,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             horizontal=True
         ) 
         # ===== Emotional impact (0–10 each) =====
-        st.divider() 
+      #  st.divider() 
         st.markdown('<h5>While listening to the clip, I felt…</h5>', unsafe_allow_html=True)
 
         col1, col2 = st.columns(2)
@@ -433,7 +433,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         sadness_val    = 1 if em_sadness else 0
         enthusiasm_val = 1 if em_enthusiasm else 0
         pride_val      = 1 if em_pride else 0
-        st.divider() 
+     #   st.divider() 
         
         # ===== Threat & Identity threat (1–10) =====
 
