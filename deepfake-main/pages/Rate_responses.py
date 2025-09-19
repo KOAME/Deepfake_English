@@ -355,7 +355,22 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
         st.markdown("🔊 If the audio isn't playing, refresh the page or try a different browser.")
 
+        st.divider()
+        st.markdown('<h5>Memory & Misattribution</h5>', unsafe_allow_html=True)
+       q0= st.radio(
+        "After hearing the clip, what do you think the candidate’s position on this issue is?",
+        options=[
+        "Supports stricter policies",
+        "Supports more open policies",
+        "Neutral / No clear position",
+        "Not sure"
+        ],
+        index=None,
+        key="key_candidate_position_after",
+        horizontal=False
+        )
         st.divider()  # Add a divider line
+
         #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
             '<h5>How clear was the speech?</h5>', unsafe_allow_html=True)
