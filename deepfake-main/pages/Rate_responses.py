@@ -767,7 +767,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # --- Watermark action ---
-        st.divider()
+    #    st.divider()
         
         st.markdown(
             '<h5>If a watermark indicated this was synthetic, I would…</h5>',
