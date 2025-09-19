@@ -153,7 +153,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no,share_likely_private, 
-                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after):
+                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after,  em_anger, em_fear, em_disgust, 
+                  em_sadness, em_enthusiasm, em_pride):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
@@ -161,7 +162,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no,share_likely_private, 
-                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after
+                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after, em_anger, em_fear, 
+                  em_disgust, em_sadness, em_enthusiasm, em_pride
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
@@ -170,7 +172,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
                   :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1, :group_no,    
                   :share_likely_private, :share_likely_public, :report_misleading,
-                  :downrank_agree, :watermark_action, :candidate_position_after
+                  :downrank_agree, :watermark_action, :candidate_position_after, :em_anger, :em_fear, :em_disgust, :em_sadness, :em_enthusiasm, :em_pride
     )
     """)
 
@@ -206,6 +208,12 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'watermark_action': watermark_action,
                 
                 'candidate_position_after': candidate_position_after,  # <-- ADD THIS
+                'em_anger': em_anger,
+                'em_fear': em_fear,
+                'em_disgust': em_disgust,
+                'em_sadness': em_sadness,
+                'em_enthusiasm': em_enthusiasm,
+                'em_pride': em_pride
                 
             })
             # db_conn.commit()
@@ -286,14 +294,20 @@ def save_to_db():
     downrank_agree       = st.session_state.key_q22_downrank  # 1–10
     watermark_action     = st.session_state.key_q23_watermark # string
     res_q0 = st.session_state.key_q0  # speech_clarity
+    anger_val      = 1 if st.session_state.key_em_anger else 0
+    fear_val       = 1 if st.session_state.key_em_fear else 0
+    disgust_val    = 1 if st.session_state.key_em_disgust else 0
+    sadness_val    = 1 if st.session_state.key_em_sadness else 0
+    enthusiasm_val = 1 if st.session_state.key_em_enthusiasm else 0
+    pride_val      = 1 if st.session_state.key_em_pride else 0
 
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no, res_q0,])
+           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val])
 
     if all([res_q0,res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,]):
+            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val]):
         st.session_state['count'] += 1
 
     insert_rating(
@@ -321,8 +335,10 @@ def save_to_db():
         group_no,
         share_likely_private, share_likely_public, report_misleading,
         downrank_agree, watermark_action,
+    
 
-        res_q0, #position
+        res_q0, #position, anger_val, fear_val, disgust_val, 
+        sadness_val, enthusiasm_val, pride_val
     )
 
     # Closed for testing
