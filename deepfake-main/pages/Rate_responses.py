@@ -774,7 +774,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             unsafe_allow_html=True
         )
         q23_watermark = st.radio(
-            "If a watermark indicated this was synthetic, I would…",
+            "",
             options=[
                 "Ignore",
                 "Be cautious but still share",
