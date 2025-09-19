@@ -376,7 +376,20 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q0",
             horizontal=True
-        )
+        ) 
+        # ===== Emotional impact (0–10 each) =====
+        st.divider()
+        st.markdown('<h5>While listening to the clip, I felt…</h5>', unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.slider("Anger", 0, 10, value=None, key="key_em_anger")
+            st.slider("Fear", 0, 10, value=None, key="key_em_fear")
+            st.slider("Disgust", 0, 10, value=None, key="key_em_disgust")
+        with col2:
+            st.slider("Sadness", 0, 10, value=None, key="key_em_sadness")
+            st.slider("Enthusiasm", 0, 10, value=None, key="key_em_enthusiasm")
+            st.slider("Pride", 0, 10, value=None, key="key_em_pride")
+
 
         st.divider()
 
