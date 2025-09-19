@@ -153,7 +153,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no,share_likely_private, 
-                  share_likely_public, report_misleading, downrank_agree, watermark_action):
+                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
@@ -161,7 +161,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no,share_likely_private, 
-                  share_likely_public, report_misleading, downrank_agree, watermark_action
+                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
@@ -170,7 +170,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
                   :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1, :group_no,    
                   :share_likely_private, :share_likely_public, :report_misleading,
-                  :downrank_agree, :watermark_action
+                  :downrank_agree, :watermark_action, :candidate_position_after
     )
     """)
 
@@ -203,7 +203,10 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'share_likely_public': share_likely_public,
                 'report_misleading': report_misleading,
                 'downrank_agree': downrank_agree,
-                'watermark_action': watermark_action
+                'watermark_action': watermark_action,
+                
+                'report_misleading':report_misleading
+                
             })
             # db_conn.commit()
     except SQLAlchemyError as e:
@@ -282,13 +285,15 @@ def save_to_db():
     report_misleading    = 1 if st.session_state.key_q21_report == "Yes" else 0
     downrank_agree       = st.session_state.key_q22_downrank  # 1–10
     watermark_action     = st.session_state.key_q23_watermark # string
+    res_q0 = st.session_state.key_q0  # speech_clarity
+
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no])
+           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no, res_q0,])
 
-    if all([res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-            res_q14, res_q15, res_q16, res_q17, res_q18, check]):
+    if all([res_q0,res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
+            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,]):
         st.session_state['count'] += 1
 
     insert_rating(
@@ -315,7 +320,9 @@ def save_to_db():
         check,
         group_no,
         share_likely_private, share_likely_public, report_misleading,
-        downrank_agree, watermark_action
+        downrank_agree, watermark_action,
+
+        res_q0, #position
     )
 
     # Closed for testing
@@ -367,7 +374,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                 "Not sure"
             ],
             index=None,
-            key="key_candidate_position_after",
+            key="key_q0",
             horizontal=True
         )
 
@@ -718,7 +725,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
 
-        if all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
+        if all([q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
