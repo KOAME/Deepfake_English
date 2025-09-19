@@ -438,12 +438,14 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # ===== Threat & Identity threat (1–10) =====
 
         st.markdown('<h5>Perceived threat & identity</h5>', unsafe_allow_html=True)
-        perceived_threat = st.radio("The issue discussed poses a serious threat to the country.",
+        perceived_threat = st.radio(
+            "How serious a threat do you think the **issue discussed in the clip** is to the country?",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_perceived_threat", label_visibility="collapsed",
                  captions=["Strongly Disagree","","","","","","","","","Strongly Agree"])
 
-        identity_threat= st.radio("The clip made me feel my group is disrespected.",
+        identity_threat= st.radio(
+            "To what extent did the clip make you feel that **your social or political group** was disrespected?",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_identity_threat", label_visibility="collapsed",
                  captions=["Strongly Disagree","","","","","","","","","Strongly Agree"])
