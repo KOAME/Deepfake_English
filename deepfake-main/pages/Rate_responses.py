@@ -205,7 +205,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'downrank_agree': downrank_agree,
                 'watermark_action': watermark_action,
                 
-                'report_misleading':report_misleading
+                'candidate_position_after': candidate_position_after,  # <-- ADD THIS
                 
             })
             # db_conn.commit()
