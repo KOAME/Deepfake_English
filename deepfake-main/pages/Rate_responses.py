@@ -156,7 +156,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after,  
                   em_anger, em_fear, em_disgust, 
                   em_sadness, em_enthusiasm, em_pride,  mip_topics,
-                  perceived_threat, identity_threat ):
+                  perceived_threat, identity_threat
+                 ,salience_before, salience_after):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
@@ -170,6 +171,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   em_disgust, em_sadness, 
                   em_enthusiasm, em_pride, mip_topics,
                    perceived_threat, identity_threat 
+                   ,salience_before, salience_after
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
@@ -184,6 +186,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :em_disgust, :em_sadness, 
                   :em_enthusiasm, :em_pride, :mip_topics,
                    :perceived_threat, :identity_threat 
+                   ,:salience_before, :salience_after
     )
     """)
 
@@ -227,6 +230,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'em_pride': em_pride,
                 'mip_topics': mip_topics,
                  'perceived_threat':perceived_threat, 'identity_threat':identity_threat,  
+                ,'salience_before':salience_before, 'salience_after':salience_after
                 
             })
             # db_conn.commit()
@@ -319,6 +323,9 @@ def save_to_db():
     perceived_threat = st.session_state.get("key_perceived_threat")
     identity_threat  = st.session_state.get("key_identity_threat")
 
+    salience_before = st.session_state.key_salience_before
+    salience_after = st.session_state.key_salience_after
+
 
 
     print("Results",
@@ -326,7 +333,8 @@ def save_to_db():
            res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val, mip_str ])
 
     if all([res_q0,res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val, mip_str ]):
+            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val, mip_str, 
+            identity_threat,perceived_threat,salience_before, salience_after ]):
         st.session_state['count'] += 1
 
     insert_rating(
@@ -814,7 +822,23 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # Convert to comma-separated string for DB
-        mip_str = ", ".join(mip_selected) if mip_selected else None
+        mip_str = ", ".join(mip_selected) if mip_selected else None 
+        
+        # ===== Issue salience before/after =====
+        st.divider()
+
+        st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
+        salience_before = st.radio("",
+                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+                 key="key_salience_before", label_visibility="collapsed",
+                 captions=["Not important","","","","","","","","","Extremely important"])
+        
+        st.markdown('<h5>After hearing the clip, how important is this topic to you now?</h5>', unsafe_allow_html=True)
+        salience_after= st.radio("",
+                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+                 key="key_salience_after", label_visibility="collapsed",
+                 captions=["Not important","","","","","","","","","Extremely important"])
+
 
         st.divider()  # Add a divider line
 
@@ -830,7 +854,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
 
         if all([q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q19_private, q20_public, q21_report, q22_downrank, q23_watermark, 
-                identity_threat,perceived_threat ]):
+                identity_threat,perceived_threat,salience_before, salience_after]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
