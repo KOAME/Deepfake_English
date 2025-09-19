@@ -357,9 +357,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         # --- Memory & Misattribution (FIXED INDENT) ---
         st.divider()
-        st.markdown('<h5>Memory & Misattribution</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>After hearing the clip, what do you think the candidate’s position on this issue is?</h5>', unsafe_allow_html=True)
         q0 = st.radio(
-            "After hearing the clip, what do you think the candidate’s position on this issue is?",
+            "",
             options=[
                 "Supports stricter policies",
                 "Supports more open policies",
@@ -368,7 +368,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             ],
             index=None,
             key="key_candidate_position_after",
-            horizontal=False
+            horizontal=True
         )
 
         st.divider()
