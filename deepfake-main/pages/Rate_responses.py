@@ -730,7 +730,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             unsafe_allow_html=True
         )
         q22_downrank = st.radio(
-            "Platforms should downrank AI-generated content even if not deceptive.",
+            "",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal=True,
             index=None,
@@ -741,6 +741,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         # --- Watermark action ---
         st.divider()
+        
         st.markdown(
             '<h5>If a watermark indicated this was synthetic, I would…</h5>',
             unsafe_allow_html=True
@@ -756,8 +757,56 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             horizontal=True,
             index=None,
             key="key_q23_watermark"
+        ) 
+        # ===== Most important problem (topics) =====
+        st.divider()
+
+        # Full topic list
+        topics_all = list(dict.fromkeys([
+            "Immigration",
+            "National Security",
+            "Economy",
+            "Racism",
+            "Climate",
+            "Education",
+            "Gender",
+            "Government / Poor leadership",
+            "Elections / Democracy",
+            "Crime & Public safety",
+            "Healthcare",
+            "Poverty / Homelessness",
+            "Unifying the country"
+        ]))
+        topics_all.append("Other")
+
+        st.markdown('<h5>What is the most important problem facing the US right now?</h5>', unsafe_allow_html=True)
+
+        # Multi-select dropdown for multiple topics
+        mip_selected = st.multiselect(
+            "Select all that apply",
+            topics_all,
+            default=[],
+            key="key_mip_topics"
         )
 
+        # Single most important topic from the same list
+        mip_primary = st.radio(
+            "And which ONE is the most important right now?",
+            options=topics_all,
+            index=None,
+            key="key_mip_primary"
+        )
+
+        # Combine both into one list
+        mip_combined = mip_selected.copy()
+        if mip_primary and mip_primary not in mip_combined:
+            mip_combined.insert(0, mip_primary)  # Primary at the start
+
+        # Convert to comma-separated string for DB
+        mip_str = ", ".join(mip_combined) if mip_combined else None
+
+
+        st.divider()  # Add a divider line
 
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         q18 = st.text_area(
