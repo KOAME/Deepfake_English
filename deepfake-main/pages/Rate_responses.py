@@ -617,8 +617,6 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # Add vertical space
-        st.markdown("<br><br>", unsafe_allow_html=True)
-
         st.markdown('<h5>What influenced your judgment about the authenticity of the clip?</h5>',
                     unsafe_allow_html=True)
         q12 = st.checkbox(
