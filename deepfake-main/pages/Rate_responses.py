@@ -778,33 +778,16 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             "Unifying the country"
         ]))
         topics_all.append("Other")
-
-        st.markdown('<h5>What is the most important problem facing the US right now?</h5>', unsafe_allow_html=True)
-
-        # Multi-select dropdown for multiple topics
+        # Multi-select dropdown (only one question)
         mip_selected = st.multiselect(
-            "Select all that apply",
+            "What is the most important problem facing the US right now? (Select all that apply)",
             topics_all,
             default=[],
             key="key_mip_topics"
         )
 
-        # Single most important topic from the same list
-        mip_primary = st.radio(
-            "And which ONE is the most important right now?",
-            options=topics_all,
-            index=None,
-            key="key_mip_primary"
-        )
-
-        # Combine both into one list
-        mip_combined = mip_selected.copy()
-        if mip_primary and mip_primary not in mip_combined:
-            mip_combined.insert(0, mip_primary)  # Primary at the start
-
         # Convert to comma-separated string for DB
-        mip_str = ", ".join(mip_combined) if mip_combined else None
-
+        mip_str = ", ".join(mip_selected) if mip_selected else None
 
         st.divider()  # Add a divider line
 
