@@ -378,17 +378,26 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             horizontal=True
         ) 
         # ===== Emotional impact (0–10 each) =====
-        st.divider()
+        st.divider() 
         st.markdown('<h5>While listening to the clip, I felt…</h5>', unsafe_allow_html=True)
+
         col1, col2 = st.columns(2)
         with col1:
-            st.slider("Anger", 0, 10, value=None, key="key_em_anger")
-            st.slider("Fear", 0, 10, value=None, key="key_em_fear")
-            st.slider("Disgust", 0, 10, value=None, key="key_em_disgust")
+            em_anger       = st.checkbox("Anger", key="key_em_anger")
+            em_fear        = st.checkbox("Fear", key="key_em_fear")
+            em_disgust     = st.checkbox("Disgust", key="key_em_disgust")
         with col2:
-            st.slider("Sadness", 0, 10, value=None, key="key_em_sadness")
-            st.slider("Enthusiasm", 0, 10, value=None, key="key_em_enthusiasm")
-            st.slider("Pride", 0, 10, value=None, key="key_em_pride")
+            em_sadness     = st.checkbox("Sadness", key="key_em_sadness")
+            em_enthusiasm  = st.checkbox("Enthusiasm", key="key_em_enthusiasm")
+            em_pride       = st.checkbox("Pride", key="key_em_pride")
+
+        # If you need 0/1 values for DB:
+        anger_val      = 1 if em_anger else 0
+        fear_val       = 1 if em_fear else 0
+        disgust_val    = 1 if em_disgust else 0
+        sadness_val    = 1 if em_sadness else 0
+        enthusiasm_val = 1 if em_enthusiasm else 0
+        pride_val      = 1 if em_pride else 0
 
 
         st.divider()
