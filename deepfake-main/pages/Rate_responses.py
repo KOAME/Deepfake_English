@@ -155,7 +155,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no,share_likely_private, 
                   share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after,  
                   em_anger, em_fear, em_disgust, 
-                  em_sadness, em_enthusiasm, em_pride,  mip_topics):
+                  em_sadness, em_enthusiasm, em_pride,  mip_topics,
+                  perceived_threat, identity_threat ):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
@@ -167,7 +168,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   candidate_position_after,
                   em_anger, em_fear, 
                   em_disgust, em_sadness, 
-                  em_enthusiasm, em_pride, mip_topics
+                  em_enthusiasm, em_pride, mip_topics,
+                   perceived_threat, identity_threat 
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
@@ -180,7 +182,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :candidate_position_after, 
                   :em_anger, :em_fear, 
                   :em_disgust, :em_sadness, 
-                  :em_enthusiasm, :em_pride, :mip_topics
+                  :em_enthusiasm, :em_pride, :mip_topics,
+                   :perceived_threat, :identity_threat 
     )
     """)
 
@@ -222,7 +225,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'em_sadness': em_sadness,
                 'em_enthusiasm': em_enthusiasm,
                 'em_pride': em_pride,
-                'mip_topics': mip_topics
+                'mip_topics': mip_topics,
+                 'perceived_threat':perceived_threat, 'identity_threat':identity_threat,  
                 
             })
             # db_conn.commit()
@@ -312,6 +316,9 @@ def save_to_db():
 
     mip_selected = st.session_state.get("key_mip_topics", [])
     mip_str = ", ".join(mip_selected) if mip_selected else None
+    perceived_threat = st.session_state.get("key_perceived_threat")
+    identity_threat  = st.session_state.get("key_identity_threat")
+
 
 
     print("Results",
@@ -350,7 +357,7 @@ def save_to_db():
 
         res_q0, anger_val, fear_val, disgust_val, 
         sadness_val, enthusiasm_val, pride_val,
-         mip_str 
+         mip_str , perceived_threat, identity_threat 
     )
 
     # Closed for testing
@@ -426,10 +433,23 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         sadness_val    = 1 if em_sadness else 0
         enthusiasm_val = 1 if em_enthusiasm else 0
         pride_val      = 1 if em_pride else 0
+        st.divider() 
+        
+        # ===== Threat & Identity threat (1–10) =====
+
+        st.markdown('<h5>Perceived threat & identity</h5>', unsafe_allow_html=True)
+        perceived_threat = st.radio("The issue discussed poses a serious threat to the country.",
+                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+                 key="key_perceived_threat", label_visibility="collapsed",
+                 captions=["Strongly Disagree","","","","","","","","","Strongly Agree"])
+
+        identity_threat= st.radio("The clip made me feel my group is disrespected.",
+                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+                 key="key_identity_threat", label_visibility="collapsed",
+                 captions=["Strongly Disagree","","","","","","","","","Strongly Agree"])
 
 
         st.divider()
-
         #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
             '<h5>How clear was the speech?</h5>', unsafe_allow_html=True)
@@ -807,7 +827,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
 
 
-        if all([q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q19_private, q20_public, q21_report, q22_downrank, q23_watermark]):
+        if all([q0, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q15, q16, q17, q19_private, q20_public, q21_report, q22_downrank, q23_watermark, 
+                identity_threat,perceived_threat ]):
             st.session_state['count'] += 1
 
     except SQLAlchemyError as e:
