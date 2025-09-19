@@ -155,7 +155,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no,share_likely_private, 
                   share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after,  
                   em_anger, em_fear, em_disgust, 
-                  em_sadness, em_enthusiasm, em_pride):
+                  em_sadness, em_enthusiasm, em_pride,  mip_topics):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
                   speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
@@ -167,7 +167,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   candidate_position_after,
                   em_anger, em_fear, 
                   em_disgust, em_sadness, 
-                  em_enthusiasm, em_pride
+                  em_enthusiasm, em_pride, mip_topics
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
@@ -180,7 +180,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :candidate_position_after, 
                   :em_anger, :em_fear, 
                   :em_disgust, :em_sadness, 
-                  :em_enthusiasm, :em_pride
+                  :em_enthusiasm, :em_pride, :mip_topics
     )
     """)
 
@@ -221,7 +221,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'em_disgust': em_disgust,
                 'em_sadness': em_sadness,
                 'em_enthusiasm': em_enthusiasm,
-                'em_pride': em_pride
+                'em_pride': em_pride,
+                'mip_topics': mip_topics
                 
             })
             # db_conn.commit()
@@ -309,13 +310,16 @@ def save_to_db():
     enthusiasm_val = 1 if st.session_state.key_em_enthusiasm else 0
     pride_val      = 1 if st.session_state.key_em_pride else 0
 
+    mip_selected = st.session_state.get("key_mip_topics", [])
+    mip_str = ", ".join(mip_selected) if mip_selected else None
+
 
     print("Results",
           [res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val])
+           res_q14, res_q15, res_q16, res_q17, res_q18, check, group_no, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val, mip_str ])
 
     if all([res_q0,res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10, res_q11, res_q12, res_q13,
-            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val]):
+            res_q14, res_q15, res_q16, res_q17, res_q18, check, res_q0,anger_val, fear_val, disgust_val, sadness_val, enthusiasm_val, pride_val, mip_str ]):
         st.session_state['count'] += 1
 
     insert_rating(
@@ -345,7 +349,8 @@ def save_to_db():
         downrank_agree, watermark_action,
 
         res_q0, anger_val, fear_val, disgust_val, 
-        sadness_val, enthusiasm_val, pride_val
+        sadness_val, enthusiasm_val, pride_val,
+         mip_str 
     )
 
     # Closed for testing
