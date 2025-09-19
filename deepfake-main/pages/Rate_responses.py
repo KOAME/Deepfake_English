@@ -230,7 +230,7 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                 'em_pride': em_pride,
                 'mip_topics': mip_topics,
                  'perceived_threat':perceived_threat, 'identity_threat':identity_threat,  
-                ,'salience_before':salience_before, 'salience_after':salience_after
+                'salience_before':salience_before, 'salience_after':salience_after
                 
             })
             # db_conn.commit()
