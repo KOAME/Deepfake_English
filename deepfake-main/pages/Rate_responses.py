@@ -720,7 +720,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # --- Sharing publicly ---
-        st.divider()
+       # st.divider()
         st.markdown(
             '<h5>How likely are you to share this clip <i>publicly</i> (e.g., a post/story)?</h5>',
             unsafe_allow_html=True
@@ -736,9 +736,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # --- Report misleading ---
-        st.divider()
+      #  st.divider()
         st.markdown(
-            '<h5>Would you report this clip as misleading on platform X?</h5>',
+            '<h5>Would you report this clip as misleading on platform X (Twitter)?</h5>',
             unsafe_allow_html=True
         )
         q21_report = st.radio(
