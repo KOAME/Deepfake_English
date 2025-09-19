@@ -153,7 +153,8 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response, check, group_no,share_likely_private, 
-                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after,  em_anger, em_fear, em_disgust, 
+                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after,  
+                  em_anger, em_fear, em_disgust, 
                   em_sadness, em_enthusiasm, em_pride):
     insert_query = text("""
     INSERT INTO english_ratings (participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
@@ -162,8 +163,11 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   loudness_attention_influence, realness_scale, realness_perception,
                   influenced_by_tone, influenced_by_quality, influenced_by_content,
                   confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,check_1, group_no,share_likely_private, 
-                  share_likely_public, report_misleading, downrank_agree, watermark_action, candidate_position_after, em_anger, em_fear, 
-                  em_disgust, em_sadness, em_enthusiasm, em_pride
+                  share_likely_public, report_misleading, downrank_agree, watermark_action, 
+                  candidate_position_after,
+                  em_anger, em_fear, 
+                  em_disgust, em_sadness, 
+                  em_enthusiasm, em_pride
     ) VALUES (
         :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
                   :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
@@ -172,7 +176,11 @@ def insert_rating(participant_id, audio_clip_id, speech_clarity, speech_persuasi
                   :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
                   :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,:check_1, :group_no,    
                   :share_likely_private, :share_likely_public, :report_misleading,
-                  :downrank_agree, :watermark_action, :candidate_position_after, :em_anger, :em_fear, :em_disgust, :em_sadness, :em_enthusiasm, :em_pride
+                  :downrank_agree, :watermark_action, 
+                  :candidate_position_after, 
+                  :em_anger, :em_fear, 
+                  :em_disgust, :em_sadness, 
+                  :em_enthusiasm, :em_pride
     )
     """)
 
@@ -335,9 +343,8 @@ def save_to_db():
         group_no,
         share_likely_private, share_likely_public, report_misleading,
         downrank_agree, watermark_action,
-    
 
-        res_q0, #position, anger_val, fear_val, disgust_val, 
+        res_q0, anger_val, fear_val, disgust_val, 
         sadness_val, enthusiasm_val, pride_val
     )
 
