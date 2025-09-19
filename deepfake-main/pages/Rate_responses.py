@@ -439,7 +439,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         st.markdown('<h4>How serious a threat do you think the **issue discussed in the clip** is to the country?</h4>', unsafe_allow_html=True)
         perceived_threat = st.radio(
-            ",
+            "",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_perceived_threat",
                  captions=["Strongly Disagree","","","","","","","","","Strongly Agree"]) 
