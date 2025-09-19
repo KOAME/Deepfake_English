@@ -441,13 +441,13 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         perceived_threat = st.radio(
             "How serious a threat do you think the **issue discussed in the clip** is to the country?",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-                 key="key_perceived_threat", label_visibility="collapsed",
+                 key="key_perceived_threat",
                  captions=["Strongly Disagree","","","","","","","","","Strongly Agree"])
 
         identity_threat= st.radio(
             "To what extent did the clip make you feel that **your social or political group** was disrespected?",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-                 key="key_identity_threat", label_visibility="collapsed",
+                 key="key_identity_threat",
                  captions=["Strongly Disagree","","","","","","","","","Strongly Agree"])
 
 
