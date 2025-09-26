@@ -462,56 +462,34 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         ) 
         # ===== Emotional impact (0–10 each) =====
         st.divider()
-        st.markdown('<h5>While listening to the clip, I felt…</h5>', unsafe_allow_html=True)
+        EMOTIONS_TO_USE = ["em_anger", "em_fear", "em_enthusiasm", "em_pride"]
 
-        col1, col2 = st.columns(2)
-        with col1:
-            em_anger = st.radio(
-                "Anger",
-                options=[1,2,3,4,5,6,7,8,9,10],
-                horizontal=True,
-                index=None,
-                key="key_em_anger",
-                label_visibility="collapsed",
-                captions=["Not at all","","","","","","","","","Extremely"]
-            )
+        # Pretty labels for display
+        EMOTION_LABELS = {
+            "em_anger": "Anger",
+            "em_fear": "Fear",
+            "em_disgust": "Disgust",
+            "em_sadness": "Sadness",
+            "em_enthusiasm": "Enthusiasm",
+            "em_pride": "Pride",
+        }
 
-            em_fear = st.radio(
-                "Fear",
-                options=[1,2,3,4,5,6,7,8,9,10],
-                horizontal=True,
-                index=None,
-                key="key_em_fear",
-                label_visibility="collapsed",
-                captions=["Not at all","","","","","","","","","Extremely"]
-            )
-
-        with col2:
-            em_enthusiasm = st.radio(
-                "Enthusiasm",
-                options=[1,2,3,4,5,6,7,8,9,10],
-                horizontal=True,
-                index=None,
-                key="key_em_enthusiasm",
-                label_visibility="collapsed",
-                captions=["Not at all","","","","","","","","","Extremely"]
-            )
-
-            em_pride = st.radio(
-                "Pride",
-                options=[1,2,3,4,5,6,7,8,9,10],
-                horizontal=True,
-                index=None,
-                key="key_em_pride",
-                label_visibility="collapsed",
-                captions=["Not at all","","","","","","","","","Extremely"]
-            )
-
-
-        st.divider() 
+       
+        cols = st.columns(2)
+        for i, emo_key in enumerate(EMOTIONS_TO_USE):
+            with cols[i % 2]:
+                st.radio(
+                    EMOTION_LABELS[emo_key],
+                    options=[1,2,3,4,5,6,7,8,9,10],
+                    horizontal=True,
+                    index=None,
+                    key=f"key_{emo_key}",
+                    label_visibility="collapsed",
+                    captions=["Not at all","","","","","","","","","Extremely"]
+                ) 
         
         # ===== Threat & Identity threat (1–10) =====
-
+        st.divider()
         st.markdown('<h5>How serious a threat do you think the issue discussed in the clip is to the country?</h5>', unsafe_allow_html=True)
         perceived_threat = st.radio(
             "",
