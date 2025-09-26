@@ -435,6 +435,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not important","","","","","","","","","Extremely important"]
         )
+        st.divider() 
         st.subheader("Listen to the audio clip of Kamala Harris or Donald Trump")
         st.audio(url, format="audio/wav")
 
