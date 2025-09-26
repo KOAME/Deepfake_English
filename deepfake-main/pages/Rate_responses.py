@@ -383,20 +383,58 @@ if 'count' not in st.session_state:
 # Treatment group-2 ->  group_no: 3
 
 group_no = 3
-
+##
 with ((st.form(key="form_rating", clear_on_submit=True))):
     try:
         with pool.connect() as db_conn:
-
+            # Fetch only what you need, including topic
             query = text(
-                f"SELECT * FROM audio_clips WHERE  group_no = {group_no} ORDER BY RAND() LIMIT 1;")
-            result = db_conn.execute(query)
+                f"SELECT audio_clip_id, url, topic FROM deepfakes.audio_clips "
+                f"WHERE group_no = :group_no ORDER BY RAND() LIMIT 1;"
+            )
+            result = db_conn.execute(query, {'group_no': group_no})
 
         sample_row = result.fetchone()
-        url = sample_row[1]
+        if not sample_row:
+            st.error("No audio found for this group. Please try again later.")
+            st.stop()
 
-        print(url)
+        audio_clip_id, url, topic = sample_row
 
+        # Store in session_state so save_to_db can access them reliably
+        st.session_state['audio_clip_id'] = audio_clip_id
+        st.session_state['current_topic'] = topic if topic is not None else "this topic"
+
+
+###
+#with ((st.form(key="form_rating", clear_on_submit=True))):
+#    try:
+   #     with pool.connect() as db_conn:
+
+      #      query = text(
+       #         f"SELECT * FROM audio_clips WHERE  group_no = {group_no} ORDER BY RAND() LIMIT 1;")
+      #      result = db_conn.execute(query)
+
+     #   sample_row = result.fetchone()
+   #     url = sample_row[1]
+#
+    #    print(url)
+
+        # --- Issue salience BEFORE listening (uses topic from DB) ---
+        st.markdown(
+            f'<h5>Before hearing the clip, how important was this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+            unsafe_allow_html=True
+        )
+        salience_before = st.radio(
+            "",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_salience_before",
+            label_visibility="collapsed",
+            captions=["Not important","","","","","","","","","Extremely important"]
+        )
         st.subheader("Listen to the audio clip of Kamala Harris or Donald Trump")
         st.audio(url, format="audio/wav")
 
@@ -827,13 +865,13 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         mip_str = ", ".join(mip_selected) if mip_selected else None 
         
         # ===== Issue salience before/after =====
-      #  st.divider()
+        st.divider()
 
-        st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
-        salience_before = st.radio("",
-                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-                 key="key_salience_before", label_visibility="collapsed",
-                 captions=["Not important","","","","","","","","","Extremely important"])
+      #  st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
+    #    salience_before = st.radio("",
+            #     options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+           #      key="key_salience_before", label_visibility="collapsed",
+           #      captions=["Not important","","","","","","","","","Extremely important"])
         
         st.markdown('<h5>After hearing the clip, how important is this topic to you now?</h5>', unsafe_allow_html=True)
         salience_after= st.radio("",
