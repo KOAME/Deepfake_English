@@ -775,7 +775,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Low","","","","","","","","","High"]
         )
-         st.info("1 = Definitely Fake, 10 = Definitely Real")
+        st.info("1 = Definitely Fake, 10 = Definitely Real")
 
 
       #  st.divider()  # Add a divider line
