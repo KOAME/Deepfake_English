@@ -755,21 +755,17 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         with col2:
             st.markdown('<h5>❓What influenced your judgment about the authenticity of the clip?</h5>',
                     unsafe_allow_html=True)
-            q12 = st.checkbox(
-                "The speaker’s tone of voice",
-                key="key_q12"
-            )
+            col1, col2, col3 = st.columns(3)
 
-            q13 = st.checkbox(
-                "The audio quality",
-                key="key_q13"
-            )
+            with col1:
+                q12 = st.checkbox("The speaker’s tone of voice", key="key_q12")
 
-            q14 = st.checkbox(
-                "The content of the audio clip",
-                key="key_q14"
-            )
-        st.markdown('<h5>On a scale from fake to real, how would you rate this audio?</h5>', unsafe_allow_html=True)
+            with col2:
+                q13 = st.checkbox("The audio quality", key="key_q13")
+            with col3:
+                q14 = st.checkbox("The content of the audio clip", key="key_q14")
+        
+        st.markdown('<h5>❓On a scale from fake to real, how would you rate this audio?</h5>', unsafe_allow_html=True)
         q10 = st.radio(
             "How real does the audio seem?",
             options=[1,2,3,4,5,6,7,8,9,10],
@@ -777,8 +773,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q10",
             label_visibility="collapsed",
-            captions=["Definitely Fake","","","","","","","","","Definitely Real"]
+            captions=["Low","","","","","","","","","High"]
         )
+         st.info("1 = Definitely Fake, 10 = Definitely Real")
+
 
       #  st.divider()  # Add a divider line
 
@@ -790,8 +788,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q15",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
+            captions=["Low", "", "", "", "", "", "", "", "", "Completely"]
         )
+        st.info("1 = Not at all, 10 = Completely")
+
         st.markdown("<br><br>", unsafe_allow_html=True)
 
         st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>',
