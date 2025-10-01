@@ -507,8 +507,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             /* Make radio labels larger & bolder */
             div[role="radiogroup"] label p {
                 font-size: 1rem !important;   /* increase text size */
-                font-weight: 600 !important;  /* make labels bold */
-                margin-bottom: 4px;           /* spacing */
+                font-weight: 500 !important;  /* make labels bold */
+                margin-bottom: 10px;           /* spacing */
             }
             </style>
             """,
