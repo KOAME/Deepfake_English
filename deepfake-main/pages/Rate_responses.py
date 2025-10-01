@@ -886,7 +886,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         
         st.divider()
         st.markdown(
-            '<h5>How likely are you to share this clip <i>privately</i> (e.g., WhatsApp, DM)?</h5>',
+            '<h5>❓How likely are you to share this clip <i>privately</i> (📩🔒 WhatsApp, DM)?</h5>',
             unsafe_allow_html=True
         )
         q19_private = st.radio(
@@ -896,13 +896,14 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q19_private",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Very likely"]
+            #captions=["Not at all", "", "", "", "", "", "", "", "", "Very likely"]
         )
+        st.info("1 = Not at all , 10 =  Very Likely") 
 
         # --- Sharing publicly ---
        # st.divider()
         st.markdown(
-            '<h5>How likely are you to share this clip <i>publicly</i> (e.g., a post/story)?</h5>',
+            '<h5>❓How likely are you to share this clip <i>publicly</i> (📢 social media post/story)?</h5>',
             unsafe_allow_html=True
         )
         q20_public = st.radio(
@@ -912,13 +913,14 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q20_public",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Very likely"]
+           # captions=["Not at all", "", "", "", "", "", "", "", "", "Very likely"]
         )
+        st.info("1 = Not at all , 10 =  Very Likely") 
 
         # --- Report misleading ---
       #  st.divider()
         st.markdown(
-            '<h5>Would you report this clip as misleading on platform X (Twitter)?</h5>',
+            '<h5>❓Would you report this clip as misleading on platform X 🆇 (Twitter)?</h5>',
             unsafe_allow_html=True
         )
         q21_report = st.radio(
