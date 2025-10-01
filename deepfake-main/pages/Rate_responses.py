@@ -467,8 +467,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_salience_before",
             label_visibility="collapsed",
-            captions=["Not important","","","","","","","","","Extremely important"]
+            captions=["Low"] + [""]*8 + ["High"]
         )
+        st.info("1 = Not important at all, 10 = Extremely important")
        # st.divider() 
         st.markdown(
             """
