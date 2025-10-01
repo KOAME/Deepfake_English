@@ -452,7 +452,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         # ===== Before Most important problem (topics) =====
         # Full topic list
-        st.markdown('<h5>What is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
         topics_all = list(dict.fromkeys([
             "Immigration",
             "National Security",
