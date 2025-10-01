@@ -470,24 +470,17 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             captions=["Low"] + [""]*8 + ["High"]
         )
         st.info("1 = Not important at all, 10 = Extremely important")
-       # st.divider() 
-        st.markdown(
-            """
-            <hr style="border: none; height: 2px; 
-                       background: linear-gradient(to right, #ff4b1f, #1fddff); 
-               margin: 25px 0;">
-            """,
-            unsafe_allow_html=True
-        )
+        st.divider() 
 
-        st.subheader("Listen to the audio clip of Kamala Harris or Donald Trump")
+        st.markdown('<h4>🔊 Listen to the audio clip of Kamala Harris or Donald Trump and answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
         st.audio(url, format="audio/wav")
 
         # Render the iframe in Streamlit
         # st.markdown(audio_html, unsafe_allow_html=True)
 
-        st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
-        st.markdown("🔊 If the audio isn't playing, refresh the page or try a different browser.")
+       # st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
+        st.markdown("❗ If the audio isn't playing, refresh the page or try a different browser.")
+        st.info("If the audio isn't playing, refresh the page or try a different browser.t")
 
         # --- Memory & Misattribution (FIXED INDENT) ---
         st.divider()
