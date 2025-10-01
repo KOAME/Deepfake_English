@@ -788,7 +788,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q15",
             label_visibility="collapsed",
-            captions=["Low", "", "", "", "", "", "", "", "", "Completely"]
+           # captions=["Low", "", "", "", "", "", "", "", "", "Completely"]
         )
         st.info("1 = Not at all, 10 = Completely")
 
@@ -808,9 +808,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
         check = check if check is not None else 10
 
-        st.divider()  # Add a divider line
+       # st.divider()  # Add a divider line
 
-        st.markdown('<h5>To what extent do you agree with the policy in the audio clip?</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>❓To what extent do you agree with the policy in the audio clip?</h5>', unsafe_allow_html=True)
         q16 = st.radio(
             "To what extent do you agree with the policy in the audio clip?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -818,8 +818,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q16",
             label_visibility="collapsed",
-            captions=["Strongly Disagree", "", "", "", "", "", "", "", "", "Strongly Agree"]
+           # captions=["1", "", "", "", "", "", "", "", "", ""]
         )
+        st.info("1 = Strongly Disagree, 10 = Strongly Agree")
+
 
         st.divider()  # Add a divider line
 
@@ -833,8 +835,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             key="key_q17",
             label_visibility="collapsed",
 
-            captions=["Not at all", "", "","", "", "", "", "", "", "Very much"]
+          #  captions=["Not at all", "", "","", "", "", "", "", "", "Very much"]
         )
+        st.info("1 = Not at all, 10 = Very much")
 
 
                 # --- Sharing privately ---
