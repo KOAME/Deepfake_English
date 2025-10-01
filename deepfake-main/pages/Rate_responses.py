@@ -500,6 +500,20 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
         # ===== Emotional impact (0–10 each) =====
         #st.divider()
+
+        st.markdown(
+            """
+            <style>
+            /* Make radio labels larger & bolder */
+            div[role="radiogroup"] label p {
+                font-size: 1rem !important;   /* increase text size */
+                font-weight: 600 !important;  /* make labels bold */
+                margin-bottom: 4px;           /* spacing */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
         st.markdown("<h5>🎭 While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
 
         EMOTIONS_TO_USE = ["em_anger", "em_fear", "em_enthusiasm", "em_pride"]
@@ -518,6 +532,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         cols = st.columns(2)
         for i, emo_key in enumerate(EMOTIONS_TO_USE):
             with cols[i % 2]:
+                st.markdown(f"**{EMOTION_LABELS[emo_key]}**")
                 st.radio(
                     EMOTION_LABELS[emo_key],
                     options=[1,2,3,4,5,6,7,8,9,10],
