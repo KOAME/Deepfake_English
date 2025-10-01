@@ -920,7 +920,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # --- Report misleading ---
       #  st.divider()
         st.markdown(
-            '<h5>❓Would you report this clip as misleading on platform X 🆇 (Twitter)?</h5>',
+            '<h5>❓Would you report this clip as misleading on platform 🆇 (Twitter)?</h5>',
             unsafe_allow_html=True
         )
         q21_report = st.radio(
@@ -935,7 +935,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # --- Downrank policy ---
         st.divider()
         st.markdown(
-            '<h5>Platforms should downrank content flagged as AI-generated even if not deceptive.</h5>',
+            '<h5>❓ Platforms should downrank content flagged as AI-generated even if not deceptive.</h5>',
             unsafe_allow_html=True
         )
         q22_downrank = st.radio(
@@ -945,9 +945,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q22_downrank",
             label_visibility="collapsed",
-            captions=["Strongly Disagree", "", "", "", "", "", "", "", "", "Strongly Agree"]
+          #  captions=["Strongly Disagree", "", "", "", "", "", "", "", "", "Strongly Agree"]
         )
-
+        st.info("1 = Strongly Disagree, 10 = Strongly Agree")
+        
         # --- Watermark action ---
     #    st.divider()
         
@@ -968,10 +969,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             key="key_q23_watermark"
         ) 
         # ===== Most important problem (topics) =====
-        st.divider()
+      #  st.divider()
 
         # Full topic list
-        st.markdown('<h5>What is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>❓After hearing the clip, what is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
         topics_all = list(dict.fromkeys([
             "Immigration",
             "National Security",
@@ -1000,7 +1001,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         mip_str = ", ".join(mip_selected) if mip_selected else None 
         
         # ===== Issue salience before/after =====
-        st.divider()
+      #  st.divider()
 
       #  st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
     #    salience_before = st.radio("",
