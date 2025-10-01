@@ -869,12 +869,12 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         st.markdown('<h5>❓How confident are you in your assessment of the candidate’s position?</h5>',
                     unsafe_allow_html=True)
-        qcons = st.radio(
+        qconf = st.radio(
             "How confident are you in your assessment of the candidate’s position?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             horizontal=True,
             index=None,
-            key="key_cons",
+            key="key_conf",
             label_visibility="collapsed",
 
           #  captions=["Not at all", "", "","", "", "", "", "", "", "Very Consistent"]
