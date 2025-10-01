@@ -510,8 +510,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             "em_fear": "😨Fear",
             "em_disgust": "🤢Disgust",
             "em_sadness": "😢Sadness",
-            "em_enthusiasm": ""🤩 Enthusiasm",
-            "em_pride": ""🦅 Pride",
+            "em_enthusiasm": "🤩 Enthusiasm",
+            "em_pride": "🦅 Pride",
         }
 
        
