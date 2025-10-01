@@ -953,21 +953,22 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
     #    st.divider()
         
         st.markdown(
-            '<h5>If a watermark indicated this was synthetic, I would…</h5>',
+            '<h5>❓If a watermark indicated this was synthetic, I would…</h5>',
             unsafe_allow_html=True
         )
-        q23_watermark = st.radio(
-            "",
+        q23_watermark = st.selectbox(
+            "Select one option:",
             options=[
                 "Ignore",
                 "Be cautious but still share",
                 "Not share",
                 "Report as misleading"
             ],
-            horizontal=True,
-            index=None,
-            key="key_q23_watermark"
-        ) 
+            index=None,              # ensures nothing is pre-selected
+            key="key_q23_watermark",
+            placeholder="Choose an option..."   # 👈 adds a nice placeholder
+        )
+    
         # ===== Most important problem (topics) =====
       #  st.divider()
 
@@ -1013,7 +1014,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         salience_after= st.radio("",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_salience_after", label_visibility="collapsed",
-                 captions=["Not important","","","","","","","","","Extremely important"])
+                # captions=["Not important","","","","","","","","","Extremely important"])
         st.info("1 = Not important, 10 = Extremely important")
 
 
