@@ -626,7 +626,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Distracting", "", "", "", "", "", "", "", "", "Engaging"]
         )
-         st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
+        st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
 
      #   st.divider()  # Add a divider line
 
@@ -827,7 +827,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             key="key_q17",
             label_visibility="collapsed",
 
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Very much"]
+            captions=["Not at all", "", "",a"", "", "", "", "", "", "Very much"]
         )
 
 
