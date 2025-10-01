@@ -539,8 +539,11 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                     horizontal=True,
                     index=None,
                     key=f"key_{emo_key}",
-                    captions=["Not at all","","","","","","","","","Extremely"]
+                    captions=["Low"] + [""]*8 + ["High"]
                 )
+                st.info("1 = Not at all, 10 = Extremely")
+            #    st.divider() 
+
         
         # ===== Threat & Identity threat (1–10) =====
         st.divider()
