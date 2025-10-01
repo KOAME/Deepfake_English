@@ -579,12 +579,13 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
         st.info("1 = Strongly Disagree, 10 = Strongly Agree")
         st.divider()
+
+ #Speech       
         
-        #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
+        #  st.markdown('<h4>❓peech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
-            '<h5>How clear was the speech?</h5>', unsafe_allow_html=True)
-        st.info(
-            "Clarity refers to how easily the speech can be understood.")
+            '<h5>❓How clear was the speech?</h5>', unsafe_allow_html=True)
+        
         q1 = st.radio(
             label="How clear was the speech?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -594,12 +595,12 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
+        st.info("Clarity refers to how easily the speech can be understood.")
 
-        st.divider()  # Add a divider line
-
+  #      st.divider()  # Add a divider line
         st.markdown(
-            '<h5>How persuasive was the speech?</h5>', unsafe_allow_html=True)
-        st.info("Persuasiveness evaluates the effectiveness of the speech in convincing the listener.")
+            '<h5>❓How persuasive was the speech?</h5>', unsafe_allow_html=True)
+        
         q2 = st.radio(
             label="How persuasive was the speech?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -609,12 +610,12 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
+        st.info("Persuasiveness evaluates the effectiveness of the speech in convincing the listener.")
 
-        st.divider()  # Add a divider line
+        #st.divider()  # Add a divider line
 
-        st.markdown('<h5>Was the pace of the speech engaging or distracting?</h5>', unsafe_allow_html=True)
-        st.info(
-            "Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
+        st.markdown('<h5>❓Was the pace of the speech engaging or distracting?</h5>', unsafe_allow_html=True)
+       
 
         q3 = st.radio(
             "Was the pace of the speech engaging or distracting?",
@@ -625,12 +626,13 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Distracting", "", "", "", "", "", "", "", "", "Engaging"]
         )
+         st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
 
-        st.divider()  # Add a divider line
+     #   st.divider()  # Add a divider line
 
         # st.markdown('<h4>Speech Clarity and Persuasiveness</h4>', unsafe_allow_html=True)
-        st.markdown('<h5>To what extent did the speaker seem trustworthy?</h5>', unsafe_allow_html=True)
-        st.info("Trustworthiness measures the credibility and reliability conveyed by the speaker.")
+        st.markdown('<h5>❓To what extent did the speaker seem trustworthy?</h5>', unsafe_allow_html=True)
+        
         q4 = st.radio(
             "To what extent did the speaker seem trustworthy?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -640,13 +642,13 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
+        st.info("Trustworthiness measures the credibility and reliability conveyed by the speaker.")
 
-        st.divider()  # Add a divider line
+    #    st.divider()  # Add a divider line
 
-        st.markdown('<h5>To what extent did you find the content of the speech trustworthy?</h5>',
+        st.markdown('<h5>❓To what extent did you find the content of the speech trustworthy?</h5>',
                     unsafe_allow_html=True)
-        st.info(
-            "Content trustworthiness reflects how believable, accurate, and reliable the message itself appears—regardless of who is delivering it.")
+        
         q5 = st.radio(
             "To what extent did you find the content of the speech trustworthy??",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -656,11 +658,11 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
+        st.info("Content trustworthiness reflects how believable, accurate, and reliable the message itself appears—regardless of who is delivering it.")
+        
+      #  st.divider()  # Add a divider line
 
-        st.divider()  # Add a divider line
-
-        st.markdown('<h5>How would you rate the speaker’s competence?</h5>', unsafe_allow_html=True)
-        st.info("Competence refers to the speaker's ability to deliver the speech effectively and convincingly.")
+        st.markdown('<h5>❓ How would you rate the speaker’s competence?</h5>', unsafe_allow_html=True)
         q6 = st.radio(
             "How would you rate the speaker’s competence?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -670,11 +672,11 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Incompetent", "", "", "", "", "", "", "", "", "Expert"]
         )
+        st.info("Competence refers to the speaker's ability to deliver the speech effectively and convincingly.")
 
-        st.divider()  # Add a divider line
+      #  st.divider()  # Add a divider line
 
-        st.markdown('<h5>How did the speed affect your understanding?</h5>', unsafe_allow_html=True)
-        st.info("This evaluates the impact of the speech speed on your ability to comprehend the message.")
+        st.markdown('<h5>❓How did the speed affect your understanding?</h5>', unsafe_allow_html=True)
 
         q7 = st.radio(
             "How did the speed affect your understanding?",
@@ -685,12 +687,11 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Confusing", "", "", "", "", "", "", "", "", "Clear"]
         )
+        st.info("This evaluates the impact of the speech speed on your ability to comprehend the message.")
 
-        st.divider()  # Add a divider line
+        #st.divider()  # Add a divider line
 
-        st.markdown("<h5>Variations in pitch affected the speaker’s sincerity?</h5>", unsafe_allow_html=True)
-        st.info(
-            "Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity.")
+        st.markdown("<h5>❓Variations in pitch affected the speaker’s sincerity?</h5>", unsafe_allow_html=True)
         q8 = st.radio(
             "Variations in pitch affected the speaker’s sincerity?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -700,12 +701,12 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
+        st.info("Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity.")
 
-        st.divider()  # Add a divider line
+    #    st.divider()  # Add a divider line
 
         #  st.markdown('<h4>Pitch, Loudness, and Emotional Impact</h4>', unsafe_allow_html=True)
-        st.markdown('<h5>Changes in loudness and emphasis grabbed my attention.</h5>', unsafe_allow_html=True)
-        st.info("Loudness and emphasis refer to how well volume variations captured and maintained your attention.")
+        st.markdown('<h5>❓ Changes in loudness and emphasis grabbed my attention.</h5>', unsafe_allow_html=True)
 
         q9 = st.radio(
             "Changes in loudness and emphasis grabbed my attention.",
@@ -716,6 +717,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
         )
+        st.info("Loudness and emphasis refer to how well volume variations captured and maintained your attention.")
 
         st.divider()  # Add a divider line
 
@@ -733,8 +735,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
      #   )
 
    #     st.divider()  # Add a divider line
-
-        st.markdown('<h5>Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
+#Real Fake
+        st.markdown('<h5❓Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
         q11 = st.radio(
             "Do you think the speech is real or fake?",
             options=["Real", "Fake"],
@@ -745,7 +747,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # Add vertical space
-        st.markdown('<h5>What influenced your judgment about the authenticity of the clip?</h5>',
+        st.markdown('<h5>❓What influenced your judgment about the authenticity of the clip?</h5>',
                     unsafe_allow_html=True)
         q12 = st.checkbox(
             "The speaker’s tone of voice",
@@ -772,9 +774,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             captions=["Definitely Fake","","","","","","","","","Definitely Real"]
         )
 
-        st.divider()  # Add a divider line
+      #  st.divider()  # Add a divider line
 
-        st.markdown('<h5>How confident are you that this audio clip is real/fake?</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>❓ How confident are you that this audio clip is real/fake?</h5>', unsafe_allow_html=True)
         q15 = st.radio(
             "How confident are you that this audio clip is real/fake?",
             options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
