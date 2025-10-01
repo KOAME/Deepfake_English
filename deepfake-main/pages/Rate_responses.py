@@ -467,7 +467,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_salience_before",
             label_visibility="collapsed",
-            captions=["Low"] + [""]*8 + ["High"]
+           # captions=["Low"] + [""]*8 + ["High"]
         )
         st.info("1 = Not important at all, 10 = Extremely important")
         st.divider() 
@@ -539,7 +539,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                     horizontal=True,
                     index=None,
                     key=f"key_{emo_key}",
-                    captions=["Low"] + [""]*8 + ["High"]
+                    #captions=["Low"] + [""]*8 + ["High"]
                 )
                 st.info("1 = Not at all, 10 = Extremely")
             #    st.divider() 
@@ -552,7 +552,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             "",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_perceived_threat",
-                 captions=["Low","","","","","","","","","High"]) 
+              #   captions=["Low","","","","","","","","","High"]
+        ) 
         
         st.info("1 = Not at all, 10 = Extremely")
         
@@ -562,7 +563,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             "",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_identity_threat",
-                 captions=["Low","","","","","","","","","High"])
+               #  captions=["Low","","","","","","","","","High"]
+        )
 
 
         st.info("1 = Not at all, 10 = Extremely")
@@ -575,7 +577,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             horizontal=True,
             index=None,
             key="key_persuasion",
-            captions=["Low","","","","","","","","","High"]
+           # captions=["Low","","","","","","","","","High"]
         )
         st.info("1 = Strongly Disagree, 10 = Strongly Agree")
         st.divider()
@@ -593,9 +595,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q1",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
+          #  captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
-        st.info("Clarity refers to how easily the speech can be understood.")
+        st.info("Clarity refers to how easily the speech can be understood. 1 = Not at all, 10 = Extremely")
 
   #      st.divider()  # Add a divider line
         st.markdown(
@@ -608,9 +610,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q2",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
+         #   captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
-        st.info("Persuasiveness evaluates the effectiveness of the speech in convincing the listener.")
+        st.info("Clarity refers to how easily the speech can be understood. 1 = Not at all, 10 = Extremely")
 
         #st.divider()  # Add a divider line
 
@@ -624,9 +626,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q3",
             label_visibility="collapsed",
-            captions=["Distracting", "", "", "", "", "", "", "", "", "Engaging"]
+          #  captions=["Distracting", "", "", "", "", "", "", "", "", "Engaging"]
         )
-        st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension.")
+        st.info("Engagement refers to how captivating the pace of the speech is, while distraction indicates whether the pace disrupts comprehension. 1 = Distracting, 10 = Engaging")
 
      #   st.divider()  # Add a divider line
 
@@ -640,9 +642,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q4",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
+         #   captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
-        st.info("Trustworthiness measures the credibility and reliability conveyed by the speaker.")
+        st.info("Trustworthiness measures the credibility and reliability conveyed by the speaker. 1 = Not at all, 10 = Extremely")
 
     #    st.divider()  # Add a divider line
 
@@ -656,9 +658,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q5",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
+        #    captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
-        st.info("Content trustworthiness reflects how believable, accurate, and reliable the message itself appears—regardless of who is delivering it.")
+        st.info("Content trustworthiness reflects how believable, accurate, and reliable the message itself appears—regardless of who is delivering it. 1 = Not at all, 10 = Extremely")
         
       #  st.divider()  # Add a divider line
 
@@ -670,9 +672,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q6",
             label_visibility="collapsed",
-            captions=["Incompetent", "", "", "", "", "", "", "", "", "Expert"]
+           # captions=["Incompetent", "", "", "", "", "", "", "", "", "Expert"]
         )
-        st.info("Competence refers to the speaker's ability to deliver the speech effectively and convincingly.")
+        st.info("Competence refers to the speaker's ability to deliver the speech effectively and convincingly. 1 = Incompetent, 10 = Expert")
 
       #  st.divider()  # Add a divider line
 
@@ -685,9 +687,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q7",
             label_visibility="collapsed",
-            captions=["Confusing", "", "", "", "", "", "", "", "", "Clear"]
+            #captions=["Confusing", "", "", "", "", "", "", "", "", "Clear"]
         )
-        st.info("This evaluates the impact of the speech speed on your ability to comprehend the message.")
+        st.info("This evaluates the impact of the speech speed on your ability to comprehend the message. 1 = Confusing, 10 = Clear")
 
         #st.divider()  # Add a divider line
 
@@ -699,9 +701,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q8",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
+           # captions=["Not at all", "", "", "", "", "", "", "", "", "Extremely"]
         )
-        st.info("Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity.")
+        st.info("Pitch variation refers to changes in tone and intonation, which can influence the perception of sincerity. 1 = Not at all, 10 = Extremely")
 
     #    st.divider()  # Add a divider line
 
@@ -715,9 +717,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q9",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
+            #captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
         )
-        st.info("Loudness and emphasis refer to how well volume variations captured and maintained your attention.")
+        st.info("Loudness and emphasis refer to how well volume variations captured and maintained your attention. 1 = Not at all, 10 = Completely")
 
         st.divider()  # Add a divider line
 
@@ -773,7 +775,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_q10",
             label_visibility="collapsed",
-            captions=["Low","","","","","","","","","High"]
+          #  captions=["Low","","","","","","","","","High"]
         )
         st.info("1 = Definitely Fake, 10 = Definitely Real")
 
@@ -804,7 +806,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             index=None,
             key="key_check",
             label_visibility="collapsed",
-            captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
+          #  captions=["Not at all", "", "", "", "", "", "", "", "", "Completely"]
         )
         check = check if check is not None else 10
 
