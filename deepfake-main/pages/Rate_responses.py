@@ -827,7 +827,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             key="key_q17",
             label_visibility="collapsed",
 
-            captions=["Not at all", "", "",a"", "", "", "", "", "", "Very much"]
+            captions=["Not at all", "", "","", "", "", "", "", "", "Very much"]
         )
 
 
