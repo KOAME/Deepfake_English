@@ -420,9 +420,44 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 #
     #    print(url)
 
+        # ===== Before Most important problem (topics) =====
+        st.divider()
+
+        # Full topic list
+        st.markdown('<h5>What is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
+        topics_all = list(dict.fromkeys([
+            "Immigration",
+            "National Security",
+            "Economy",
+            "Racism",
+            "Climate",
+            "Education",
+            "Gender",
+            "Government / Poor leadership",
+            "Elections / Democracy",
+            "Crime & Public safety",
+            "Healthcare",
+            "Poverty / Homelessness",
+            "Unifying the country"
+        ]))
+        topics_all.append("Other")
+        # Multi-select dropdown (only one question)
+        mip_selected_before = st.multiselect(
+            "",
+            topics_all,
+            default=[],
+            key="key_mip_topics"
+        )
+
+        # Convert to comma-separated string for DB
+        mip_str_before = ", ".join(mip_selected) if mip_selected else None 
+        
+        st.divider()
+
+        
         # --- Issue salience BEFORE listening (uses topic from DB) ---
         st.markdown(
-            f'<h5>Before hearing the clip, how important was this topic '
+            f'<h5>How important was this topic '
             f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
             unsafe_allow_html=True
         )
