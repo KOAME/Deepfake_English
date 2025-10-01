@@ -419,36 +419,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
    #     url = sample_row[1]
 #
     #    print(url)
-        st.markdown("""
-        <style>
-        .question-block {
-            padding: 20px;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #ffffff 0%, #f9fafc 100%);
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid #e6e9ef;
-            transition: all 0.2s ease-in-out;
-        }
-        .question-block:hover {
-            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-            transform: translateY(-2px);
-        }
-        .question-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        </style>
-        """, unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class="question-block">
-            <div class="question-title">🎭 Emotional Reactions</div>
-            <p>Please rate how strongly you felt each of the following emotions.</p>
-        </div>
-        """, unsafe_allow_html=True)
 
         # ===== Before Most important problem (topics) =====
         # Full topic list
@@ -485,7 +456,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         
         # --- Issue salience BEFORE listening (uses topic from DB) ---
         st.markdown(
-            f'<h5>How important was this topic '
+            f'<h5>❓ How important was this topic '
             f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
             unsafe_allow_html=True
         )
@@ -498,7 +469,16 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             label_visibility="collapsed",
             captions=["Not important","","","","","","","","","Extremely important"]
         )
-        st.divider() 
+       # st.divider() 
+        st.markdown(
+            """
+            <hr style="border: none; height: 2px; 
+                       background: linear-gradient(to right, #ff4b1f, #1fddff); 
+               margin: 25px 0;">
+            """,
+            unsafe_allow_html=True
+        )
+
         st.subheader("Listen to the audio clip of Kamala Harris or Donald Trump")
         st.audio(url, format="audio/wav")
 
