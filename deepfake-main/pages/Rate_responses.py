@@ -422,17 +422,33 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.markdown("""
         <style>
         .question-block {
-            padding: 15px;
-            border-radius: 12px;
-            background-color: #f8f9fa;
-            margin-bottom: 20px;
-            box-shadow: 0px 1px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafc 100%);
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e6e9ef;
+            transition: all 0.2s ease-in-out;
+        }
+        .question-block:hover {
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        st.markdown('<div class="question-block">🎭 Emotional Reactions</div>', unsafe_allow_html=True)
-
+        st.markdown("""
+        <div class="question-block">
+            <div class="question-title">🎭 Emotional Reactions</div>
+            <p>Please rate how strongly you felt each of the following emotions.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
         # ===== Before Most important problem (topics) =====
         # Full topic list
