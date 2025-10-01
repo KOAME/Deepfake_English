@@ -420,7 +420,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 #
     #    print(url)
 
-        st.success("### ✅Key Issues (Before Clip)")
+        st.success("### Key Issues (Before Clip)")
 
         # ===== Before Most important problem (topics) =====
         # Full topic list
@@ -471,7 +471,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
            # captions=["Low"] + [""]*8 + ["High"]
         )
         st.info("1 = Not important at all, 10 = Extremely important")
-        st.divider() 
+        #st.divider() 
+        st.success("### Listening to the Clip")
 
         st.markdown('<h4>🔊 Listen to the audio clip of Kamala Harris or Donald Trump and answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
         st.audio(url, format="audio/wav")
@@ -485,20 +486,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         # --- Memory & Misattribution (FIXED INDENT) ---
      #   st.divider()
+        st.success("### Feelings & Reactions")
+
 #question        
-        st.markdown('<h5>❓What do you think the candidate’s position on this issue is?</h5>', unsafe_allow_html=True)
-        q0 = st.selectbox(
-            "Select one option:",
-            options=[
-                "Supports stricter policies",
-                "Supports more open policies",
-                "Neutral / No clear position",
-                "Not sure"
-            ],
-            index=None,   # ensures no default is selected
-            key="key_q0",
-            placeholder="Choose an option..."
-        )
+
         # ===== Emotional impact (0–10 each) =====
         #st.divider()
 
@@ -567,8 +558,23 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                #  captions=["Low","","","","","","","","","High"]
         )
 
-
         st.info("1 = Not at all, 10 = Extremely")
+
+        st.success("### Candidate’s Position")
+
+        st.markdown('<h5>❓What do you think the candidate’s position on this issue is?</h5>', unsafe_allow_html=True)
+        q0 = st.selectbox(
+            "Select one option:",
+            options=[
+                "Supports stricter policies",
+                "Supports more open policies",
+                "Neutral / No clear position",
+                "Not sure"
+            ],
+            index=None,   # ensures no default is selected
+            key="key_q0",
+            placeholder="Choose an option..."
+        )
 
         st.markdown("<h5>❓ How much do you agree with the candidate’s position on this issue?</h5>", unsafe_allow_html=True)
 
@@ -581,7 +587,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
            # captions=["Low","","","","","","","","","High"]
         )
         st.info("1 = Strongly Disagree, 10 = Strongly Agree")
-        st.divider()
+     #   st.divider()      
+        
+        st.success("### Speech & Delivery")
+
 
  #Speech       
         
@@ -740,6 +749,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
    #     st.divider()  # Add a divider line
 #Real Fake
         
+        st.success("### Authenticity")
 
         
         col1, col2 = st.columns([1, 2])  # left column = Real/Fake, right column = influences
@@ -826,7 +836,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.info("1 = Strongly Disagree, 10 = Strongly Agree")
 
 
-        st.divider()  # Add a divider line
+       # st.divider()  # Add a divider line
+        
+        st.success("### Political Outcomes")
+
 #more on candidate
         st.markdown('<h5>❓Based on the speech you just heard, how likely are you to vote for this person?</h5>',
                     unsafe_allow_html=True)
@@ -887,7 +900,9 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         
 # --- Sharing privately ---
         
-        st.divider()
+      #  st.divider()
+        st.success("### Sharing & Platforms")
+
         st.markdown(
             '<h5>❓How likely are you to share this clip <i>privately</i> (📩🔒 WhatsApp, DM)?</h5>',
             unsafe_allow_html=True
@@ -936,7 +951,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # --- Downrank policy ---
-        st.divider()
+      #  st.divider()
         st.markdown(
             '<h5>❓ Platforms should downrank content flagged as AI-generated even if not deceptive.</h5>',
             unsafe_allow_html=True
@@ -974,6 +989,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
     
         # ===== Most important problem (topics) =====
       #  st.divider()
+        st.success("### Key Issues (After Clip)")
 
         # Full topic list
         st.markdown('<h5>❓After hearing the clip, what is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
