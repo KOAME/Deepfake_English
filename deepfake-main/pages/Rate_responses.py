@@ -736,7 +736,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
    #     st.divider()  # Add a divider line
 #Real Fake
-        st.markdown('<h5❓Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>❓Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
         q11 = st.radio(
             "Do you think the speech is real or fake?",
             options=["Real", "Fake"],
