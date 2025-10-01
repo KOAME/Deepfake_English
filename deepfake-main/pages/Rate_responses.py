@@ -529,19 +529,19 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         }
 
        
-        cols = st.columns(2)
-        for i, emo_key in enumerate(EMOTIONS_TO_USE):
-            with cols[i % 2]:
-                st.markdown(f"**{EMOTION_LABELS[emo_key]}**")
+        for emo_key in EMOTIONS_TO_USE:
+            col1, col2 = st.columns([1,4])  # left = label, right = scale
+            with col1:
+                st.markdown(f"**{EMOTION_LABELS[emo_key]}**")  # big bold label
+            with col2:
                 st.radio(
                     "",
                     options=[1,2,3,4,5,6,7,8,9,10],
                     horizontal=True,
                     index=None,
                     key=f"key_{emo_key}",
-                   # label_visibility="collapsed",
                     captions=["Not at all","","","","","","","","","Extremely"]
-                ) 
+                )
         
         # ===== Threat & Identity threat (1–10) =====
         st.divider()
