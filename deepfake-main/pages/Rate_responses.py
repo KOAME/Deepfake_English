@@ -524,7 +524,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                     horizontal=True,
                     index=None,
                     key=f"key_{emo_key}",
-                    label_visibility="collapsed",
+                   # label_visibility="collapsed",
                     captions=["Not at all","","","","","","","","","Extremely"]
                 ) 
         
