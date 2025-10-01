@@ -1014,6 +1014,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_salience_after", label_visibility="collapsed",
                  captions=["Not important","","","","","","","","","Extremely important"])
+        st.info("1 = Not important, 10 = Extremely important")
 
 
         st.divider()  # Add a divider line
