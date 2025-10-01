@@ -419,10 +419,22 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
    #     url = sample_row[1]
 #
     #    print(url)
+        st.markdown("""
+        <style>
+        .question-block {
+            padding: 15px;
+            border-radius: 12px;
+            background-color: #f8f9fa;
+            margin-bottom: 20px;
+            box-shadow: 0px 1px 6px rgba(0,0,0,0.1);
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+st.markdown('<div class="question-block">🎭 Emotional Reactions</div>', unsafe_allow_html=True)
+
 
         # ===== Before Most important problem (topics) =====
-        st.divider()
-
         # Full topic list
         st.markdown('<h5>What is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
         topics_all = list(dict.fromkeys([
