@@ -736,33 +736,39 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
    #     st.divider()  # Add a divider line
 #Real Fake
-        st.markdown('<h5>❓Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
-        q11 = st.radio(
-            "Do you think the speech is real or fake?",
-            options=["Real", "Fake"],
-            horizontal=True,
-            index=None,
-            key="key_q11",
-            label_visibility="collapsed"
-        )
+        
+
+        
+        col1, col2 = st.columns([1, 2])  # left column = Real/Fake, right column = influences
+        with col1:
+            st.markdown('<h5>❓Do you think the speech is real or fake?</h5>', unsafe_allow_html=True)
+            q11 = st.radio(
+                    "Do you think the speech is real or fake?",
+                    options=["Real", "Fake"],
+                    horizontal=True,
+                    index=None,
+                    key="key_q11",
+                    label_visibility="collapsed"
+                )
 
         # Add vertical space
-        st.markdown('<h5>❓What influenced your judgment about the authenticity of the clip?</h5>',
+        with col2:
+            st.markdown('<h5>❓What influenced your judgment about the authenticity of the clip?</h5>',
                     unsafe_allow_html=True)
-        q12 = st.checkbox(
-            "The speaker’s tone of voice",
-            key="key_q12"
-        )
+            q12 = st.checkbox(
+                "The speaker’s tone of voice",
+                key="key_q12"
+            )
 
-        q13 = st.checkbox(
-            "The audio quality",
-            key="key_q13"
-        )
+            q13 = st.checkbox(
+                "The audio quality",
+                key="key_q13"
+            )
 
-        q14 = st.checkbox(
-            "The content of the audio clip",
-            key="key_q14"
-        )
+            q14 = st.checkbox(
+                "The content of the audio clip",
+                key="key_q14"
+            )
         st.markdown('<h5>On a scale from fake to real, how would you rate this audio?</h5>', unsafe_allow_html=True)
         q10 = st.radio(
             "How real does the audio seem?",
