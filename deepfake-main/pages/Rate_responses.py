@@ -483,7 +483,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
 
         # --- Memory & Misattribution (FIXED INDENT) ---
-        st.divider()
+     #   st.divider()
 #question        
         st.markdown('<h5>❓What do you think the candidate’s position on this issue is?</h5>', unsafe_allow_html=True)
         q0 = st.selectbox(
@@ -499,17 +499,19 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             placeholder="Choose an option..."
         )
         # ===== Emotional impact (0–10 each) =====
-        st.divider()
+        #st.divider()
+        st.markdown("<h5>🎭 While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
+
         EMOTIONS_TO_USE = ["em_anger", "em_fear", "em_enthusiasm", "em_pride"]
 
         # Pretty labels for display
         EMOTION_LABELS = {
-            "em_anger": "Anger",
-            "em_fear": "Fear",
-            "em_disgust": "Disgust",
-            "em_sadness": "Sadness",
-            "em_enthusiasm": "Enthusiasm",
-            "em_pride": "Pride",
+            "em_anger": "😡Anger",
+            "em_fear": "😨Fear",
+            "em_disgust": "🤢Disgust",
+            "em_sadness": "😢Sadness",
+            "em_enthusiasm": ""🤩 Enthusiasm",
+            "em_pride": ""🦅 Pride",
         }
 
        
