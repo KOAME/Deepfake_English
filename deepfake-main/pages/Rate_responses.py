@@ -420,10 +420,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 #
     #    print(url)
 
-        st.markdown(
-            "<div style='text-align:center; color:#999; margin:20px 0;'>🎭</div>",
-            unsafe_allow_html=True
-        )
+        st.success("Key Issues (Before Clip)")
 
         # ===== Before Most important problem (topics) =====
         # Full topic list
