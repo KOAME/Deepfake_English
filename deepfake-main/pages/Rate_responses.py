@@ -534,7 +534,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             with cols[i % 2]:
                 st.markdown(f"**{EMOTION_LABELS[emo_key]}**")
                 st.radio(
-                    EMOTION_LABELS[emo_key],
+                    "",
                     options=[1,2,3,4,5,6,7,8,9,10],
                     horizontal=True,
                     index=None,
