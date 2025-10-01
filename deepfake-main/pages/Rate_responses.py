@@ -451,12 +451,12 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # Convert to comma-separated string for DB
         mip_str_before = ", ".join(mip_selected) if mip_selected_before else None 
         
-        st.divider()
+       # st.divider()
 
         
         # --- Issue salience BEFORE listening (uses topic from DB) ---
         st.markdown(
-            f'<h5>❓ How important was this topic '
+            f'<h5>❓ How important is this topic '
             f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
             unsafe_allow_html=True
         )
