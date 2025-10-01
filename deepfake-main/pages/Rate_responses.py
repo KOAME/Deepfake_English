@@ -553,19 +553,33 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_perceived_threat",
                  captions=["Low","","","","","","","","","High"]) 
-                 
+        
+        st.info("1 = Not at all, 10 = Extremely")
+        
         st.markdown('<h5>❓How much did the clip make you feel that your social or political group was being disrespected?</h5>', unsafe_allow_html=True)
 
         identity_threat= st.radio(
             "",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_identity_threat",
-                 captions=["Low","","","","","","","","","    High"])
+                 captions=["Low","","","","","","","","","High"])
 
 
         st.info("1 = Not at all, 10 = Extremely")
-        
+
+        st.markdown("<h5>❓ How much do you agree with the candidate’s position on this issue?</h5>", unsafe_allow_html=True)
+
+        q_persuasion = st.radio(
+            "",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_persuasion",
+            captions=["Low","","","","","","","","","High"]
+        )
+        st.info("1 = Strongly Disagree, 10 = Strongly Agree")
         st.divider()
+        
         #  st.markdown('<h4>Speech Speed and Pace</h4>', unsafe_allow_html=True)
         st.markdown(
             '<h5>How clear was the speech?</h5>', unsafe_allow_html=True)
