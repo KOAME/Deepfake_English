@@ -824,8 +824,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
 
         st.divider()  # Add a divider line
-
-        st.markdown('<h5>Based on the speech you just heard, how likely are you to vote for this person?</h5>',
+#more on candidate
+        st.markdown('<h5>❓Based on the speech you just heard, how likely are you to vote for this person?</h5>',
                     unsafe_allow_html=True)
         q17 = st.radio(
             "Based on the speech you just heard, how likely are you to vote for this person?",
@@ -835,12 +835,55 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             key="key_q17",
             label_visibility="collapsed",
 
-          #  captions=["Not at all", "", "","", "", "", "", "", "", "Very much"]
+          #  captions=["Not at all", "", "","", "", "", "", "", "", "Very uch"]
+        )
+        st.info("1 = Not at all, 10 = Very Much")
+
+        st.markdown('<h5>❓How consistent do you think the candidate’s statements and actions are on this issue?</h5>',
+                    unsafe_allow_html=True)
+        qcons = st.radio(
+            "How consistent do you think the candidate’s statements and actions are on this issue?",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_cons",
+            label_visibility="collapsed",
+
+          #  captions=["Not at all", "", "","", "", "", "", "", "", "Very Consistent"]
         )
         st.info("1 = Not at all, 10 = Very much")
 
+        st.markdown('<h5>❓From the audio clip, to what extent do you feel the candidate’s stance aligns with your own views?</h5>',
+                    unsafe_allow_html=True)
+        qalign = st.radio(
+            "How consistent do you think the candidate’s statements and actions are on this issue?",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_align",
+            label_visibility="collapsed",
 
-                # --- Sharing privately ---
+          #  captions=["Not at all", "", "","", "", "", "", "", "", "Very Consistent"]
+        )
+        st.info("1 =  Strongly Opposed, 10 =  Strongly Aligned")        
+
+        st.markdown('<h5>❓How confident are you in your assessment of the candidate’s position?</h5>',
+                    unsafe_allow_html=True)
+        qcons = st.radio(
+            "How confident are you in your assessment of the candidate’s position?",
+            options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            horizontal=True,
+            index=None,
+            key="key_cons",
+            label_visibility="collapsed",
+
+          #  captions=["Not at all", "", "","", "", "", "", "", "", "Very Consistent"]
+        )
+        st.info("1 = Not Confident , 10 =  Strongly Confident")        
+        
+        
+# --- Sharing privately ---
+        
         st.divider()
         st.markdown(
             '<h5>How likely are you to share this clip <i>privately</i> (e.g., WhatsApp, DM)?</h5>',
