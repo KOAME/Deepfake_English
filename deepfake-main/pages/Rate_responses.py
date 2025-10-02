@@ -420,7 +420,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 #
     #    print(url)
 
-        st.success("####### ")
+        st.success("####")
 
         # ===== Before Most important problem (topics) =====
         # Full topic list
