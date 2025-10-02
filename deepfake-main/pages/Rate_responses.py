@@ -992,7 +992,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.success("######")
 
         # Full topic list
-        st.markdown('<h5>❓After hearing the clip, what is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>', unsafe_allow_html=True)
         topics_all = list(dict.fromkeys([
             "Immigration",
             "National Security",
@@ -1029,7 +1029,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
            #      key="key_salience_before", label_visibility="collapsed",
            #      captions=["Not important","","","","","","","","","Extremely important"])
         
-        st.markdown('<h5>After hearing the clip, how important is this topic to you now?</h5>', unsafe_allow_html=True)
+        st.markdown('<h5>How important is this topic to you now?</h5>', unsafe_allow_html=True)
         salience_after= st.radio("",
                  options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
                  key="key_salience_after", label_visibility="collapsed",
