@@ -486,6 +486,22 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
 
         # --- Memory & Misattribution (FIXED INDENT) ---
      #   st.divider()
+        st.markdown(
+            f'<h5>❓ How important is this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+            unsafe_allow_html=True
+        )
+        salience_topic_after = st.radio(
+            "",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_salience_topic_after",
+            label_visibility="collapsed",
+           # captions=["Low"] + [""]*8 + ["High"]
+        )
+        st.info("1 = Not important at all, 10 = Extremely important")
+        
         st.success("######")
 
 #question        
