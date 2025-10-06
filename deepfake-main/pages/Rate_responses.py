@@ -475,7 +475,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             "If you skip or miss any question, the page will reload and your answers for this clip will be lost."
         )
         st.info("💡 Tip: Scroll carefully and make sure each question has a selected option before clicking **Submit and View Next**.")
-        st.success("######")
+       # st.success("######")
 
         # BEFORE: Most important problem(s)
         st.markdown(
