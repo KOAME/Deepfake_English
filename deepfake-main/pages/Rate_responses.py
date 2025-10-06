@@ -457,8 +457,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         
         # --- Issue salience BEFORE listening (uses topic from DB) ---
         st.markdown(
-            f'<h5>❓ How important is this topic '
-            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+                f'<h5>❓ Before listening: What is <i>your personal stance</i> on '
+                f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',
             unsafe_allow_html=True
         )
         salience_before = st.radio(
@@ -1068,7 +1068,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
        #          options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
         #         key="key_salience_after", label_visibility="collapsed",
         #        # captions=["Not important","","","","","","","","","Extremely important"]
-                                )
+                             #   )
       #  st.info("1 = Not important, 10 = Extremely important")
 
 
