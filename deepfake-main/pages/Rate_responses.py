@@ -873,30 +873,49 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # Optional: bump count only when a core set is answered
         core_keys = [
-            "key_q0",
-            "key_q1",
-            "key_q2",
-            "key_q3",
-            "key_q4",
-            "key_q5",
-            "key_q6",
-            "key_q7",
-            "key_q8",
-            "key_q9",
-            "key_q10",
-            "key_q11",
-            "key_q15",
-            "key_q16",
-            "key_q17",
+            # ---- Pre-clip section ----
+            "key_mip_topics_before",      # important problems before
+            "key_salience_before",        # topic importance before
+            "key_stance_before",          # stance before listening
+
+            # ---- Emotion section ----
+            "key_em_anger",
+            "key_em_fear",
+            "key_em_enthusiasm",
+            "key_em_pride",
+
+            # ---- Threat perception ----
+            "key_perceived_threat",
+            "key_identity_threat",
+
+            # ---- Candidate & speech perceptions ----
+            "key_q0",  # candidate position
+            "key_q1",  # speech clarity
+            "key_q2",  # speech persuasiveness
+            "key_q3",  # speech pace engagement
+            "key_q4",  # speaker trustworthiness
+            "key_q5",  # content trustworthiness
+            "key_q6",  # speaker competence
+            "key_q7",  # speed effect
+            "key_q8",  # pitch sincerity
+            "key_q9",  # loudness attention
+            "key_q10", # realness scale
+            "key_q11", # real/fake choice
+            "key_q15", # confidence real/fake
+            "key_q16", # policy agreement
+            "key_q17", # likelihood to vote
+
+            # ---- Sharing & governance ----
             "key_q19_private",
             "key_q20_public",
             "key_q21_report",
             "key_q22_downrank",
             "key_q23_watermark",
-            "key_perceived_threat",
-            "key_identity_threat",
-            "key_salience_before",
-            "key_salience_topic_after",
+
+            # ---- Post-clip wrap-up ----
+            "key_mip_topics",             # most important problem after
+            "key_salience_topic_after",   # importance after
+            "key_stance_after",           # stance after
         ]
         if all(st.session_state.get(k) is not None for k in core_keys):
             st.session_state["count"] += 0  # already incremented inside save_to_db when complete
