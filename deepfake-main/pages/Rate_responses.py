@@ -920,7 +920,54 @@ with st.form(key="form_rating", clear_on_submit=True):
         ]
         if all(st.session_state.get(k) is not None for k in core_keys):
             st.session_state["count"] += 0  # already incremented inside save_to_db when complete
+            
+        # Map keys to user-facing labels and whether they must be non-empty
+        core_requirements = [
+            # ---- Pre-clip section ----
+            ("key_mip_topics_before", "Select the most important problem(s) BEFORE listening", True),
+            ("key_salience_before",   "Rate the topic importance BEFORE listening", False),
+            ("key_stance_before",     "State your personal stance BEFORE listening", False),
 
+            # ---- Emotion section ----
+            ("key_em_anger",       "Rate your felt Anger", False),
+            ("key_em_fear",        "Rate your felt Fear", False),
+            ("key_em_enthusiasm",  "Rate your felt Enthusiasm", False),
+            ("key_em_pride",       "Rate your felt Pride", False),
+
+            # ---- Threat perception ----
+            ("key_perceived_threat", "Rate national threat", False),
+            ("key_identity_threat",  "Rate identity disrespect", False),
+
+            # ---- Candidate & speech perceptions ----
+            ("key_q0",   "Select the candidate’s position", False),
+            ("key_q1",   "Rate speech clarity", False),
+            ("key_q2",   "Rate speech persuasiveness", False),
+            ("key_q3",   "Rate pace (engaging vs distracting)", False),
+            ("key_q4",   "Rate speaker trustworthiness", False),
+            ("key_q5",   "Rate content trustworthiness", False),
+            ("key_q6",   "Rate speaker competence", False),
+            ("key_q7",   "Speed effect on understanding", False),
+            ("key_q8",   "Pitch effect on sincerity", False),
+            ("key_q9",   "Loudness/emphasis effect", False),
+            ("key_q10",  "Fake→Real scale", False),
+            ("key_q11",  "Real or Fake choice", False),
+            ("key_q15",  "Confidence in authenticity judgment", False),
+            ("key_q16",  "Agreement with policy", False),
+            ("key_q17",  "Likelihood to vote", False),
+
+            # ---- Sharing & governance ----
+            ("key_q19_private",   "Likelihood to share privately", False),
+            ("key_q20_public",    "Likelihood to share publicly", False),
+            ("key_q21_report",    "Would you report as misleading?", False),
+            ("key_q22_downrank",  "Downrank AI-generated content policy", False),
+            ("key_q23_watermark", "Action if watermark indicates synthetic", False),
+
+            # ---- Post-clip wrap-up ----
+            ("key_mip_topics",           "Select the most important problem(s) AFTER listening", True),
+            ("key_salience_topic_after", "Rate topic importance AFTER listening", False),
+            ("key_stance_after",         "State your personal stance AFTER listening", False),
+        ]
+        
         missing_labels = [
             label for (key, label, require_nonempty) in core_requirements
             if is_missing(key, require_nonempty)
