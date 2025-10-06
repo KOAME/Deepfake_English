@@ -479,31 +479,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.markdown('<h4>🔊 Listen to the audio clip of Kamala Harris or Donald Trump and answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
         st.audio(url, format="audio/wav")
 
-        # Render the iframe in Streamlit
-        # st.markdown(audio_html, unsafe_allow_html=True)
 
-       # st.markdown('<h4>Please answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
-        #st.markdown(" If the audio isn't playing, refresh the page or try a different browser.")
         st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
-
-        # --- Memory & Misattribution (FIXED INDENT) ---
-     #   st.divider()
-        st.markdown(
-            f'<h5>❓ How important is this topic '
-            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
-            unsafe_allow_html=True
-        )
-        salience_topic_after = st.radio(
-            "",
-            options=[1,2,3,4,5,6,7,8,9,10],
-            horizontal=True,
-            index=None,
-            key="key_salience_topic_after",
-            label_visibility="collapsed",
-           # captions=["Low"] + [""]*8 + ["High"]
-        )
-        st.info("1 = Not important at all, 10 = Extremely important")
-        
         st.success("######")
 
 #question        
@@ -1041,11 +1018,41 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # ===== Issue salience before/after =====
       #  st.divider()
 
-      #  st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
-    #    salience_before = st.radio("",
-            #     options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-           #      key="key_salience_before", label_visibility="collapsed",
-           #      captions=["Not important","","","","","","","","","Extremely important"])
+        st.markdown(
+            f'<h5>❓ What is <i>your personal stance</i> on this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',
+            unsafe_allow_html=True)
+        stance_before  = st.selectbox(
+            "Select one option:",
+            options=[
+                "Supports stricter policies",
+                "Supports more open policies",
+                "Neutral / No clear position",
+                "Not sure"
+            ],
+            index=None,   # ensures no default is selected
+            key="key_stance_before ",
+            placeholder="Choose an option..."
+        )
+        
+        st.markdown(
+            f'<h5>❓ How important is this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+            unsafe_allow_html=True
+        )
+        salience_topic_after = st.radio(
+            "",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_salience_topic_after",
+            label_visibility="collapsed",
+           # captions=["Low"] + [""]*8 + ["High"]
+        )
+        st.info("1 = Not important at all, 10 = Extremely important")
+        
+        st.success("######")
+
         
         st.markdown('<h5>How important is this topic to you now?</h5>', unsafe_allow_html=True)
         salience_after= st.radio("",
