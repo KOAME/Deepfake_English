@@ -384,7 +384,7 @@ if 'count' not in st.session_state:
 
 group_no = 3
 ##
-with ((st.form(key="form_rating", clear_on_submit=True))):
+with st.form(key="form_rating", clear_on_submit=True):
     try:
         with pool.connect() as db_conn:
             # Fetch only what you need, including topic
@@ -444,7 +444,8 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         
         # --- Issue salience BEFORE listening (uses topic from DB) ---
         st.markdown(
-                f'<h5>❓ How important is this topic ' f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>', unsafe_allow_html=True
+                f'<h5>❓ How important is this topic ' f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>', 
+            unsafe_allow_html=True
         )
         salience_before = st.radio(
             "",
