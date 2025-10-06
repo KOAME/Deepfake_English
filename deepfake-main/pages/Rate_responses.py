@@ -526,18 +526,8 @@ with st.form(key="form_rating", clear_on_submit=True):
             f'<h5>❓ What is <i>your personal stance</i> on this topic (<i>{st.session_state["current_topic"]}</i>)?</h5>',
             unsafe_allow_html=True,
         )
-        stance_before = st.selectbox(
-            "Select one option:",
-            options=[
-                "Supports stricter policies",
-                "Supports more open policies",
-                "Neutral / No clear position",
-                "Not sure",
-            ],
-            index=None,
-            key="key_stance_before",
-            placeholder="Choose an option...",
-        )
+        stance_before = ten_radio("stance_before")
+        st.info("1 = Supports more open policies, 10 = Supports stricter policies")
 
         st.success("######")
         st.markdown(
@@ -848,18 +838,12 @@ with st.form(key="form_rating", clear_on_submit=True):
             f'<h5>❓ What is <i>your personal stance</i> on this topic (<i>{st.session_state["current_topic"]}</i>)?</h5>',
             unsafe_allow_html=True,
         )
-        stance_after = st.selectbox(
-            "Select one option:",
-            options=[
-                "Supports stricter policies",
-                "Supports more open policies",
-                "Neutral / No clear position",
-                "Not sure",
-            ],
-            index=None,
-            key="key_stance_after",
-            placeholder="Choose an option...",
-        )
+        stance_after = ten_radio("key_stance_after")
+        st.info("1 = Supports more open policies, 10 = Supports stricter policies")
+
+        
+
+      
 
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         st.text_area(
