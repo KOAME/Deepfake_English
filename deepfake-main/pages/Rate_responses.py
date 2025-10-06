@@ -912,7 +912,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         if all(st.session_state.get(k) is not None for k in core_keys):
             st.session_state["count"] += 0  # already incremented inside save_to_db when complete
 
-        missing_labels = [label for k, label in required_fields.items() if is_missing(k)]
+        missing_labels = [label for k, label in core_keys.items() if is_missing(k)]
 
         if missing_labels:
             st.error(
