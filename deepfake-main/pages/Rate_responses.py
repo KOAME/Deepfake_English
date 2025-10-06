@@ -384,7 +384,7 @@ if 'count' not in st.session_state:
 
 group_no = 3
 ##
-with st.form(key="form_rating", clear_on_submit=True):
+with ((st.form(key="form_rating", clear_on_submit=True))):
     try:
         with pool.connect() as db_conn:
             # Fetch only what you need, including topic
@@ -406,6 +406,19 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.session_state['current_topic'] = topic if topic is not None else "this topic"
 
 
+###
+#with ((st.form(key="form_rating", clear_on_submit=True))):
+#    try:
+   #     with pool.connect() as db_conn:
+
+      #      query = text(
+       #         f"SELECT * FROM audio_clips WHERE  group_no = {group_no} ORDER BY RAND() LIMIT 1;")
+      #      result = db_conn.execute(query)
+
+     #   sample_row = result.fetchone()
+   #     url = sample_row[1]
+#
+    #    print(url)
 
         st.success("######")
 
@@ -437,14 +450,15 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         # Convert to comma-separated string for DB
-        mip_str_before = ", ".join(mip_selected_before) if mip_selected_before else None 
+        mip_str_before = ", ".join(mip_selected) if mip_selected_before else None 
         
        # st.divider()
 
         
         # --- Issue salience BEFORE listening (uses topic from DB) ---
         st.markdown(
-                f'<h5>❓ How important is this topic ' f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>', 
+            f'<h5>❓ How important is this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
             unsafe_allow_html=True
         )
         salience_before = st.radio(
@@ -458,26 +472,6 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
         st.info("1 = Not important at all, 10 = Extremely important")
         #st.divider() 
-
-        st.markdown(
-                f'<h5>❓What is <i>your personal stance</i> on '
-                f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',
-            unsafe_allow_html=True
-        )
-        stance_before  = st.selectbox(
-            "Select one option:",
-            options=[
-                "Supports stricter policies",
-                "Supports more open policies",
-                "Neutral / No clear position",
-                "Not sure"
-            ],
-            index=None,   # ensures no default is selected
-            key="key_stance_before",
-            placeholder="Choose an option..."
-        )
-
-        
         st.success("######")
 
         st.markdown('<h4>🔊 Listen to the audio clip of Kamala Harris or Donald Trump and answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
@@ -492,8 +486,22 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # --- Memory & Misattribution (FIXED INDENT) ---
      #   st.divider()
+        st.markdown(
+            f'<h5>❓ How important is this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+            unsafe_allow_html=True
+        )
+        salience_topic_after = st.radio(
+            "",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_salience_topic_after",
+            label_visibility="collapsed",
+           # captions=["Low"] + [""]*8 + ["High"]
+        )
+        st.info("1 = Not important at all, 10 = Extremely important")
         
-
         st.success("######")
 
 #question        
@@ -1028,28 +1036,32 @@ with st.form(key="form_rating", clear_on_submit=True):
         # Convert to comma-separated string for DB
         mip_str = ", ".join(mip_selected) if mip_selected else None 
         
+        # ===== Issue salience before/after =====
+      #  st.divider()
 
+      #  st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
+    #    salience_before = st.radio("",
+            #     options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+           #      key="key_salience_before", label_visibility="collapsed",
+           #      captions=["Not important","","","","","","","","","Extremely important"])
         
-        st.markdown(
-            f'<h5>❓ How important is this topic '
-            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
-            unsafe_allow_html=True)
-        salience_after = st.radio(
-            "",
-            options=[1,2,3,4,5,6,7,8,9,10],
-            horizontal=True,
-            index=None,
-            key="key_salience_after",
-            label_visibility="collapsed",
-           # captions=["Low"] + [""]*8 + ["High"])
-        st.info("1 = Not important at all, 10 = Extremely important")        
+        st.markdown('<h5>How important is this topic to you now?</h5>', unsafe_allow_html=True)
+        salience_after= st.radio("",
+                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
+                 key="key_salience_after", label_visibility="collapsed",
+                # captions=["Not important","","","","","","","","","Extremely important"]
+                                )
+        st.info("1 = Not important, 10 = Extremely important")
 
+
+        st.divider()  # Add a divider line
 
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         q18 = st.text_area(
             "Did anything stand out or seem interesting to you? If so, why?",
             help="Feel free to share any thoughts or impressions you found particularly interesting about the audio.",
-            key="key_q18")
+            key="key_q18"
+        )
 
         st.divider()  # Add a divider line
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
