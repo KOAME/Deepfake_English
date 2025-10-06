@@ -968,16 +968,16 @@ with st.form(key="form_rating", clear_on_submit=True):
             ("key_stance_after",         "State your personal stance AFTER listening", False),
         ]
         
-        missing_labels = [
-            label for (key, label, require_nonempty) in core_requirements
-            if is_missing(key, require_nonempty)
-        ]
+      #  missing_labels = [
+     #       label for (key, label, require_nonempty) in core_requirements
+      #      if is_missing(key, require_nonempty)
+     #   ]
 
-        if missing_labels:
-            st.error(
-                "❗ You missed some required questions. Please complete the following:\n\n"
-                + "\n".join(f"- {item}" for item in missing_labels)
-            )
+     #   if missing_labels:
+            #st.error(
+               # "❗ You missed some required questions. Please complete the following:\n\n"
+               # + "\n".join(f"- {item}" for item in missing_labels)
+          #  )
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
     except Exception as e:
