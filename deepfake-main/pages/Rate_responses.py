@@ -468,7 +468,15 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.session_state["audio_clip_id"] = audio_clip_id
         st.session_state["current_topic"] = topic if topic else "this topic"
 
-
+        def ten_radio(key):
+            return st.radio(
+                "",
+                options=list(range(1, 11)),
+                horizontal=True,
+                index=None,
+                key=key,
+                label_visibility="collapsed",
+            )
 
         st.warning(
             "⚠️ Please answer **every question** carefully before submitting. "
