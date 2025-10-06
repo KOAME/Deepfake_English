@@ -1051,8 +1051,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
         st.info("1 = Not important at all, 10 = Extremely important")
         
-        st.success("######")
-
+    
         
         st.markdown('<h5>How important is this topic to you now?</h5>', unsafe_allow_html=True)
         salience_after= st.radio("",
@@ -1063,7 +1062,6 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.info("1 = Not important, 10 = Extremely important")
 
 
-        st.divider()  # Add a divider line
 
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         q18 = st.text_area(
