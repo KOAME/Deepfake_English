@@ -450,7 +450,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
 
         # Convert to comma-separated string for DB
-        mip_str_before = ", ".join(mip_selected) if mip_selected_before else None 
+        mip_str_before = ", ".join(mip_selected_before) if mip_selected_before else None 
         
        # st.divider()
 
