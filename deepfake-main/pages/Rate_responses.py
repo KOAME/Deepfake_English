@@ -1022,7 +1022,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             f'<h5>❓ What is <i>your personal stance</i> on this topic '
             f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',
             unsafe_allow_html=True)
-        stance_before  = st.selectbox(
+        stance_after  = st.selectbox(
             "Select one option:",
             options=[
                 "Supports stricter policies",
@@ -1031,7 +1031,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
                 "Not sure"
             ],
             index=None,   # ensures no default is selected
-            key="key_stance_before ",
+            key="key_stance_after ",
             placeholder="Choose an option..."
         )
         
