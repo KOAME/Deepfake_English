@@ -1033,8 +1033,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.markdown(
             f'<h5>❓ How important is this topic '
             f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
-            unsafe_allow_html=True
-        )
+            unsafe_allow_html=True)
         salience_after = st.radio(
             "",
             options=[1,2,3,4,5,6,7,8,9,10],
@@ -1042,8 +1041,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             index=None,
             key="key_salience_after",
             label_visibility="collapsed",
-           # captions=["Low"] + [""]*8 + ["High"]
-        )
+           # captions=["Low"] + [""]*8 + ["High"])
         st.info("1 = Not important at all, 10 = Extremely important")        
 
 
@@ -1051,8 +1049,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         q18 = st.text_area(
             "Did anything stand out or seem interesting to you? If so, why?",
             help="Feel free to share any thoughts or impressions you found particularly interesting about the audio.",
-            key="key_q18"
-        )
+            key="key_q18")
 
         st.divider()  # Add a divider line
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
