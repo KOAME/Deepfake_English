@@ -406,19 +406,6 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.session_state['current_topic'] = topic if topic is not None else "this topic"
 
 
-###
-#with ((st.form(key="form_rating", clear_on_submit=True))):
-#    try:
-   #     with pool.connect() as db_conn:
-
-      #      query = text(
-       #         f"SELECT * FROM audio_clips WHERE  group_no = {group_no} ORDER BY RAND() LIMIT 1;")
-      #      result = db_conn.execute(query)
-
-     #   sample_row = result.fetchone()
-   #     url = sample_row[1]
-#
-    #    print(url)
 
         st.success("######")
 
