@@ -1027,14 +1027,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # Convert to comma-separated string for DB
         mip_str = ", ".join(mip_selected) if mip_selected else None 
         
-        # ===== Issue salience before/after =====
-      #  st.divider()
 
-      #  st.markdown('<h5>Before hearing the clip, how important was this topic to you?</h5>', unsafe_allow_html=True)
-    #    salience_before = st.radio("",
-            #     options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-           #      key="key_salience_before", label_visibility="collapsed",
-           #      captions=["Not important","","","","","","","","","Extremely important"])
         
         st.markdown(
             f'<h5>❓ How important is this topic '
@@ -1051,17 +1044,7 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
            # captions=["Low"] + [""]*8 + ["High"]
         )
         st.info("1 = Not important at all, 10 = Extremely important")        
-        
-    #    st.markdown('<h5>How important is this topic to you now?</h5>', unsafe_allow_html=True)
-     #   salience_after= st.radio("",
-       #          options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-        #         key="key_salience_after", label_visibility="collapsed",
-        #        # captions=["Not important","","","","","","","","","Extremely important"]
-                             #   )
-      #  st.info("1 = Not important, 10 = Extremely important")
 
-
-     #   st.divider()  # Add a divider line
 
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         q18 = st.text_area(
