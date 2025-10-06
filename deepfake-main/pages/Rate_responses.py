@@ -1018,6 +1018,25 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         # ===== Issue salience before/after =====
       #  st.divider()
 
+
+        
+        st.markdown(
+            f'<h5>❓ How important is this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+            unsafe_allow_html=True
+        )
+        salience_topic_after = st.radio(
+            "",
+            options=[1,2,3,4,5,6,7,8,9,10],
+            horizontal=True,
+            index=None,
+            key="key_salience_topic_after",
+            label_visibility="collapsed",
+           # captions=["Low"] + [""]*8 + ["High"]
+        )
+        st.info("1 = Not important at all, 10 = Extremely important")
+
+
         st.markdown(
             f'<h5>❓ What is <i>your personal stance</i> on this topic '
             f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',
@@ -1035,34 +1054,6 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
             placeholder="Choose an option..."
         )
         
-        st.markdown(
-            f'<h5>❓ How important is this topic '
-            f'(<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
-            unsafe_allow_html=True
-        )
-        salience_topic_after = st.radio(
-            "",
-            options=[1,2,3,4,5,6,7,8,9,10],
-            horizontal=True,
-            index=None,
-            key="key_salience_topic_after",
-            label_visibility="collapsed",
-           # captions=["Low"] + [""]*8 + ["High"]
-        )
-        st.info("1 = Not important at all, 10 = Extremely important")
-        
-    
-        
-        st.markdown('<h5>How important is this topic to you now?</h5>', unsafe_allow_html=True)
-        salience_after= st.radio("",
-                 options=[1,2,3,4,5,6,7,8,9,10], horizontal=True, index=None,
-                 key="key_salience_after", label_visibility="collapsed",
-                # captions=["Not important","","","","","","","","","Extremely important"]
-                                )
-        st.info("1 = Not important, 10 = Extremely important")
-
-
-
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         q18 = st.text_area(
             "Did anything stand out or seem interesting to you? If so, why?",
