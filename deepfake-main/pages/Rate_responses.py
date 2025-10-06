@@ -458,7 +458,10 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         )
         st.info("1 = Not important at all, 10 = Extremely important")
 
-        st.markdown(f'<h5>❓ What is <i>your personal stance</i> on this topic 'f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',, unsafe_allow_html=True)
+        st.markdown(
+            f'<h5>❓ What is <i>your personal stance</i> on this topic '
+            f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',
+            unsafe_allow_html=True)
         stance_before  = st.selectbox(
             "Select one option:",
             options=[
