@@ -534,7 +534,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             f'<h5>❓ What is <i>your personal stance</i> on this topic (<i>{st.session_state["current_topic"]}</i>)?</h5>',
             unsafe_allow_html=True,
         )
-        stance_before = ten_radio("stance_before")
+        stance_before = ten_radio("key_stance_before")
         st.info("1 = Supports more open policies, 10 = Supports stricter policies")
 
         st.success("######")
@@ -862,8 +862,17 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.divider()
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
-
-        # Optional: bump count only when a core set is answered
+        
+        # ---------- Validation helpers ----------
+        def is_missing(key: str, require_nonempty: bool = False) -> bool:
+            val = st.session_state.get(key, None)
+            if val is None:
+                return True
+            if require_nonempty:
+                # Treat empty lists/strings/dicts as missing when flagged
+                if isinstance(val, (list, str, dict)) and len(val) == 0:
+                    return True
+            return False        # Optional: bump count only when a core set is answered
         core_keys = [
             # ---- Pre-clip section ----
             "key_mip_topics_before",      # important problems before
@@ -912,12 +921,15 @@ with st.form(key="form_rating", clear_on_submit=True):
         if all(st.session_state.get(k) is not None for k in core_keys):
             st.session_state["count"] += 0  # already incremented inside save_to_db when complete
 
-        missing_labels = [label for k, label in core_keys.items() if is_missing(k)]
+        missing_labels = [
+            label for (key, label, require_nonempty) in core_requirements
+            if is_missing(key, require_nonempty)
+        ]
 
         if missing_labels:
             st.error(
-            "❗ You missed some required questions. Please complete the following:\n\n"
-            + "\n".join(f"- {item}" for item in missing_labels)
+                "❗ You missed some required questions. Please complete the following:\n\n"
+                + "\n".join(f"- {item}" for item in missing_labels)
             )
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
