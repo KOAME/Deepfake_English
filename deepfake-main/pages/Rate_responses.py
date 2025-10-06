@@ -406,20 +406,6 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
         st.session_state['current_topic'] = topic if topic is not None else "this topic"
 
 
-###
-#with ((st.form(key="form_rating", clear_on_submit=True))):
-#    try:
-   #     with pool.connect() as db_conn:
-
-      #      query = text(
-       #         f"SELECT * FROM audio_clips WHERE  group_no = {group_no} ORDER BY RAND() LIMIT 1;")
-      #      result = db_conn.execute(query)
-
-     #   sample_row = result.fetchone()
-   #     url = sample_row[1]
-#
-    #    print(url)
-
         st.success("######")
 
         # ===== Before Most important problem (topics) =====
@@ -471,7 +457,20 @@ with ((st.form(key="form_rating", clear_on_submit=True))):
            # captions=["Low"] + [""]*8 + ["High"]
         )
         st.info("1 = Not important at all, 10 = Extremely important")
-        #st.divider() 
+
+        st.markdown(f'<h5>❓ What is <i>your personal stance</i> on this topic 'f'(<i>{st.session_state["current_topic"]}</i>)?</h5>',, unsafe_allow_html=True)
+        stance_before  = st.selectbox(
+            "Select one option:",
+            options=[
+                "Supports stricter policies",
+                "Supports more open policies",
+                "Neutral / No clear position",
+                "Not sure"
+            ],
+            index=None,   # ensures no default is selected
+            key="key_stance_before ",
+            placeholder="Choose an option..."
+        )
         st.success("######")
 
         st.markdown('<h4>🔊 Listen to the audio clip of Kamala Harris or Donald Trump and answer the following questions about the audio clip.</h4>', unsafe_allow_html=True)
