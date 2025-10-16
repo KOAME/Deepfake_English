@@ -192,12 +192,12 @@ def insert_rating(
     salience_after,
 ):
     """
-    Inserts into table: english_ratings
+    Inserts into table: english_ratings_phase2
     Columns must match your DB schema.
     """
     insert_query = text(
         """
-        INSERT INTO english_ratings (
+        INSERT INTO english_ratings_phase2 (
             participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
             speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
             speaker_competence, speech_speed_influence, pitch_sincerity_effect,
