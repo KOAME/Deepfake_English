@@ -290,7 +290,7 @@ def update_participant(participant_id, age_group, gender, education, occupation,
                        ai_experience,
                        media_consumption):
     update_query = text("""
-    UPDATE participants
+    UPDATE participants_phase2
     SET age_group = :age_group,
         gender = :gender,
         education = :education,
