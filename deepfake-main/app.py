@@ -182,21 +182,24 @@ def get_sqlalchemy_engine(tunnel):
 # Database insertions
 def insert_participant_and_get_id(pool):
     try:
-        with pool.connect() as connection:
-            insert_query = text(
-                "INSERT INTO participants (age_group, gender, education, occupation, country_of_residence, "
-                "nationality, race, native_tongue, languages_spoken, political_party, political_inclination, "
-                "listening_habits, tech_savy, ai_experience, media_consumption) VALUES (NULL, NULL, NULL, NULL, NULL, "
-                "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)")
+        insert_query = text("""
+            INSERT INTO participants (
+                age_group, gender, education, occupation, country_of_residence,
+                nationality, race, native_tongue, languages_spoken,
+                political_party, political_inclination, listening_habits,
+                tech_savy, ai_experience, media_consumption
+            ) VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+        """)
+
+        with pool.begin() as connection:  # ✅ automatically commits on success
             result = connection.execute(insert_query)
-            # connection.commit()
-            last_id_query = text("SELECT LAST_INSERT_ID()")
-            last_id_result = connection.execute(last_id_query)
-            last_id = last_id_result.scalar()
-            return last_id
+            participant_id = result.lastrowid  # ✅ safest way to get ID from same statement
+            return participant_id
+
     except SQLAlchemyError as e:
         st.error(f"Database insertion failed: {e}")
         raise
+
 
 
 def insert_prolific_id(pool, participant_id, prolific_id):
