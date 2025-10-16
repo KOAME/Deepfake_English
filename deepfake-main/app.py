@@ -203,23 +203,22 @@ def insert_participant_and_get_id(pool):
 
 
 def insert_prolific_id(pool, participant_id, prolific_id):
-
     try:
-        insert_query = text(
-            """INSERT INTO prolific_ids (participant_id, prolific_id) VALUES (:participant_id, :prolific_id)""")
+        insert_query = text("""
+            INSERT INTO prolific_ids (participant_id, prolific_id)
+            VALUES (:participant_id, :prolific_id)
+        """)
 
-        parameters = {
-            "participant_id": participant_id,
-            "prolific_id": prolific_id
-        }
-
-        with pool.connect() as db_conn:
-            db_conn.execute(insert_query, parameters)
-            # db_conn.commit()
+        with pool.begin() as db_conn:  # ✅ ensures commit
+            db_conn.execute(insert_query, {
+                "participant_id": participant_id,
+                "prolific_id": prolific_id
+            })
 
     except SQLAlchemyError as e:
         st.error(f"Failed to insert Prolific ID: {e}")
         raise
+
 
 
 # Main logic
