@@ -586,7 +586,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # Threat & Identity threat
         st.markdown(
-            '<h5>❓How serious a threat do you think the issue discussed in the clip is to the country?</h5>',
+            '<h5>❓How much do you think this issue threatens your country?</h5>',
             unsafe_allow_html=True,
         )
         st.radio(
@@ -600,7 +600,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.info("1 = Not at all, 10 = Extremely")
 
         st.markdown(
-            '<h5>❓How much did the clip make you feel that your social or political group was being disrespected?</h5>',
+            '<h5>❓How much does the topic in this clip disrespect your social or political group?</h5>',
             unsafe_allow_html=True,
         )
         st.radio(
@@ -620,18 +620,28 @@ with st.form(key="form_rating", clear_on_submit=True):
             '<h5>❓What do you think the candidate’s position on this issue is?</h5>',
             unsafe_allow_html=True,
         )
-        st.selectbox(
-            "Select one option:",
-            options=[
-                "Supports stricter policies",
-                "Supports more open policies",
-                "Neutral / No clear position",
-                "Not sure",
-            ],
+
+        st.radio(
+            "",
+            options=list(range(1, 11)),
+            horizontal=True,
             index=None,
             key="key_q0",
-            placeholder="Choose an option...",
+            label_visibility="collapsed",
         )
+        st.info("1 = Supports more open policies, 10 = Supports stricter policies")
+       # st.selectbox(
+         #   "Select one option:",
+        #    options=[
+       #         "Supports stricter policies",
+           #     "Supports more open policies",
+          #      "Neutral / No clear position",
+           #     "Not sure",
+         #   ],
+         #   index=None,
+         #   key="key_q0",
+         #   placeholder="Choose an option...",
+       # )
 
         # Agreement with position (optional display; not in DB schema)
         st.markdown("<h5>❓ How much do you agree with the candidate’s position on this issue?</h5>", unsafe_allow_html=True)
@@ -811,13 +821,23 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.info("1 = Strongly Disagree, 10 = Strongly Agree")
 
         st.markdown("<h5>❓If a watermark indicated this was synthetic, I would…</h5>", unsafe_allow_html=True)
-        st.selectbox(
-            "Select one option:",
-            options=["Ignore", "Be cautious but still share", "Not share", "Report as misleading"],
+        st.radio(
+            "",
+            options=list(range(1, 11)),
+            horizontal=True,
             index=None,
             key="key_q23_watermark",
-            placeholder="Choose an option...",
+            label_visibility="collapsed",
         )
+        st.info("1 = Completely Ignore, 10 = Strongly report as misleading") 
+        
+        #st.selectbox(
+        #    "Select one option:",
+        #    options=["Ignore", "Be cautious but still share", "Not share", "Report as misleading"],
+        #    index=None,
+        #    key="key_q23_watermark",
+        #    placeholder="Choose an option...",
+      #  )
 
         # AFTER: Topics
         st.success("######")
