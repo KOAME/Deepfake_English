@@ -281,7 +281,7 @@ def insert_participant_and_get_id():
         with pool.begin() as connection:
             insert_query = text(
                 """
-                INSERT INTO participants_phase2 (
+                INSERT INTO participants (
                     age_group, gender, education, occupation, country_of_residence,
                     nationality, race, native_tongue, languages_spoken, political_party,
                     political_inclination, listening_habits, tech_savy, ai_experience, media_consumption
