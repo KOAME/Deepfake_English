@@ -435,8 +435,8 @@ def save_to_db():
     mip_after_filled = bool(mip_selected and len(mip_selected) > 0)
 
 # Check if all required fields are filled AND both MIP fields have selections
-if all(v is not None for v in required) and mip_before_filled and mip_after_filled:
-    st.session_state["count"] += 1
+    if all(v is not None for v in required) and mip_before_filled and mip_after_filled:
+        st.session_state["count"] += 1
     # Check if all required fields are filled
    # if all(v is not None for v in required):
        # st.session_state["count"] += 1
