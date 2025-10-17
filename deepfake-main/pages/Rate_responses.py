@@ -873,7 +873,9 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
 
         st.divider()
-        st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
+       # st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
+        st.form_submit_button("**Submit and View Next**")
+
         
         # ---------- Validation helpers ----------
         def is_missing(key: str, require_nonempty: bool = False) -> bool:
@@ -994,7 +996,8 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.error(f"Database query failed: {e}")
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
-
+if submitted:
+    save_to_db()  # ✅ Call save_to_db AFTER form submission
 # Finish / route
 if st.session_state["count"] < 1:
     st.write("Please rate the audio and answer all questions to finish the survey.")
