@@ -443,7 +443,7 @@ def save_to_db():
 
     mark_as_rated(st.session_state["audio_clip_id"])
 
-
+submitted = False
 with st.form(key="form_rating", clear_on_submit=True):
     try:
         # Fetch one clip for the chosen group
@@ -874,7 +874,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.divider()
        # st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
-        st.form_submit_button("**Submit and View Next**")
+        submitted= st.form_submit_button("**Submit and View Next**")
 
         
         # ---------- Validation helpers ----------
@@ -992,6 +992,7 @@ with st.form(key="form_rating", clear_on_submit=True):
                # "❗ You missed some required questions. Please complete the following:\n\n"
                # + "\n".join(f"- {item}" for item in missing_labels)
           #  )
+    
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
     except Exception as e:
