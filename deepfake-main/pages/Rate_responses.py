@@ -179,6 +179,10 @@ def insert_rating(
     downrank_agree,
     watermark_action,
     candidate_position_after,
+    agreement_candidate_position,      # ✅ ADD THIS
+    candidate_consistency,             # ✅ ADD THIS
+    candidate_alignment,               # ✅ ADD THIS
+    confidence_candidate_position,     # ✅ ADD THIS
     em_anger,
     em_fear,
     em_disgust,
@@ -186,10 +190,13 @@ def insert_rating(
     em_enthusiasm,
     em_pride,
     mip_topics,
+    mip_topics_before,                 # ✅ ADD THIS
     perceived_threat,
     identity_threat,
     salience_before,
+    stance_before,                     # ✅ ADD THIS
     salience_after,
+    stance_after,                      # ✅ ADD THIS
 ):
     """
     Inserts into table: english_ratings_phase2
@@ -206,8 +213,12 @@ def insert_rating(
             confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,
             check_1, group_no, share_likely_private, share_likely_public, report_misleading,
             downrank_agree, watermark_action, candidate_position_after,
-            em_anger, em_fear, em_disgust, em_sadness, em_enthusiasm, em_pride, mip_topics,
-            perceived_threat, identity_threat, salience_before, salience_after
+            agreement_candidate_position, candidate_consistency, candidate_alignment,
+            confidence_candidate_position,
+            em_anger, em_fear, em_disgust, em_sadness, em_enthusiasm, em_pride, 
+            mip_topics, mip_topics_before,
+            perceived_threat, identity_threat, 
+            salience_before, stance_before, salience_after, stance_after
         )
         VALUES (
             :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
@@ -218,14 +229,17 @@ def insert_rating(
             :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,
             :check_1, :group_no, :share_likely_private, :share_likely_public, :report_misleading,
             :downrank_agree, :watermark_action, :candidate_position_after,
-            :em_anger, :em_fear, :em_disgust, :em_sadness, :em_enthusiasm, :em_pride, :mip_topics,
-            :perceived_threat, :identity_threat, :salience_before, :salience_after
+            :agreement_candidate_position, :candidate_consistency, :candidate_alignment,
+            :confidence_candidate_position,
+            :em_anger, :em_fear, :em_disgust, :em_sadness, :em_enthusiasm, :em_pride, 
+            :mip_topics, :mip_topics_before,
+            :perceived_threat, :identity_threat, 
+            :salience_before, :stance_before, :salience_after, :stance_after
         )
         """
     )
 
     try:
-        # Use a transaction so it commits automatically on success
         with pool.begin() as db_conn:
             db_conn.execute(
                 insert_query,
@@ -258,6 +272,10 @@ def insert_rating(
                     "downrank_agree": downrank_agree,
                     "watermark_action": watermark_action,
                     "candidate_position_after": candidate_position_after,
+                    "agreement_candidate_position": agreement_candidate_position,  # ✅ ADD THIS
+                    "candidate_consistency": candidate_consistency,                # ✅ ADD THIS
+                    "candidate_alignment": candidate_alignment,                    # ✅ ADD THIS
+                    "confidence_candidate_position": confidence_candidate_position,# ✅ ADD THIS
                     "em_anger": em_anger,
                     "em_fear": em_fear,
                     "em_disgust": em_disgust,
@@ -265,16 +283,18 @@ def insert_rating(
                     "em_enthusiasm": em_enthusiasm,
                     "em_pride": em_pride,
                     "mip_topics": mip_topics,
+                    "mip_topics_before": mip_topics_before,                       # ✅ ADD THIS
                     "perceived_threat": perceived_threat,
                     "identity_threat": identity_threat,
                     "salience_before": salience_before,
+                    "stance_before": stance_before,                               # ✅ ADD THIS
                     "salience_after": salience_after,
+                    "stance_after": stance_after,                                 # ✅ ADD THIS
                 },
             )
     except SQLAlchemyError as e:
         st.error(f"Database insertion failed: {e}")
         raise
-
 
 def insert_participant_and_get_id():
     try:
@@ -331,33 +351,32 @@ def save_to_db():
     else:
         participant_id = st.session_state["participant_id"]
 
-    # Pull values from session_state (these keys must match widgets)
-    res_q1 = st.session_state.get("key_q1")   # speech_clarity
-    res_q2 = st.session_state.get("key_q2")   # speech_persuasiveness
-    res_q3 = st.session_state.get("key_q3")   # speech_pace_engagement
-    res_q4 = st.session_state.get("key_q4")   # speaker_trustworthiness
-    res_q5 = st.session_state.get("key_q5")   # speech_trustworthiness
-    res_q6 = st.session_state.get("key_q6")   # speaker_competence
-    res_q7 = st.session_state.get("key_q7")   # speech_speed_influence
-    res_q8 = st.session_state.get("key_q8")   # pitch_sincerity_effect
-    res_q9 = st.session_state.get("key_q9")   # loudness_attention_influence
-    res_q10 = st.session_state.get("key_q10") # realness_scale (1..10)
+    # Pull values from session_state
+    res_q1 = st.session_state.get("key_q1")
+    res_q2 = st.session_state.get("key_q2")
+    res_q3 = st.session_state.get("key_q3")
+    res_q4 = st.session_state.get("key_q4")
+    res_q5 = st.session_state.get("key_q5")
+    res_q6 = st.session_state.get("key_q6")
+    res_q7 = st.session_state.get("key_q7")
+    res_q8 = st.session_state.get("key_q8")
+    res_q9 = st.session_state.get("key_q9")
+    res_q10 = st.session_state.get("key_q10")
 
-    # Real/Fake (1=Real, 0=Fake)
     q11 = st.session_state.get("key_q11")
     res_q11 = 1 if q11 == "Real" else (0 if q11 == "Fake" else None)
 
-    res_q12 = 1 if st.session_state.get("key_q12") else 0  # influenced_by_tone
-    res_q13 = 1 if st.session_state.get("key_q13") else 0  # influenced_by_quality
-    res_q14 = 1 if st.session_state.get("key_q14") else 0  # influenced_by_content
+    res_q12 = 1 if st.session_state.get("key_q12") else 0
+    res_q13 = 1 if st.session_state.get("key_q13") else 0
+    res_q14 = 1 if st.session_state.get("key_q14") else 0
 
-    res_q15 = st.session_state.get("key_q15")              # confidence_level
-    res_q16 = st.session_state.get("key_q16")              # policy_agreement
-    res_q17 = st.session_state.get("key_q17")              # likelihood_to_vote
-    res_q18 = st.session_state.get("key_q18")              # open_ended_response
+    res_q15 = st.session_state.get("key_q15")
+    res_q16 = st.session_state.get("key_q16")
+    res_q17 = st.session_state.get("key_q17")
+    res_q18 = st.session_state.get("key_q18")
 
     check_val = st.session_state.get("key_check")
-    check_val = 10 if check_val is None else check_val     # default to 10
+    check_val = 10 if check_val is None else check_val
 
     share_likely_private = st.session_state.get("key_q19_private")
     share_likely_public  = st.session_state.get("key_q20_public")
@@ -365,40 +384,39 @@ def save_to_db():
     downrank_agree       = st.session_state.get("key_q22_downrank")
     watermark_action     = st.session_state.get("key_q23_watermark")
 
-    # Candidate position AFTER clip (selectbox key_q0)
     candidate_position_after = st.session_state.get("key_q0")
+    
+    # ✅ ADD THESE NEW CAPTURES
+    agreement_candidate_position = st.session_state.get("key_persuasion")
+    candidate_consistency = st.session_state.get("key_cons")
+    candidate_alignment = st.session_state.get("key_align")
+    confidence_candidate_position = st.session_state.get("key_conf")
 
-    # Emotions now 1..10 (not booleans)
     em_anger       = st.session_state.get("key_em_anger")
     em_fear        = st.session_state.get("key_em_fear")
-    em_disgust     = st.session_state.get("key_em_disgust")      # not displayed now, but kept for schema compat
-    em_sadness     = st.session_state.get("key_em_sadness")      # not displayed now, but kept for schema compat
+    em_disgust     = None  # Not displayed
+    em_sadness     = None  # Not displayed
     em_enthusiasm  = st.session_state.get("key_em_enthusiasm")
     em_pride       = st.session_state.get("key_em_pride")
 
-    # Topics (after-clip)
     mip_selected = st.session_state.get("key_mip_topics", [])
     mip_str = ", ".join(mip_selected) if mip_selected else None
+    
+    # ✅ ADD THIS NEW CAPTURE
+    mip_selected_before = st.session_state.get("key_mip_topics_before", [])
+    mip_str_before = ", ".join(mip_selected_before) if mip_selected_before else None
 
-    # Threats
     perceived_threat = st.session_state.get("key_perceived_threat")
     identity_threat  = st.session_state.get("key_identity_threat")
 
-    # Salience before/after
     salience_before = st.session_state.get("key_salience_before")
-    salience_after  = st.session_state.get("key_salience_topic_after")  # note: widget key for "after"
+    salience_after  = st.session_state.get("key_salience_topic_after")
+    
+    # ✅ ADD THESE NEW CAPTURES
+    stance_before = st.session_state.get("key_stance_before")
+    stance_after = st.session_state.get("key_stance_after")
 
-    # Simple completeness bump (optional)
-    required = [
-        candidate_position_after, res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10,
-        res_q11, res_q12, res_q13, res_q14, res_q15, res_q16, res_q17,
-        share_likely_private, share_likely_public, report_misleading, downrank_agree, watermark_action,
-        em_anger, em_fear, em_enthusiasm, em_pride, perceived_threat, identity_threat, salience_before, salience_after
-    ]
-    if all(v is not None for v in required):
-        st.session_state["count"] += 1
-
-    # Write
+    # Write to DB
     insert_rating(
         participant_id=participant_id,
         audio_clip_id=st.session_state["audio_clip_id"],
@@ -428,6 +446,10 @@ def save_to_db():
         downrank_agree=downrank_agree,
         watermark_action=watermark_action,
         candidate_position_after=candidate_position_after,
+        agreement_candidate_position=agreement_candidate_position,      # ✅ ADD THIS
+        candidate_consistency=candidate_consistency,                    # ✅ ADD THIS
+        candidate_alignment=candidate_alignment,                        # ✅ ADD THIS
+        confidence_candidate_position=confidence_candidate_position,    # ✅ ADD THIS
         em_anger=em_anger,
         em_fear=em_fear,
         em_disgust=em_disgust,
@@ -435,14 +457,17 @@ def save_to_db():
         em_enthusiasm=em_enthusiasm,
         em_pride=em_pride,
         mip_topics=mip_str,
+        mip_topics_before=mip_str_before,                              # ✅ ADD THIS
         perceived_threat=perceived_threat,
         identity_threat=identity_threat,
         salience_before=salience_before,
+        stance_before=stance_before,                                   # ✅ ADD THIS
         salience_after=salience_after,
+        stance_after=stance_after,                                     # ✅ ADD THIS
     )
 
     mark_as_rated(st.session_state["audio_clip_id"])
-
+    
 submitted = False
 with st.form(key="form_rating", clear_on_submit=True):
     try:
