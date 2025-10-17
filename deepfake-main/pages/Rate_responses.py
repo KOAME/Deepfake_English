@@ -658,15 +658,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.success("######")
 
         # Speech/perception items
-        def ten_radio(key):
-            return st.radio(
-                "",
-                options=list(range(1, 11)),
-                horizontal=True,
-                index=None,
-                key=key,
-                label_visibility="collapsed",
-            )
+
 
         st.markdown("<h5>❓How clear was the speech?</h5>", unsafe_allow_html=True)
         ten_radio("key_q1")
