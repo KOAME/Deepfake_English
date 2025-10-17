@@ -386,7 +386,7 @@ def save_to_db():
 
     candidate_position_after = st.session_state.get("key_q0")
     
-    # ✅ ADD THESE NEW CAPTURES
+    # NEW CAPTURES
     agreement_candidate_position = st.session_state.get("key_persuasion")
     candidate_consistency = st.session_state.get("key_cons")
     candidate_alignment = st.session_state.get("key_align")
@@ -402,7 +402,6 @@ def save_to_db():
     mip_selected = st.session_state.get("key_mip_topics", [])
     mip_str = ", ".join(mip_selected) if mip_selected else None
     
-    # ✅ ADD THIS NEW CAPTURE
     mip_selected_before = st.session_state.get("key_mip_topics_before", [])
     mip_str_before = ", ".join(mip_selected_before) if mip_selected_before else None
 
@@ -412,9 +411,28 @@ def save_to_db():
     salience_before = st.session_state.get("key_salience_before")
     salience_after  = st.session_state.get("key_salience_topic_after")
     
-    # ✅ ADD THESE NEW CAPTURES
     stance_before = st.session_state.get("key_stance_before")
     stance_after = st.session_state.get("key_stance_after")
+
+    # ✅ UPDATED: Complete list of required fields for completion check
+    required = [
+        candidate_position_after, 
+        agreement_candidate_position,      # ✅ ADD
+        candidate_consistency,             # ✅ ADD
+        candidate_alignment,               # ✅ ADD
+        confidence_candidate_position,     # ✅ ADD
+        res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10,
+        res_q11, res_q15, res_q16, res_q17,
+        share_likely_private, share_likely_public, report_misleading, downrank_agree, watermark_action,
+        em_anger, em_fear, em_enthusiasm, em_pride, 
+        perceived_threat, identity_threat, 
+        salience_before, stance_before,    # ✅ ADD stance_before
+        salience_after, stance_after       # ✅ ADD stance_after
+    ]
+    
+    # Check if all required fields are filled
+    if all(v is not None for v in required):
+        st.session_state["count"] += 1
 
     # Write to DB
     insert_rating(
@@ -446,10 +464,10 @@ def save_to_db():
         downrank_agree=downrank_agree,
         watermark_action=watermark_action,
         candidate_position_after=candidate_position_after,
-        agreement_candidate_position=agreement_candidate_position,      # ✅ ADD THIS
-        candidate_consistency=candidate_consistency,                    # ✅ ADD THIS
-        candidate_alignment=candidate_alignment,                        # ✅ ADD THIS
-        confidence_candidate_position=confidence_candidate_position,    # ✅ ADD THIS
+        agreement_candidate_position=agreement_candidate_position,
+        candidate_consistency=candidate_consistency,
+        candidate_alignment=candidate_alignment,
+        confidence_candidate_position=confidence_candidate_position,
         em_anger=em_anger,
         em_fear=em_fear,
         em_disgust=em_disgust,
@@ -457,18 +475,29 @@ def save_to_db():
         em_enthusiasm=em_enthusiasm,
         em_pride=em_pride,
         mip_topics=mip_str,
-        mip_topics_before=mip_str_before,                              # ✅ ADD THIS
+        mip_topics_before=mip_str_before,
         perceived_threat=perceived_threat,
         identity_threat=identity_threat,
         salience_before=salience_before,
-        stance_before=stance_before,                                   # ✅ ADD THIS
+        stance_before=stance_before,
         salience_after=salience_after,
-        stance_after=stance_after,                                     # ✅ ADD THIS
+        stance_after=stance_after,
     )
 
     mark_as_rated(st.session_state["audio_clip_id"])
     
-submitted = False
+
+
+# After the form closes, add this debug section
+st.write("DEBUG INFO:")
+st.write(f"Count: {st.session_state.get('count', 0)}")
+st.write(f"Agreement candidate position: {st.session_state.get('key_persuasion')}")
+st.write(f"Candidate consistency: {st.session_state.get('key_cons')}")
+st.write(f"Candidate alignment: {st.session_state.get('key_align')}")
+st.write(f"Confidence candidate position: {st.session_state.get('key_conf')}")
+st.write(f"Stance before: {st.session_state.get('key_stance_before')}")
+st.write(f"Stance after: {st.session_state.get('key_stance_after')}")
+
 with st.form(key="form_rating", clear_on_submit=True):
     try:
         # Fetch one clip for the chosen group
