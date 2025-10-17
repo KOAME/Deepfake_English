@@ -763,7 +763,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         with col2:
             st.markdown(
-                "<h5>❓What influenced your judgment about the authenticity of the clip?</h5>",
+                "<h5>❓What influenced your judgment about the authenticity of the clip?(Check all that apply, or leave blank if none)</h5>",
                 unsafe_allow_html=True,
             )
             c1, c2, c3 = st.columns(3)
