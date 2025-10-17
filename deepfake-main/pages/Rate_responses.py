@@ -487,17 +487,6 @@ def save_to_db():
     mark_as_rated(st.session_state["audio_clip_id"])
     
 
-
-# After the form closes, add this debug section
-st.write("DEBUG INFO:")
-st.write(f"Count: {st.session_state.get('count', 0)}")
-st.write(f"Agreement candidate position: {st.session_state.get('key_persuasion')}")
-st.write(f"Candidate consistency: {st.session_state.get('key_cons')}")
-st.write(f"Candidate alignment: {st.session_state.get('key_align')}")
-st.write(f"Confidence candidate position: {st.session_state.get('key_conf')}")
-st.write(f"Stance before: {st.session_state.get('key_stance_before')}")
-st.write(f"Stance after: {st.session_state.get('key_stance_after')}")
-
 with st.form(key="form_rating", clear_on_submit=True):
     try:
         # Fetch one clip for the chosen group
