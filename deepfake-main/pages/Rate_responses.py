@@ -427,12 +427,19 @@ def save_to_db():
         em_anger, em_fear, em_enthusiasm, em_pride, 
         perceived_threat, identity_threat, 
         salience_before, stance_before,    # ✅ ADD stance_before
-        salience_after, stance_after       # ✅ ADD stance_after
+        salience_after, stance_after,       # ✅ ADD stance_after
+        
     ]
-    
+    # ✅ Separate check for MIP fields (must have at least 1 selection)
+    mip_before_filled = bool(mip_selected_before and len(mip_selected_before) > 0)
+    mip_after_filled = bool(mip_selected and len(mip_selected) > 0)
+
+# Check if all required fields are filled AND both MIP fields have selections
+if all(v is not None for v in required) and mip_before_filled and mip_after_filled:
+    st.session_state["count"] += 1
     # Check if all required fields are filled
-    if all(v is not None for v in required):
-        st.session_state["count"] += 1
+   # if all(v is not None for v in required):
+       # st.session_state["count"] += 1
 
     # Write to DB
     insert_rating(
