@@ -536,21 +536,37 @@ with st.form(key="form_rating", clear_on_submit=True):
        # st.success("######")
 
         # BEFORE: Most important problem(s)
+        # Make the dropdown (multiselect) box larger and more visible
+    st.markdown("""
+        <style>
+        /* Increase font size inside dropdown */
+        div[data-baseweb="select"] > div {
+            font-size: 18px !important;
+        }
+
+        /* Increase height and padding of the dropdown box */
+        div[data-baseweb="select"] > div {
+            min-height: 60px !important;
+            padding: 10px !important;
+        }
+
+        /* Make border more visible */
+        div[data-baseweb="select"] {
+            border: 2px solid #2b6cb0 !important;  /* blue accent */
+            border-radius: 10px !important;
+        }
+
+        /* Optional: highlight when focused */
+        div[data-baseweb="select"]:focus-within {
+            border-color: #3182ce !important;
+            box-shadow: 0 0 5px rgba(49,130,206,0.5) !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
         st.markdown(
-         #   '<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
-        #    unsafe_allow_html=True,
-                """
-            <div style='
-                font-size:22px; 
-                font-weight:600; 
-                margin-top:20px; 
-                margin-bottom:10px;
-                color:#1a1a1a;
-            '>
-                ❓ What is the most important problem facing the US right now? 
-                <br><span style='font-weight:400;'>Select <u>all</u> that apply:</span>
-            </div>
-            """,
+            '<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
+            unsafe_allow_html=True,
+              
     unsafe_allow_html=True,
         )
         topics_all = list(
