@@ -537,8 +537,21 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # BEFORE: Most important problem(s)
         st.markdown(
-            '<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
-            unsafe_allow_html=True,
+         #   '<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
+        #    unsafe_allow_html=True,
+                """
+            <div style='
+                font-size:22px; 
+                font-weight:600; 
+                margin-top:20px; 
+                margin-bottom:10px;
+                color:#1a1a1a;
+            '>
+                ❓ What is the most important problem facing the US right now? 
+                <br><span style='font-weight:400;'>Select <u>all</u> that apply:</span>
+            </div>
+            """,
+    unsafe_allow_html=True,
         )
         topics_all = list(
             dict.fromkeys(
