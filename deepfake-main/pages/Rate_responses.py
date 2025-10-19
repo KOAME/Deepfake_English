@@ -529,7 +529,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             )
 
         st.warning(
-            "⚠️ Please answer **every question** carefully before submitting. "
+            "⚠️ Use Google Chrome Browser. Please answer **every question** carefully before submitting. "
             "If you skip or miss any question, the page will reload and your answers for this clip will be lost."
         )
         st.info("💡 Tip: Scroll carefully and make sure each question has a selected option before clicking **Submit and View Next**.")
