@@ -612,6 +612,8 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
         st.audio(url, format="audio/wav")
         st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
+        st.markdown(f"⬇️ **Download the audio if the player fails:** [{url}]({url})")
+
         st.success("######")
 
         # Emotions (use 1..10 radios)
