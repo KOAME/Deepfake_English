@@ -543,7 +543,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         # Make the dropdown (multiselect) box larger and more visible
 
         st.markdown(
-            #'<h5>1❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
+            #'<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
             #unsafe_allow_html=True,
              """
             <div style='
@@ -556,8 +556,8 @@ with st.form(key="form_rating", clear_on_submit=True):
             margin-top:20px;
             margin-bottom:10px;
         '>
-        2❓ What is the most important problem facing the US right now? 
-        <br><span style='font-weight:400;'>Select <u>all</u> that apply:</span>
+        ❓ What is the most important problem facing the US right now? 
+        <br><span style='font-weight:400;'>Select <u>all</u> that apply from this dropdown list:</span>
     </div>
     """,
     unsafe_allow_html=True,
@@ -589,7 +589,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # Issue salience BEFORE listening
         st.markdown(
-            f'<h5>3❓ How important is this topic (<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
+            f'<h5>❓ How important is this topic (<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
             unsafe_allow_html=True,
         )
         salience_before = st.radio(
@@ -633,7 +633,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             """,
             unsafe_allow_html=True,
         )
-        st.markdown("<h5>4 🎭 While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
+        st.markdown("<h5>🎭 While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
 
         EMOTIONS_TO_USE = ["em_anger", "em_fear", "em_enthusiasm", "em_pride"]
         EMOTION_LABELS = {
@@ -660,7 +660,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # Threat & Identity threat
         st.markdown(
-            '<h5>5❓How much do you think this issue threatens your country?</h5>',
+            '<h5>❓How much do you think this issue threatens your country?</h5>',
             unsafe_allow_html=True,
         )
         st.radio(
@@ -674,7 +674,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.info("1 = Not at all, 10 = Extremely")
 
         st.markdown(
-            '<h5>6❓How much does the topic in this clip disrespect your social or political group?</h5>',
+            '<h5>❓How much does the topic in this clip disrespect your social or political group?</h5>',
             unsafe_allow_html=True,
         )
         st.radio(
@@ -691,7 +691,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # Candidate position (AFTER listening) — saved as candidate_position_after
         st.markdown(
-            '<h5>7❓What do you think the candidate’s position on this issue is?</h5>',
+            '<h5>❓What do you think the candidate’s position on this issue is?</h5>',
             unsafe_allow_html=True,
         )
 
@@ -927,7 +927,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             margin-bottom:10px;
         '>
         ❓ What is the most important problem facing the US right now? 
-        <br><span style='font-weight:400;'>Select <u>all</u> that apply:</span>
+        <br><span style='font-weight:400;'>Select <u>all</u> that apply from this dropdown list:</span>
     </div>
     """,
     unsafe_allow_html=True,
