@@ -370,6 +370,10 @@ def save_to_db():
     res_q13 = 1 if st.session_state.get("key_q13") else 0
     res_q14 = 1 if st.session_state.get("key_q14") else 0
 
+    # ✅ Ensure all default to 0 if left blank
+    if all(v == 0 for v in [res_q12, res_q13, res_q14]):
+        res_q12, res_q13, res_q14 = 0, 0, 0
+        
     res_q15 = st.session_state.get("key_q15")
     res_q16 = st.session_state.get("key_q16")
     res_q17 = st.session_state.get("key_q17")
