@@ -341,7 +341,7 @@ if "count" not in st.session_state:
 # Control group -> group_no: 1
 # Treatment group-1 -> group_no: 2
 # Treatment group-2 -> group_no: 3
-group_no = 3
+group_no = 2
 
 def save_to_db():
     # participant id
