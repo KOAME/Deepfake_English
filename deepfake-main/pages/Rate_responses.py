@@ -543,7 +543,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         # Make the dropdown (multiselect) box larger and more visible
 
         st.markdown(
-            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) MOST PARTICIPANT FORGET TO ANSWER THIS QUESTION</h5>',
+            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) Note: Many participants forgot to answer this question.</h5>',
             unsafe_allow_html=True,
             
   
@@ -899,7 +899,7 @@ with st.form(key="form_rating", clear_on_submit=True):
        # )
         
         st.markdown(
-            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) MOST PARTICIPANT FORGET TO ANSWER THIS QUESTION</h5>',
+            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) Note: Many participants forgot to answer this question.</h5>',
           unsafe_allow_html=True,
         )
         mip_selected = st.multiselect("", topics_all, default=[], key="key_mip_topics")
