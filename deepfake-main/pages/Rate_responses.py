@@ -543,24 +543,10 @@ with st.form(key="form_rating", clear_on_submit=True):
         # Make the dropdown (multiselect) box larger and more visible
 
         st.markdown(
-            #'<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
-            #unsafe_allow_html=True,
-             """
-            <div style='
-            background-color:#f7f7f7;
-            padding:12px 16px;
-            border-radius:10px;
-            font-size:22px;
-            font-weight:600;
-            color:#1a1a1a;
-            margin-top:20px;
-            margin-bottom:10px;
-        '>
-        ❓ What is the most important problem facing the US right now? 
-        <br><span style='font-weight:400;'>Select <u>all</u> that apply from this dropdown list:</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
+            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) MOST PARTICIPANT FORGET TO ANSWER THIS QUESTION</h5>',
+            unsafe_allow_html=True,
+            
+  
         )
         topics_all = list(
             dict.fromkeys(
@@ -633,7 +619,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             """,
             unsafe_allow_html=True,
         )
-        st.markdown("<h5>🎭 While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
+        st.markdown("<h5>❓ Answer the 4 sub questions. While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
 
         EMOTIONS_TO_USE = ["em_anger", "em_fear", "em_enthusiasm", "em_pride"]
         EMOTION_LABELS = {
@@ -913,24 +899,8 @@ with st.form(key="form_rating", clear_on_submit=True):
        # )
         
         st.markdown(
-            #'<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
-            #unsafe_allow_html=True,
-             """
-            <div style='
-            background-color:#f7f7f7;
-            padding:12px 16px;
-            border-radius:10px;
-            font-size:22px;
-            font-weight:600;
-            color:#1a1a1a;
-            margin-top:20px;
-            margin-bottom:10px;
-        '>
-        ❓ What is the most important problem facing the US right now? 
-        <br><span style='font-weight:400;'>Select <u>all</u> that apply from this dropdown list:</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
+            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) MOST PARTICIPANT FORGET TO ANSWER THIS QUESTION</h5>',
+          unsafe_allow_html=True,
         )
         mip_selected = st.multiselect("", topics_all, default=[], key="key_mip_topics")
 
