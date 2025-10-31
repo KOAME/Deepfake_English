@@ -183,7 +183,7 @@ def get_sqlalchemy_engine(tunnel):
 def insert_participant_and_get_id(pool):
     try:
         insert_query = text("""
-            INSERT INTO deepfakes.participants (
+            INSERT INTO deepfakes.participants_phase2 (
                 age_group, gender, education, occupation, country_of_residence,
                 nationality, race, native_tongue, languages_spoken,
                 political_party, political_inclination, listening_habits,
