@@ -243,4 +243,4 @@ elif all([consent1, consent2, consent3]):
 
 if 'participant_id' in st.session_state:
     st.write("Let's check the case!")
-    st.switch_page("pages/Rate_responses.py")
+    st.switch_page("pages/Rate_responses_phase3.py.py")
