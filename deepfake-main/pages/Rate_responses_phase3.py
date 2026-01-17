@@ -358,6 +358,8 @@ with st.form(key="form_rating", clear_on_submit=True):
         # Q2: Fake→Real scale
         st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
         ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
+        st.info("1 = Definitely Real, 10 = "Definitely Fake")
+
 
         # Q3: Confidence retrospective
         st.markdown(
@@ -365,20 +367,22 @@ with st.form(key="form_rating", clear_on_submit=True):
             unsafe_allow_html=True,
         )
         ten_radio("key_confident", "Not confident at all", "Extremely confident")
-
+        st.info("1 = Not confident at all, 10 = "Extremely confident")
         # Q4: Difficulty
         st.markdown(
             "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
             unsafe_allow_html=True,
         )
         ten_radio("key_difficulty", "Very easy", "Very difficult")
-
+        st.info("1 = Very easy, 10 = "Very difficult")
+        
         # Q5: Trust political audio content online
         st.markdown(
             "<h5>❓How much do you trust political audio content you encounter online?</h5>",
             unsafe_allow_html=True,
         )
         ten_radio("key_trust_content", "Not at all", "Completely")
+        st.info("1 = Not at all, 10 = "Completely")
 
         # Q6: Trust online news/political media
         st.markdown(
@@ -386,7 +390,21 @@ with st.form(key="form_rating", clear_on_submit=True):
             unsafe_allow_html=True,
         )
         ten_radio("key_trust_media", "Not at all", "Completely")
+        st.info("1 = Not at all, 10 = "Completely")
 
+
+
+        # Attention check
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>', unsafe_allow_html=True)
+        st.radio(
+            "",
+            options=list(range(1, 11)),
+            horizontal=True,
+            index=None,
+            key="key_check",
+            label_visibility="collapsed",
+        )
         # Q7: Scam / misleading info experience
         st.markdown(
             "<h5>❓Have you ever personally fallen for false or misleading information online (for example, a scam, hoax, or manipulated media)?</h5>",
@@ -400,19 +418,6 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_scam",
             label_visibility="collapsed",
         )
-
-        # Attention check
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>', unsafe_allow_html=True)
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_check",
-            label_visibility="collapsed",
-        )
-
         # Optional open-ended
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         st.text_area(
