@@ -158,7 +158,7 @@ def insert_rating_phase3(
     difficult_to_decide: int,
     trust_content: int,
     trust_media: int,
-    scam: str,
+    scam: int,
     open_ended_response: str,
     check_1: bool,
 ):
@@ -261,8 +261,9 @@ def save_to_db():
     trust_content = st.session_state.get("key_trust_content")
     trust_media = st.session_state.get("key_trust_media")
 
-    scam = st.session_state.get("key_scam")  # store exact string: "Yes"/"No"/"Not sure"
-    open_ended_response = st.session_state.get("key_open_ended")
+    scam_raw = st.session_state.get("key_scam")  # "Yes" / "No" / "Not sure" / None
+    SCAM_MAP = {"Yes": 1, "No": 0, "Not sure": 2}
+    scam = SCAM_MAP.get(scam_raw)  # -> 1/0/2/None
 
     check_val = st.session_state.get("key_check")
     # Your text says “select 4 if yes” so enforce boolean True if ==4
