@@ -163,7 +163,7 @@ def insert_rating_phase3(
     scam: int,
     open_ended_response: str,
     check_1: bool,
-    group_no,
+    group_no: int
 ):
     """
     Matches exactly: deepfakes.english_ratings_phase3
@@ -196,7 +196,7 @@ def insert_rating_phase3(
             :scam,
             :open_ended_response,
             :check_1,
-            :group_no,
+            :group_no
         )
         """
     )
