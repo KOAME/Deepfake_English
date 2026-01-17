@@ -159,7 +159,6 @@ def insert_rating_phase3(
     trust_content: int,
     trust_media: int,
     scam: int,
-    past
     open_ended_response: str,
     check_1: bool,
 ):
