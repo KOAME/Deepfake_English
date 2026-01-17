@@ -358,7 +358,7 @@ with st.form(key="form_rating", clear_on_submit=True):
         # Q2: Fake→Real scale
         st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
         ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
-        st.info("1 = Definitely Real, 10 = "Definitely Fake")
+        st.info("1 = Definitely Real, 10 = Definitely Fake")
 
 
         # Q3: Confidence retrospective
@@ -367,14 +367,14 @@ with st.form(key="form_rating", clear_on_submit=True):
             unsafe_allow_html=True,
         )
         ten_radio("key_confident", "Not confident at all", "Extremely confident")
-        st.info("1 = Not confident at all, 10 = "Extremely confident")
+        st.info("1 = Not confident at all, 10 = Extremely confident")
         # Q4: Difficulty
         st.markdown(
             "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
             unsafe_allow_html=True,
         )
         ten_radio("key_difficulty", "Very easy", "Very difficult")
-        st.info("1 = Very easy, 10 = "Very difficult")
+        st.info("1 = Very easy, 10 = Very difficult")
         
         # Q5: Trust political audio content online
         st.markdown(
@@ -382,7 +382,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             unsafe_allow_html=True,
         )
         ten_radio("key_trust_content", "Not at all", "Completely")
-        st.info("1 = Not at all, 10 = "Completely")
+        st.info("1 = Not at all, 10 = Completely")
 
         # Q6: Trust online news/political media
         st.markdown(
@@ -390,7 +390,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             unsafe_allow_html=True,
         )
         ten_radio("key_trust_media", "Not at all", "Completely")
-        st.info("1 = Not at all, 10 = "Completely")
+        st.info("1 = Not at all, 10 = Completely")
 
 
 
