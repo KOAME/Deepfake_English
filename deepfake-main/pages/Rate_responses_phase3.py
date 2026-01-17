@@ -268,6 +268,8 @@ def save_to_db():
     check_val = st.session_state.get("key_check")
     # Your text says “select 4 if yes” so enforce boolean True if ==4
     check_1 = True if check_val == 4 else False
+    open_ended_response = st.session_state.get("key_open_ended")
+
 
     required = [
         realness_scale,
