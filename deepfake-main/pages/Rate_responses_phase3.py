@@ -10,8 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 # --------------------------------------------------------------------------------
 # Page & Layout
 # --------------------------------------------------------------------------------
-if "group_no" not in st.session_state:
-    st.session_state["group_no"] = 2
+
     
 st.set_page_config(initial_sidebar_state="collapsed", layout="wide")
 
@@ -234,7 +233,7 @@ if "count" not in st.session_state:
     st.session_state["count"] = 0
 
 # CONTROL GROUP_NO HERE (keep if you still sample by group_no)
-
+group_no=1
 def ten_radio(key: str, left_label: str | None = None, right_label: str | None = None):
     val = st.radio(
         "",
@@ -275,7 +274,6 @@ def save_to_db():
     # Your text says “select 4 if yes” so enforce boolean True if ==4
     check_1 = True if check_val == 4 else False
     open_ended_response = st.session_state.get("key_open_ended")
-    group_no=group_no
 
 
     required = [
@@ -304,6 +302,7 @@ def save_to_db():
         scam=scam,
         open_ended_response=open_ended_response,
         check_1=check_1,
+        group_no=1
     )
 
     st.session_state["count"] += 1
