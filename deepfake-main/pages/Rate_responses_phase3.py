@@ -10,8 +10,9 @@ from sqlalchemy.exc import SQLAlchemyError
 # --------------------------------------------------------------------------------
 # Page & Layout
 # --------------------------------------------------------------------------------
-group_no = 2
-
+if "group_no" not in st.session_state:
+    st.session_state["group_no"] = 2
+    
 st.set_page_config(initial_sidebar_state="collapsed", layout="wide")
 
 st.markdown(
