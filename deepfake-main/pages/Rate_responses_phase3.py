@@ -6,37 +6,22 @@ from sqlalchemy import create_engine, text
 import pymysql
 from sshtunnel import SSHTunnelForwarder
 from sqlalchemy.exc import SQLAlchemyError
-#
+
 # --------------------------------------------------------------------------------
 # Page & Layout
 # --------------------------------------------------------------------------------
 st.set_page_config(initial_sidebar_state="collapsed", layout="wide")
 
-# Apply CSS to control width
-st.markdown(
-    f"""
-    <style>
-    .block-container {{
-        max-width: {75}%;
-        margin: auto;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Inject CSS to center radio button captions
 st.markdown(
     """
     <style>
-    /* Horizontal radio buttons */
+    .block-container { max-width: 75%; margin: auto; }
     div[role="radiogroup"] {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
     }
-    /* Center label text */
     div[role="radiogroup"] label {
         text-align: center;
         display: flex;
@@ -49,10 +34,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Sidebar state init
 if "sidebar_state" not in st.session_state:
     st.session_state.sidebar_state = "collapsed"
-
 
 def collapse_sidebar():
     st.markdown(
@@ -64,7 +47,6 @@ def collapse_sidebar():
         """,
         unsafe_allow_html=True,
     )
-
 
 if st.session_state.sidebar_state == "collapsed":
     collapse_sidebar()
@@ -101,8 +83,7 @@ def start_ssh_tunnel():
         st.error(f"SSH tunnel connection failed: {e}")
         raise
 
-
-def get_connection(tunnel, retries=10, delay=20):
+def get_connection(tunnel, retries=10, delay=5):
     attempt = 0
     while attempt < retries:
         try:
@@ -112,27 +93,22 @@ def get_connection(tunnel, retries=10, delay=20):
                 password=db_password,
                 database=db_name,
                 port=tunnel.local_bind_port,
-                connect_timeout=10600,
-                read_timeout=9600,
-                write_timeout=9600,
+                connect_timeout=60,
+                read_timeout=60,
+                write_timeout=60,
                 max_allowed_packet=128 * 1024 * 1024,
             )
             return conn
         except pymysql.err.OperationalError as e:
-            st.error(f"Connection attempt {attempt + 1} failed: {e}")
             attempt += 1
             if attempt < retries:
-                st.info(f"Retrying in {delay} seconds...")
+                st.info(f"DB connection failed (attempt {attempt}/{retries}). Retrying in {delay}s…")
                 time.sleep(delay)
             else:
-                st.error(
-                    "Failed to connect to the database after multiple retries. Please check your network!"
-                )
+                st.error(f"Failed to connect to DB after {retries} attempts: {e}")
                 raise
 
-
 def get_sqlalchemy_engine(tunnel):
-    # Use SQLAlchemy pre-ping and pooling
     engine = create_engine(
         "mysql+pymysql://",
         creator=lambda: get_connection(tunnel),
@@ -143,165 +119,22 @@ def get_sqlalchemy_engine(tunnel):
     )
     return engine
 
-
 tunnel = start_ssh_tunnel()
 pool = get_sqlalchemy_engine(tunnel)
 
 # --------------------------------------------------------------------------------
-# DB Helpers
+# DB Helpers (NEW, MINIMAL)
 # --------------------------------------------------------------------------------
-def insert_rating(
-    participant_id,
-    audio_clip_id,
-    speech_clarity,
-    speech_persuasiveness,
-    speech_pace_engagement,
-    speaker_trustworthiness,
-    speech_trustworthiness,
-    speaker_competence,
-    speech_speed_influence,
-    pitch_sincerity_effect,
-    loudness_attention_influence,
-    realness_scale,
-    realness_perception,
-    influenced_by_tone,
-    influenced_by_quality,
-    influenced_by_content,
-    confidence_level,
-    policy_agreement,
-    likelihood_to_vote,
-    open_ended_response,
-    check,
-    group_no,
-    share_likely_private,
-    share_likely_public,
-    report_misleading,
-    downrank_agree,
-    watermark_action,
-    candidate_position_after,
-    agreement_candidate_position,      # ✅ ADD THIS
-    candidate_consistency,             # ✅ ADD THIS
-    candidate_alignment,               # ✅ ADD THIS
-    confidence_candidate_position,     # ✅ ADD THIS
-    em_anger,
-    em_fear,
-    em_disgust,
-    em_sadness,
-    em_enthusiasm,
-    em_pride,
-    mip_topics,
-    mip_topics_before,                 # ✅ ADD THIS
-    perceived_threat,
-    identity_threat,
-    salience_before,
-    stance_before,                     # ✅ ADD THIS
-    salience_after,
-    stance_after,                      # ✅ ADD THIS
-):
-    """
-    Inserts into table: english_ratings_phase2
-    Columns must match your DB schema.
-    """
-    insert_query = text(
-        """
-        INSERT INTO english_ratings_phase2 (
-            participant_id, audio_clip_id, speech_clarity, speech_persuasiveness,
-            speech_pace_engagement, speaker_trustworthiness, speech_trustworthiness,
-            speaker_competence, speech_speed_influence, pitch_sincerity_effect,
-            loudness_attention_influence, realness_scale, realness_perception,
-            influenced_by_tone, influenced_by_quality, influenced_by_content,
-            confidence_level, policy_agreement, likelihood_to_vote, open_ended_response,
-            check_1, group_no, share_likely_private, share_likely_public, report_misleading,
-            downrank_agree, watermark_action, candidate_position_after,
-            agreement_candidate_position, candidate_consistency, candidate_alignment,
-            confidence_candidate_position,
-            em_anger, em_fear, em_disgust, em_sadness, em_enthusiasm, em_pride, 
-            mip_topics, mip_topics_before,
-            perceived_threat, identity_threat, 
-            salience_before, stance_before, salience_after, stance_after
-        )
-        VALUES (
-            :participant_id, :audio_clip_id, :speech_clarity, :speech_persuasiveness,
-            :speech_pace_engagement, :speaker_trustworthiness, :speech_trustworthiness,
-            :speaker_competence, :speech_speed_influence, :pitch_sincerity_effect,
-            :loudness_attention_influence, :realness_scale, :realness_perception,
-            :influenced_by_tone, :influenced_by_quality, :influenced_by_content,
-            :confidence_level, :policy_agreement, :likelihood_to_vote, :open_ended_response,
-            :check_1, :group_no, :share_likely_private, :share_likely_public, :report_misleading,
-            :downrank_agree, :watermark_action, :candidate_position_after,
-            :agreement_candidate_position, :candidate_consistency, :candidate_alignment,
-            :confidence_candidate_position,
-            :em_anger, :em_fear, :em_disgust, :em_sadness, :em_enthusiasm, :em_pride, 
-            :mip_topics, :mip_topics_before,
-            :perceived_threat, :identity_threat, 
-            :salience_before, :stance_before, :salience_after, :stance_after
-        )
-        """
-    )
-
-    try:
-        with pool.begin() as db_conn:
-            db_conn.execute(
-                insert_query,
-                {
-                    "participant_id": participant_id,
-                    "audio_clip_id": audio_clip_id,
-                    "speech_clarity": speech_clarity,
-                    "speech_persuasiveness": speech_persuasiveness,
-                    "speech_pace_engagement": speech_pace_engagement,
-                    "speaker_trustworthiness": speaker_trustworthiness,
-                    "speech_trustworthiness": speech_trustworthiness,
-                    "speaker_competence": speaker_competence,
-                    "speech_speed_influence": speech_speed_influence,
-                    "pitch_sincerity_effect": pitch_sincerity_effect,
-                    "loudness_attention_influence": loudness_attention_influence,
-                    "realness_scale": realness_scale,
-                    "realness_perception": realness_perception,
-                    "influenced_by_tone": influenced_by_tone,
-                    "influenced_by_quality": influenced_by_quality,
-                    "influenced_by_content": influenced_by_content,
-                    "confidence_level": confidence_level,
-                    "policy_agreement": policy_agreement,
-                    "likelihood_to_vote": likelihood_to_vote,
-                    "open_ended_response": open_ended_response,
-                    "check_1": check,
-                    "group_no": group_no,
-                    "share_likely_private": share_likely_private,
-                    "share_likely_public": share_likely_public,
-                    "report_misleading": report_misleading,
-                    "downrank_agree": downrank_agree,
-                    "watermark_action": watermark_action,
-                    "candidate_position_after": candidate_position_after,
-                    "agreement_candidate_position": agreement_candidate_position,  # ✅ ADD THIS
-                    "candidate_consistency": candidate_consistency,                # ✅ ADD THIS
-                    "candidate_alignment": candidate_alignment,                    # ✅ ADD THIS
-                    "confidence_candidate_position": confidence_candidate_position,# ✅ ADD THIS
-                    "em_anger": em_anger,
-                    "em_fear": em_fear,
-                    "em_disgust": em_disgust,
-                    "em_sadness": em_sadness,
-                    "em_enthusiasm": em_enthusiasm,
-                    "em_pride": em_pride,
-                    "mip_topics": mip_topics,
-                    "mip_topics_before": mip_topics_before,                       # ✅ ADD THIS
-                    "perceived_threat": perceived_threat,
-                    "identity_threat": identity_threat,
-                    "salience_before": salience_before,
-                    "stance_before": stance_before,                               # ✅ ADD THIS
-                    "salience_after": salience_after,
-                    "stance_after": stance_after,                                 # ✅ ADD THIS
-                },
-            )
-    except SQLAlchemyError as e:
-        st.error(f"Database insertion failed: {e}")
-        raise
-
 def insert_participant_and_get_id():
+    """
+    If you still want participant_id, you need a participants table.
+    Keep your existing implementation if participants_phase2 still exists.
+    """
     try:
         with pool.begin() as connection:
             insert_query = text(
                 """
-                INSERT INTO participants_phase2 (
+                INSERT INTO participants_phase3 (
                     age_group, gender, education, occupation, country_of_residence,
                     nationality, race, native_tongue, languages_spoken, political_party,
                     political_inclination, listening_habits, tech_savy, ai_experience, media_consumption
@@ -310,21 +143,78 @@ def insert_participant_and_get_id():
                 """
             )
             connection.execute(insert_query)
-            last_id_query = text("SELECT LAST_INSERT_ID()")
-            last_id_result = connection.execute(last_id_query)
+            last_id_result = connection.execute(text("SELECT LAST_INSERT_ID()"))
             return last_id_result.scalar()
     except SQLAlchemyError as e:
         st.error(f"Failed to insert participant: {e}")
         raise
 
-
-def mark_as_rated(audio_clip_id):
+def insert_rating_phase3(
+    participant_id: int,
+    audio_clip_id: int,
+    realness_scale: int,
+    realness_perception: int,
+    confident: int,
+    difficult_to_decide: int,
+    trust_content: int,
+    trust_media: int,
+    scam: str,
+    open_ended_response: str,
+    check_1: bool,
+):
+    """
+    Matches exactly: deepfakes.english_ratings_phase3
+    """
+    insert_query = text(
+        """
+        INSERT INTO deepfakes.english_ratings_phase3 (
+            participant_id,
+            audio_clip_id,
+            realness_scale,
+            realness_perception,
+            confident,
+            difficult_to_decide,
+            trust_content,
+            trust_media,
+            scam,
+            open_ended_response,
+            check_1
+        )
+        VALUES (
+            :participant_id,
+            :audio_clip_id,
+            :realness_scale,
+            :realness_perception,
+            :confident,
+            :difficult_to_decide,
+            :trust_content,
+            :trust_media,
+            :scam,
+            :open_ended_response,
+            :check_1
+        )
+        """
+    )
     try:
         with pool.begin() as db_conn:
-            query = text("UPDATE audio_clips SET rated = 1 WHERE audio_clip_id = :audio_clip_id")
-            db_conn.execute(query, {"audio_clip_id": audio_clip_id})
+            db_conn.execute(
+                insert_query,
+                {
+                    "participant_id": participant_id,
+                    "audio_clip_id": audio_clip_id,
+                    "realness_scale": realness_scale,
+                    "realness_perception": realness_perception,
+                    "confident": confident,
+                    "difficult_to_decide": difficult_to_decide,
+                    "trust_content": trust_content,
+                    "trust_media": trust_media,
+                    "scam": scam,
+                    "open_ended_response": open_ended_response,
+                    "check_1": check_1,
+                },
+            )
     except SQLAlchemyError as e:
-        st.error(f"Failed to mark prompt as rated: {e}")
+        st.error(f"Database insertion failed: {e}")
         raise
 
 # --------------------------------------------------------------------------------
@@ -333,170 +223,80 @@ def mark_as_rated(audio_clip_id):
 st.title("Welcome, Audio Explorer! 🎧")
 survey = ss.StreamlitSurvey("rate_survey")
 
-# progress count
 if "count" not in st.session_state:
     st.session_state["count"] = 0
 
-# CONTROL GROUP_NO HERE
-# Control group -> group_no: 1
-# Treatment group-1 -> group_no: 2
-# Treatment group-2 -> group_no: 3
+# CONTROL GROUP_NO HERE (keep if you still sample by group_no)
 group_no = 2
+
+def ten_radio(key: str, left_label: str | None = None, right_label: str | None = None):
+    val = st.radio(
+        "",
+        options=list(range(1, 11)),
+        horizontal=True,
+        index=None,
+        key=key,
+        label_visibility="collapsed",
+    )
+    if left_label and right_label:
+        st.info(f"1 = {left_label}, 10 = {right_label}")
+    return val
 
 def save_to_db():
     # participant id
     if "participant_id" not in st.session_state:
-        participant_id = insert_participant_and_get_id()
-        st.session_state["participant_id"] = participant_id
-    else:
-        participant_id = st.session_state["participant_id"]
+        st.session_state["participant_id"] = insert_participant_and_get_id()
+    participant_id = st.session_state["participant_id"]
 
-    # Pull values from session_state
-    res_q1 = st.session_state.get("key_q1")
-    res_q2 = st.session_state.get("key_q2")
-    res_q3 = st.session_state.get("key_q3")
-    res_q4 = st.session_state.get("key_q4")
-    res_q5 = st.session_state.get("key_q5")
-    res_q6 = st.session_state.get("key_q6")
-    res_q7 = st.session_state.get("key_q7")
-    res_q8 = st.session_state.get("key_q8")
-    res_q9 = st.session_state.get("key_q9")
-    res_q10 = st.session_state.get("key_q10")
+    # --- map UI to DB types ---
+    realness_scale = st.session_state.get("key_realness_scale")
 
-    q11 = st.session_state.get("key_q11")
-    res_q11 = 1 if q11 == "Real" else (0 if q11 == "Fake" else None)
+    rf = st.session_state.get("key_real_fake")
+    # Store as 1=Real, 0=Fake (consistent with your earlier coding)
+    realness_perception = 1 if rf == "Real" else (0 if rf == "Fake" else None)
 
-    res_q12 = 1 if st.session_state.get("key_q12") else 0
-    res_q13 = 1 if st.session_state.get("key_q13") else 0
-    res_q14 = 1 if st.session_state.get("key_q14") else 0
+    confident = st.session_state.get("key_confident")
+    difficult_to_decide = st.session_state.get("key_difficulty")
 
-    # ✅ Ensure all default to 0 if left blank
-    if all(v == 0 for v in [res_q12, res_q13, res_q14]):
-        res_q12, res_q13, res_q14 = 0, 0, 0
-        
-    res_q15 = st.session_state.get("key_q15")
-    res_q16 = st.session_state.get("key_q16")
-    res_q17 = st.session_state.get("key_q17")
-    res_q18 = st.session_state.get("key_q18")
+    trust_content = st.session_state.get("key_trust_content")
+    trust_media = st.session_state.get("key_trust_media")
+
+    scam = st.session_state.get("key_scam")  # store exact string: "Yes"/"No"/"Not sure"
+    open_ended_response = st.session_state.get("key_open_ended")
 
     check_val = st.session_state.get("key_check")
-    check_val = 10 if check_val is None else check_val
+    # Your text says “select 4 if yes” so enforce boolean True if ==4
+    check_1 = True if check_val == 4 else False
 
-    share_likely_private = st.session_state.get("key_q19_private")
-    share_likely_public  = st.session_state.get("key_q20_public")
-    report_misleading    = 1 if st.session_state.get("key_q21_report") == "Yes" else 0
-    downrank_agree       = st.session_state.get("key_q22_downrank")
-    watermark_action     = st.session_state.get("key_q23_watermark")
-
-    candidate_position_after = st.session_state.get("key_q0")
-    
-    # NEW CAPTURES
-    agreement_candidate_position = st.session_state.get("key_persuasion")
-    candidate_consistency = st.session_state.get("key_cons")
-    candidate_alignment = st.session_state.get("key_align")
-    confidence_candidate_position = st.session_state.get("key_conf")
-
-    em_anger       = st.session_state.get("key_em_anger")
-    em_fear        = st.session_state.get("key_em_fear")
-    em_disgust     = None  # Not displayed
-    em_sadness     = None  # Not displayed
-    em_enthusiasm  = st.session_state.get("key_em_enthusiasm")
-    em_pride       = st.session_state.get("key_em_pride")
-
-    mip_selected = st.session_state.get("key_mip_topics", [])
-    mip_str = ", ".join(mip_selected) if mip_selected else None
-    
-    mip_selected_before = st.session_state.get("key_mip_topics_before", [])
-    mip_str_before = ", ".join(mip_selected_before) if mip_selected_before else None
-
-    perceived_threat = st.session_state.get("key_perceived_threat")
-    identity_threat  = st.session_state.get("key_identity_threat")
-
-    salience_before = st.session_state.get("key_salience_before")
-    salience_after  = st.session_state.get("key_salience_topic_after")
-    
-    stance_before = st.session_state.get("key_stance_before")
-    stance_after = st.session_state.get("key_stance_after")
-
-    # ✅ UPDATED: Complete list of required fields for completion check
     required = [
-        candidate_position_after, 
-        agreement_candidate_position,      # ✅ ADD
-        candidate_consistency,             # ✅ ADD
-        candidate_alignment,               # ✅ ADD
-        confidence_candidate_position,     # ✅ ADD
-        res_q1, res_q2, res_q3, res_q4, res_q5, res_q6, res_q7, res_q8, res_q9, res_q10,
-        res_q11, res_q15, res_q16, res_q17,
-        share_likely_private, share_likely_public, report_misleading, downrank_agree, watermark_action,
-        em_anger, em_fear, em_enthusiasm, em_pride, 
-        perceived_threat, identity_threat, 
-        salience_before, stance_before,    # ✅ ADD stance_before
-        salience_after, stance_after,       # ✅ ADD stance_after
-        
+        realness_scale,
+        realness_perception,
+        confident,
+        difficult_to_decide,
+        trust_content,
+        trust_media,
+        scam,
+        check_val,  # so they must answer the attention check
     ]
-    # ✅ Separate check for MIP fields (must have at least 1 selection)
-    mip_before_filled = bool(mip_selected_before and len(mip_selected_before) > 0)
-    mip_after_filled = bool(mip_selected and len(mip_selected) > 0)
+    if not all(v is not None for v in required):
+        st.error("You missed required questions. Please answer everything before submitting.")
+        return
 
-# Check if all required fields are filled AND both MIP fields have selections
-    if all(v is not None for v in required) and mip_before_filled and mip_after_filled:
-        st.session_state["count"] += 1
-    # Check if all required fields are filled
-   # if all(v is not None for v in required):
-       # st.session_state["count"] += 1
-
-    # Write to DB
-    insert_rating(
+    insert_rating_phase3(
         participant_id=participant_id,
         audio_clip_id=st.session_state["audio_clip_id"],
-        speech_clarity=res_q1,
-        speech_persuasiveness=res_q2,
-        speech_pace_engagement=res_q3,
-        speaker_trustworthiness=res_q4,
-        speech_trustworthiness=res_q5,
-        speaker_competence=res_q6,
-        speech_speed_influence=res_q7,
-        pitch_sincerity_effect=res_q8,
-        loudness_attention_influence=res_q9,
-        realness_scale=res_q10,
-        realness_perception=res_q11,
-        influenced_by_tone=res_q12,
-        influenced_by_quality=res_q13,
-        influenced_by_content=res_q14,
-        confidence_level=res_q15,
-        policy_agreement=res_q16,
-        likelihood_to_vote=res_q17,
-        open_ended_response=res_q18,
-        check=check_val,
-        group_no=group_no,
-        share_likely_private=share_likely_private,
-        share_likely_public=share_likely_public,
-        report_misleading=report_misleading,
-        downrank_agree=downrank_agree,
-        watermark_action=watermark_action,
-        candidate_position_after=candidate_position_after,
-        agreement_candidate_position=agreement_candidate_position,
-        candidate_consistency=candidate_consistency,
-        candidate_alignment=candidate_alignment,
-        confidence_candidate_position=confidence_candidate_position,
-        em_anger=em_anger,
-        em_fear=em_fear,
-        em_disgust=em_disgust,
-        em_sadness=em_sadness,
-        em_enthusiasm=em_enthusiasm,
-        em_pride=em_pride,
-        mip_topics=mip_str,
-        mip_topics_before=mip_str_before,
-        perceived_threat=perceived_threat,
-        identity_threat=identity_threat,
-        salience_before=salience_before,
-        stance_before=stance_before,
-        salience_after=salience_after,
-        stance_after=stance_after,
+        realness_scale=realness_scale,
+        realness_perception=realness_perception,
+        confident=confident,
+        difficult_to_decide=difficult_to_decide,
+        trust_content=trust_content,
+        trust_media=trust_media,
+        scam=scam,
+        open_ended_response=open_ended_response,
+        check_1=check_1,
     )
 
-    mark_as_rated(st.session_state["audio_clip_id"])
-    
+    st.session_state["count"] += 1
 
 with st.form(key="form_rating", clear_on_submit=True):
     try:
@@ -511,8 +311,7 @@ with st.form(key="form_rating", clear_on_submit=True):
                 LIMIT 1;
                 """
             )
-            result = db_conn.execute(query, {"group_no": group_no})
-        sample_row = result.fetchone()
+            sample_row = db_conn.execute(query, {"group_no": group_no}).fetchone()
 
         if not sample_row:
             st.error("No audio found for this group. Please try again later.")
@@ -522,277 +321,79 @@ with st.form(key="form_rating", clear_on_submit=True):
         st.session_state["audio_clip_id"] = audio_clip_id
         st.session_state["current_topic"] = topic if topic else "this topic"
 
-        def ten_radio(key):
-            return st.radio(
-                "",
-                options=list(range(1, 11)),
-                horizontal=True,
-                index=None,
-                key=key,
-                label_visibility="collapsed",
-            )
-
         st.warning(
-            "⚠️ Use Google Chrome Browser. Please answer **every question** carefully before submitting. "
-            "If you skip or miss any question, the page will reload and your answers for this clip will be lost."
+            "⚠️ Use Google Chrome. Answer every question before submitting. "
+            "If you skip any required question, you may lose answers for this clip."
         )
-        st.info("💡 Tip: Scroll carefully and make sure each question has a selected option before clicking **Submit and View Next**.")
-       # st.success("######")
-
-        # BEFORE: Most important problem(s)
-        # Make the dropdown (multiselect) box larger and more visible
 
         st.markdown(
-            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) Note: Many participants forgot to answer this question.</h5>',
-            unsafe_allow_html=True,
-            
-  
-        )
-        topics_all = list(
-            dict.fromkeys(
-                [
-                    "Immigration",
-                    "National Security",
-                    "Economy",
-                    "Racism",
-                    "Climate",
-                    "Education",
-                    "Gender",
-                    "Government / Poor leadership",
-                    "Elections / Democracy",
-                    "Crime & Public safety",
-                    "Healthcare",
-                    "Poverty / Homelessness",
-                    "Unifying the country",
-                ]
-            )
-        )
-        topics_all.append("Other")
-        mip_selected_before = st.multiselect(
-            "", topics_all, default=[], key="key_mip_topics_before"
-        )
-        # (Note: not stored in DB by your schema; keep if you add a column later.)
-
-        # Issue salience BEFORE listening
-        st.markdown(
-            f'<h5>❓ How important is this topic (<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
-            unsafe_allow_html=True,
-        )
-        salience_before = st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_salience_before",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Not important at all, 10 = Extremely important")
-
-        st.markdown(
-            f'<h5>❓ What is <i>your personal stance</i> on this topic (<i>{st.session_state["current_topic"]}</i>)?</h5>',
-            unsafe_allow_html=True,
-        )
-        stance_before = ten_radio("key_stance_before")
-        st.info("1 = Supports more open policies, 10 = Supports stricter policies")
-
-        st.success("######")
-        st.markdown(
-            '<h4>🔊 Listen to the audio clip of Kamala Harris or Donald Trump and answer the following questions about the audio clip.</h4>',
+            "<h4>🔊 Listen to the audio clip and answer the questions below.</h4>",
             unsafe_allow_html=True,
         )
         st.audio(url, format="audio/wav")
-        st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
-        st.markdown(f"⬇️ **Download the audio if the player fails:** [{url}]({url})")
-
-        st.success("######")
-
-        # Emotions (use 1..10 radios)
-        st.markdown(
-            """
-            <style>
-            div[role="radiogroup"] label p {
-                font-size: 1rem !important;
-                font-weight: 500 !important;
-                margin-bottom: 4px;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown("<h5>❓ Answer the 4 sub questions. While listening to the clip, I felt...</h5>", unsafe_allow_html=True)
-
-        EMOTIONS_TO_USE = ["em_anger", "em_fear", "em_enthusiasm", "em_pride"]
-        EMOTION_LABELS = {
-            "em_anger": "😡 Anger",
-            "em_fear": "😨 Fear",
-            "em_disgust": "🤢 Disgust",
-            "em_sadness": "😢 Sadness",
-            "em_enthusiasm": "🤩 Enthusiasm",
-            "em_pride": "🦅 Pride",
-        }
-
-        cols = st.columns(2)
-        for i, emo_key in enumerate(EMOTIONS_TO_USE):
-            with cols[i % 2]:
-                st.markdown(f"**{EMOTION_LABELS[emo_key]}**")
-                st.radio(
-                    "",
-                    options=list(range(1, 11)),
-                    horizontal=True,
-                    index=None,
-                    key=f"key_{emo_key}",
-                )
-                st.info("1 = Not at all, 10 = Extremely")
-
-        # Threat & Identity threat
-        st.markdown(
-            '<h5>❓How much do you think this issue threatens your country?</h5>',
-            unsafe_allow_html=True,
-        )
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_perceived_threat",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Not at all, 10 = Extremely")
-
-        st.markdown(
-            '<h5>❓How much does the topic in this clip disrespect your social or political group?</h5>',
-            unsafe_allow_html=True,
-        )
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_identity_threat",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Not at all, 10 = Extremely")
-
-        st.success("######")
-
-        # Candidate position (AFTER listening) — saved as candidate_position_after
-        st.markdown(
-            '<h5>❓What do you think the candidate’s position on this issue is?</h5>',
-            unsafe_allow_html=True,
-        )
-
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_q0",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Supports more open policies, 10 = Supports stricter policies")
-       # st.selectbox(
-         #   "Select one option:",
-        #    options=[
-       #         "Supports stricter policies",
-           #     "Supports more open policies",
-          #      "Neutral / No clear position",
-           #     "Not sure",
-         #   ],
-         #   index=None,
-         #   key="key_q0",
-         #   placeholder="Choose an option...",
-       # )
-
-        # Agreement with position (optional display; not in DB schema)
-        st.markdown("<h5>❓ How much do you agree with the candidate’s position on this issue?</h5>", unsafe_allow_html=True)
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_persuasion",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Strongly Disagree, 10 = Strongly Agree")
-
-        st.success("######")
-
-        # Speech/perception items
-
-
-        st.markdown("<h5>❓How clear was the speech?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q1")
-        st.info("Clarity refers to how easily the speech can be understood. 1 = Not at all, 10 = Extremely")
-
-        st.markdown("<h5>❓How persuasive was the speech?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q2")
-        st.info("Persuasiveness refers to how convincing the speech felt. 1 = Not at all, 10 = Extremely")
-
-        st.markdown("<h5>❓Was the pace of the speech engaging or distracting?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q3")
-        st.info("1 = Distracting, 10 = Engaging")
-
-        st.markdown("<h5>❓To what extent did the speaker seem trustworthy?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q4")
-        st.info("1 = Not at all, 10 = Extremely")
-
-        st.markdown("<h5>❓To what extent did you find the content of the speech trustworthy?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q5")
-        st.info("1 = Not at all, 10 = Extremely")
-
-        st.markdown("<h5>❓How would you rate the speaker’s competence?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q6")
-        st.info("1 = Incompetent, 10 = Expert")
-
-        st.markdown("<h5>❓How did the speed affect your understanding?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q7")
-        st.info("1 = Confusing, 10 = Clear")
-
-        st.markdown("<h5>❓Variations in pitch affected the speaker’s sincerity?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q8")
-        st.info("1 = Not at all, 10 = Extremely")
-
-        st.markdown("<h5>❓Changes in loudness and emphasis grabbed my attention.</h5>", unsafe_allow_html=True)
-        ten_radio("key_q9")
-        st.info("1 = Not at all, 10 = Completely")
+        st.info("If the audio isn't playing, refresh the page or try a different browser.")
 
         st.divider()
 
-        # Real/Fake & drivers
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            st.markdown("<h5>❓Do you think the speech is real or fake?</h5>", unsafe_allow_html=True)
-            st.radio(
-                "",
-                options=["Real", "Fake"],
-                horizontal=True,
-                index=None,
-                key="key_q11",
-                label_visibility="collapsed",
-            )
-
-        with col2:
-            st.markdown(
-                "<h5>❓What influenced your judgment about the authenticity of the clip?(Check all that apply, or leave blank if none)</h5>",
-                unsafe_allow_html=True,
-            )
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                st.checkbox("The speaker’s tone of voice", key="key_q12")
-            with c2:
-                st.checkbox("The audio quality", key="key_q13")
-            with c3:
-                st.checkbox("The content of the audio clip", key="key_q14")
-
+        # Q1: Fake→Real scale
         st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q10")
-        st.info("1 = Definitely Fake, 10 = Definitely Real")
+        ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
 
-        st.markdown("<h5>❓ How confident are you that this audio clip is real/fake?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q15")
-        st.info("1 = Not at all, 10 = Completely")
+        # Q2: Real/Fake binary
+        st.markdown("<h5>❓Do you think the speech is real or fake?</h5>", unsafe_allow_html=True)
+        st.radio(
+            "",
+            options=["Real", "Fake"],
+            horizontal=True,
+            index=None,
+            key="key_real_fake",
+            label_visibility="collapsed",
+        )
 
-        st.markdown("<br><br>", unsafe_allow_html=True)
+        # Q3: Confidence retrospective
+        st.markdown(
+            "<h5>❓How confident are you that your judgement about the authenticity of the audio was correct?</h5>",
+            unsafe_allow_html=True,
+        )
+        ten_radio("key_confident", "Not confident at all", "Extremely confident")
+
+        # Q4: Difficulty
+        st.markdown(
+            "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
+            unsafe_allow_html=True,
+        )
+        ten_radio("key_difficulty", "Very easy", "Very difficult")
+
+        # Q5: Trust political audio content online
+        st.markdown(
+            "<h5>❓How much do you trust political audio content you encounter online?</h5>",
+            unsafe_allow_html=True,
+        )
+        ten_radio("key_trust_content", "Not at all", "Completely")
+
+        # Q6: Trust online news/political media
+        st.markdown(
+            "<h5>❓How much do you trust online news and political media in general?</h5>",
+            unsafe_allow_html=True,
+        )
+        ten_radio("key_trust_media", "Not at all", "Completely")
+
+        # Q7: Scam / misleading info experience
+        st.markdown(
+            "<h5>❓Have you ever personally fallen for false or misleading information online (for example, a scam, hoax, or manipulated media)?</h5>",
+            unsafe_allow_html=True,
+        )
+        st.radio(
+            "",
+            options=["Yes", "No", "Not sure"],
+            horizontal=True,
+            index=None,
+            key="key_scam",
+            label_visibility="collapsed",
+        )
+
+        # Attention check
+        st.markdown("<br>", unsafe_allow_html=True)
         st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>', unsafe_allow_html=True)
         st.radio(
             "",
@@ -803,272 +404,24 @@ with st.form(key="form_rating", clear_on_submit=True):
             label_visibility="collapsed",
         )
 
-        st.markdown("<h5>❓To what extent do you agree with the policy in the audio clip?</h5>", unsafe_allow_html=True)
-        ten_radio("key_q16")
-        st.info("1 = Strongly Disagree, 10 = Strongly Agree")
-
-        st.success("######")
-
-        # Vote likelihood + extra perceptions (not stored unless you add columns)
-        st.markdown(
-            "<h5>❓Based on the speech you just heard, how likely are you to vote for this person?</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_q17")
-        st.info("1 = Not at all, 10 = Very Much")
-
-        # Additional measures (displayed only). Add DB columns if you want to store.
-        st.markdown(
-            "<h5>❓How consistent do you think the candidate’s statements and actions are on this issue?</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_cons")
-        st.info("1 = Not at all, 10 = Very much")
-
-        st.markdown(
-            "<h5>❓From the audio clip, to what extent do you feel the candidate’s stance aligns with your own views?</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_align")
-        st.info("1 = Strongly Opposed, 10 = Strongly Aligned")
-
-        st.markdown(
-            "<h5>❓How confident are you in your assessment of the candidate’s position?</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_conf")
-        st.info("1 = Not Confident, 10 = Strongly Confident")
-
-        # Sharing / platform policy
-        st.success("######")
-        st.markdown(
-            '<h5>❓How likely are you to share this clip <i>privately</i> (📩🔒 WhatsApp, DM)?</h5>',
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_q19_private")
-        st.info("1 = Not at all , 10 = Very Likely")
-
-        st.markdown(
-            '<h5>❓How likely are you to share this clip <i>publicly</i> (📢 social media post/story)?</h5>',
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_q20_public")
-        st.info("1 = Not at all , 10 = Very Likely")
-
-        st.markdown("<h5>❓Would you report this clip as misleading on platform 🆇 (Twitter)?</h5>", unsafe_allow_html=True)
-        st.radio(
-            "",
-            options=["Yes", "No"],
-            horizontal=True,
-            index=None,
-            key="key_q21_report",
-            label_visibility="collapsed",
-        )
-
-        st.markdown(
-            "<h5>❓ Platforms should downrank content flagged as AI-generated even if not deceptive.</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_q22_downrank")
-        st.info("1 = Strongly Disagree, 10 = Strongly Agree")
-
-        st.markdown("<h5>❓If a watermark indicated this was synthetic, I would…</h5>", unsafe_allow_html=True)
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_q23_watermark",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Completely Ignore, 10 = Strongly report as misleading") 
-        
-        #st.selectbox(
-        #    "Select one option:",
-        #    options=["Ignore", "Be cautious but still share", "Not share", "Report as misleading"],
-        #    index=None,
-        #    key="key_q23_watermark",
-        #    placeholder="Choose an option...",
-      #  )
-
-        # AFTER: Topics
-        st.success("######")
-        #st.markdown(
-         #   '<h5>❓What is the most important problem facing the US right now? (Select all that apply)</h5>',
-         #   unsafe_allow_html=True,
-       # )
-        
-        st.markdown(
-            '<h5>❓What is the most important problem facing the US right now? (Select all that apply) Note: Many participants forgot to answer this question.</h5>',
-          unsafe_allow_html=True,
-        )
-        mip_selected = st.multiselect("", topics_all, default=[], key="key_mip_topics")
-
-        # AFTER: Issue salience
-        st.markdown(
-            f'<h5>❓ How important is this topic (<i>{st.session_state["current_topic"]}</i>) to you?</h5>',
-            unsafe_allow_html=True,
-        )
-        st.radio(
-            "",
-            options=list(range(1, 11)),
-            horizontal=True,
-            index=None,
-            key="key_salience_topic_after",
-            label_visibility="collapsed",
-        )
-        st.info("1 = Not important at all, 10 = Extremely important")
-
-        st.markdown(
-            f'<h5>❓ What is <i>your personal stance</i> on this topic (<i>{st.session_state["current_topic"]}</i>)?</h5>',
-            unsafe_allow_html=True,
-        )
-        stance_after = ten_radio("key_stance_after")
-        st.info("1 = Supports more open policies, 10 = Supports stricter policies")
-
-        
-
-      
-
+        # Optional open-ended
         st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
         st.text_area(
             "Did anything stand out or seem interesting to you? If so, why?",
-            help="Feel free to share any thoughts or impressions you found particularly interesting about the audio.",
-            key="key_q18",
+            key="key_open_ended",
         )
 
         st.divider()
         st.form_submit_button("**Submit and View Next**", on_click=save_to_db)
-        #submitted= st.form_submit_button("**Submit and View Next**")
 
-        
-        # ---------- Validation helpers ----------
-        def is_missing(key: str, require_nonempty: bool = False) -> bool:
-            val = st.session_state.get(key, None)
-            if val is None:
-                return True
-            if require_nonempty:
-                # Treat empty lists/strings/dicts as missing when flagged
-                if isinstance(val, (list, str, dict)) and len(val) == 0:
-                    return True
-            return False        # Optional: bump count only when a core set is answered
-        core_keys = [
-            # ---- Pre-clip section ----
-            "key_mip_topics_before",      # important problems before
-            "key_salience_before",        # topic importance before
-            "key_stance_before",          # stance before listening
-
-            # ---- Emotion section ----
-            "key_em_anger",
-            "key_em_fear",
-            "key_em_enthusiasm",
-            "key_em_pride",
-
-            # ---- Threat perception ----
-            "key_perceived_threat",
-            "key_identity_threat",
-
-            # ---- Candidate & speech perceptions ----
-            "key_q0",  # candidate position
-            "key_q1",  # speech clarity
-            "key_q2",  # speech persuasiveness
-            "key_q3",  # speech pace engagement
-            "key_q4",  # speaker trustworthiness
-            "key_q5",  # content trustworthiness
-            "key_q6",  # speaker competence
-            "key_q7",  # speed effect
-            "key_q8",  # pitch sincerity
-            "key_q9",  # loudness attention
-            "key_q10", # realness scale
-            "key_q11", # real/fake choice
-            "key_q15", # confidence real/fake
-            "key_q16", # policy agreement
-            "key_q17", # likelihood to vote
-
-            # ---- Sharing & governance ----
-            "key_q19_private",
-            "key_q20_public",
-            "key_q21_report",
-            "key_q22_downrank",
-            "key_q23_watermark",
-
-            # ---- Post-clip wrap-up ----
-            "key_mip_topics",             # most important problem after
-            "key_salience_topic_after",   # importance after
-            "key_stance_after",           # stance after
-        ]
-        if all(st.session_state.get(k) is not None for k in core_keys):
-            st.session_state["count"] += 0  # already incremented inside save_to_db when complete
-            
-        # Map keys to user-facing labels and whether they must be non-empty
-        core_requirements = [
-            # ---- Pre-clip section ----
-            ("key_mip_topics_before", "Select the most important problem(s) BEFORE listening", True),
-            ("key_salience_before",   "Rate the topic importance BEFORE listening", False),
-            ("key_stance_before",     "State your personal stance BEFORE listening", False),
-
-            # ---- Emotion section ----
-            ("key_em_anger",       "Rate your felt Anger", False),
-            ("key_em_fear",        "Rate your felt Fear", False),
-            ("key_em_enthusiasm",  "Rate your felt Enthusiasm", False),
-            ("key_em_pride",       "Rate your felt Pride", False),
-
-            # ---- Threat perception ----
-            ("key_perceived_threat", "Rate national threat", False),
-            ("key_identity_threat",  "Rate identity disrespect", False),
-
-            # ---- Candidate & speech perceptions ----
-            ("key_q0",   "Select the candidate’s position", False),
-            ("key_q1",   "Rate speech clarity", False),
-            ("key_q2",   "Rate speech persuasiveness", False),
-            ("key_q3",   "Rate pace (engaging vs distracting)", False),
-            ("key_q4",   "Rate speaker trustworthiness", False),
-            ("key_q5",   "Rate content trustworthiness", False),
-            ("key_q6",   "Rate speaker competence", False),
-            ("key_q7",   "Speed effect on understanding", False),
-            ("key_q8",   "Pitch effect on sincerity", False),
-            ("key_q9",   "Loudness/emphasis effect", False),
-            ("key_q10",  "Fake→Real scale", False),
-            ("key_q11",  "Real or Fake choice", False),
-            ("key_q15",  "Confidence in authenticity judgment", False),
-            ("key_q16",  "Agreement with policy", False),
-            ("key_q17",  "Likelihood to vote", False),
-
-            # ---- Sharing & governance ----
-            ("key_q19_private",   "Likelihood to share privately", False),
-            ("key_q20_public",    "Likelihood to share publicly", False),
-            ("key_q21_report",    "Would you report as misleading?", False),
-            ("key_q22_downrank",  "Downrank AI-generated content policy", False),
-            ("key_q23_watermark", "Action if watermark indicates synthetic", False),
-
-            # ---- Post-clip wrap-up ----
-            ("key_mip_topics",           "Select the most important problem(s) AFTER listening", True),
-            ("key_salience_topic_after", "Rate topic importance AFTER listening", False),
-            ("key_stance_after",         "State your personal stance AFTER listening", False),
-        ]
-        
-      #  missing_labels = [
-     #       label for (key, label, require_nonempty) in core_requirements
-      #      if is_missing(key, require_nonempty)
-     #   ]
-
-     #   if missing_labels:
-            #st.error(
-               # "❗ You missed some required questions. Please complete the following:\n\n"
-               # + "\n".join(f"- {item}" for item in missing_labels)
-          #  )
-    
     except SQLAlchemyError as e:
         st.error(f"Database query failed: {e}")
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
 
-#if submitted:
-    #save_to_db()  # ✅ Call save_to_db AFTER form submission
-
 # Finish / route
 if st.session_state["count"] < 1:
-    st.write("Please rate the audio and answer all questions to finish the survey.")
+    st.write("Please rate the audio and answer all required questions to finish the survey.")
     st.write(f"You have rated {st.session_state['count']} audios so far.")
 else:
     st.write("You have rated the audio and you can finish your participation now.")
