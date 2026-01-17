@@ -273,6 +273,7 @@ def save_to_db():
     # Your text says “select 4 if yes” so enforce boolean True if ==4
     check_1 = True if check_val == 4 else False
     open_ended_response = st.session_state.get("key_open_ended")
+    group_no=group_no
 
 
     required = [
