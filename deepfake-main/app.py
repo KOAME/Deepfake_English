@@ -205,7 +205,7 @@ def insert_participant_and_get_id(pool):
 def insert_prolific_id(pool, participant_id, prolific_id):
     try:
         insert_query = text("""
-            INSERT INTO deepfakes.prolific_ids_p2 (participant_id, prolific_id)
+            INSERT INTO deepfakes.prolific_ids_p3 (participant_id, prolific_id)
             VALUES (:participant_id, :prolific_id)
         """)
 
