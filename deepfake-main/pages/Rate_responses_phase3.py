@@ -159,6 +159,7 @@ def insert_rating_phase3(
     trust_content: int,
     trust_media: int,
     scam: int,
+    past
     open_ended_response: str,
     check_1: bool,
 ):
@@ -338,11 +339,8 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         st.divider()
 
-        # Q1: Fake→Real scale
-        st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
-        ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
 
-        # Q2: Real/Fake binary
+        # Q1: Real/Fake binary
         st.markdown("<h5>❓Do you think the speech is real or fake?</h5>", unsafe_allow_html=True)
         st.radio(
             "",
@@ -352,6 +350,10 @@ with st.form(key="form_rating", clear_on_submit=True):
             key="key_real_fake",
             label_visibility="collapsed",
         )
+        
+        # Q2: Fake→Real scale
+        st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
+        ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
 
         # Q3: Confidence retrospective
         st.markdown(
