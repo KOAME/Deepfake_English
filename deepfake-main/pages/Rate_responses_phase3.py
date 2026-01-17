@@ -161,6 +161,7 @@ def insert_rating_phase3(
     scam: int,
     open_ended_response: str,
     check_1: bool,
+    group_no,
 ):
     """
     Matches exactly: deepfakes.english_ratings_phase3
@@ -178,7 +179,8 @@ def insert_rating_phase3(
             trust_media,
             scam,
             open_ended_response,
-            check_1
+            check_1,
+            group_no
         )
         VALUES (
             :participant_id,
@@ -191,7 +193,8 @@ def insert_rating_phase3(
             :trust_media,
             :scam,
             :open_ended_response,
-            :check_1
+            :check_1,
+            :group_no,
         )
         """
     )
@@ -211,6 +214,7 @@ def insert_rating_phase3(
                     "scam": scam,
                     "open_ended_response": open_ended_response,
                     "check_1": check_1,
+                    "group_no":group_no
                 },
             )
     except SQLAlchemyError as e:
