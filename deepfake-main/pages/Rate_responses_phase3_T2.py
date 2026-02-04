@@ -259,7 +259,6 @@ def save_to_db():
     realness_scale = st.session_state.get("key_realness_scale")
 
     rf = st.session_state.get("key_real_fake")
-    # Store as 1=Real, 0=Fake (consistent with your earlier coding)
     realness_perception = 1 if rf == "Real" else (0 if rf == "Fake" else None)
 
     confident = st.session_state.get("key_confident")
@@ -268,15 +267,14 @@ def save_to_db():
     trust_content = st.session_state.get("key_trust_content")
     trust_media = st.session_state.get("key_trust_media")
 
-    scam_raw = st.session_state.get("key_scam")  # "Yes" / "No" / "Not sure" / None
+    scam_raw = st.session_state.get("key_scam")
     SCAM_MAP = {"Yes": 1, "No": 0, "Not sure": 2}
-    scam = SCAM_MAP.get(scam_raw)  # -> 1/0/2/None
+    scam = SCAM_MAP.get(scam_raw)
 
     check_val = st.session_state.get("key_check")
-    # Your text says “select 4 if yes” so enforce boolean True if ==4
     check_1 = True if check_val == 4 else False
-    open_ended_response = st.session_state.get("key_open_ended")
 
+    open_ended_response = st.session_state.get("key_open_ended")
 
     required = [
         realness_scale,
@@ -286,11 +284,11 @@ def save_to_db():
         trust_content,
         trust_media,
         scam,
-        check_val,  # so they must answer the attention check
+        check_val,
     ]
     if not all(v is not None for v in required):
         st.error("You missed required questions. Please answer everything before submitting.")
-        return
+        return False
 
     insert_rating_phase3(
         participant_id=participant_id,
@@ -308,6 +306,8 @@ def save_to_db():
     )
 
     st.session_state["count"] += 1
+    return True
+
 
 with st.form(key="form_rating", clear_on_submit=False):
     try:
