@@ -341,7 +341,7 @@ with st.form(key="form_rating", clear_on_submit=False):
         # STEP 1 — Audio + Q1–Q4
         # ==================================================
         if st.session_state["step"] == 1:
-             st.warning(
+            st.warning(
             "⚠️ Use Google Chrome. Answer every question before submitting. "
             "If you skip any required question, you may lose answers for this clip."
             )
