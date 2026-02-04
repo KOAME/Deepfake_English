@@ -320,7 +320,7 @@ with st.form(key="form_rating", clear_on_submit=True):
                 LIMIT 1;
                 """
             )
-            sample_row = db_conn.execute(query, {"group_no": AUDIO_SET_NO}).fetchone()
+            sample_row = db_conn.execute(query, {"audio_set_no": AUDIO_SET_NO}).fetchone()
 
         if not sample_row:
             st.error("No audio found for this group. Please try again later.")
