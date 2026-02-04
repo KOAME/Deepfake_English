@@ -347,7 +347,7 @@ with st.form(key="form_rating", clear_on_submit=True):
             </style>
 
             <div class="big-red-warning">
-                🚨 Warning: this audio is Fake
+                🚨 Warning: You are listening to a fake (AI-generated) audio clip
               </div>
             """,
             unsafe_allow_html=True,
