@@ -341,11 +341,17 @@ with st.form(key="form_rating", clear_on_submit=False):
         # STEP 1 — Audio + Q1–Q4
         # ==================================================
         if st.session_state["step"] == 1:
+             st.warning(
+            "⚠️ Use Google Chrome. Answer every question before submitting. "
+            "If you skip any required question, you may lose answers for this clip."
+            )
             st.markdown(
                 "<h4>🔊 Listen to the audio clip and answer the questions below.</h4>",
                 unsafe_allow_html=True,
             )
-            st.audio(url, format="audio/wav")
+           st.audio(url, format="audio/wav")
+           st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
+           st.markdown(f"⬇️ **Download the audio if the player fails:** [{url}]({url})")
 
             st.divider()
 
