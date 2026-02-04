@@ -311,7 +311,9 @@ def save_to_db():
 
 with st.form(key="form_rating", clear_on_submit=False):
     try:
-        # Fetch one clip only when starting step 1 (so step 2 uses same clip)
+        # --------------------------------------------------
+        # Fetch clip only when starting a new item
+        # --------------------------------------------------
         if st.session_state["step"] == 1 or "audio_clip_id" not in st.session_state:
             with pool.connect() as db_conn:
                 query = text(
@@ -323,91 +325,48 @@ with st.form(key="form_rating", clear_on_submit=False):
                     LIMIT 1;
                     """
                 )
-                sample_row = db_conn.execute(query, {"group_no": group_no}).fetchone()
+                row = db_conn.execute(query, {"group_no": group_no}).fetchone()
 
-            if not sample_row:
-                st.error("No audio found for this group. Please try again later.")
+            if not row:
+                st.error("No audio found.")
                 st.stop()
 
-            audio_clip_id, url, topic = sample_row
+            audio_clip_id, url, topic = row
             st.session_state["audio_clip_id"] = audio_clip_id
             st.session_state["url"] = url
-            st.session_state["current_topic"] = topic if topic else "this topic"
 
         url = st.session_state["url"]
 
-        # ----------------------------
-        # STEP 1: Audio + Q1–Q4
-        # ----------------------------
+        # ==================================================
+        # STEP 1 — Audio + Q1–Q4
+        # ==================================================
         if st.session_state["step"] == 1:
-            st.markdown(
-                """
-                <style>
-                .big-red-warning {
-                    background: #ffe6e6;
-                    border: 2px solid #ff0000;
-                    color: #b30000;
-                    padding: 16px 18px;
-                    border-radius: 12px;
-                    font-size: 20px;
-                    font-weight: 800;
-                    text-align: center;
-                    line-height: 1.25;
-                    margin: 10px 0 18px 0;
-                }
-                </style>
-                <div class="big-red-warning">
-                    ⚠️ Use Google Chrome. Answer every question before submitting.
-                    If you skip any required question, you may lose answers for this clip.
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
             st.markdown(
                 "<h4>🔊 Listen to the audio clip and answer the questions below.</h4>",
                 unsafe_allow_html=True,
             )
             st.audio(url, format="audio/wav")
-            st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
-            st.markdown(f"⬇️ **Download the audio if the player fails:** [{url}]({url})")
 
             st.divider()
 
-            # Q1: Real/Fake binary
             st.markdown("<h5>❓Do you think the speech is real or fake?</h5>", unsafe_allow_html=True)
-            st.radio(
-                "",
-                options=["Real", "Fake"],
-                horizontal=True,
-                index=None,
-                key="key_real_fake",
-                label_visibility="collapsed",
-            )
+            st.radio("", ["Real", "Fake"], horizontal=True, index=None, key="key_real_fake")
 
-            # Q2: Fake→Real scale
             st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
             ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
 
-            # Q3: Confidence retrospective
-            st.markdown(
-                "<h5>❓How confident are you that your judgement about the authenticity of the audio was correct?</h5>",
-                unsafe_allow_html=True,
-            )
-            ten_radio("key_confident", "Not confident at all", "Extremely confident")
+            st.markdown("<h5>❓How confident are you in your judgement?</h5>", unsafe_allow_html=True)
+            ten_radio("key_confident", "Not confident", "Extremely confident")
 
-            # Q4: Difficulty
             st.markdown(
                 "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
                 unsafe_allow_html=True,
             )
             ten_radio("key_difficulty", "Very easy", "Very difficult")
 
-            # Step-1 next button
-            go_next = st.form_submit_button("Next ➜")
+            next_clicked = st.form_submit_button("Next ➜")
 
-            if go_next:
-                # Require Q1–Q4 before moving on
+            if next_clicked:
                 required_step1 = [
                     st.session_state.get("key_real_fake"),
                     st.session_state.get("key_realness_scale"),
@@ -415,108 +374,70 @@ with st.form(key="form_rating", clear_on_submit=False):
                     st.session_state.get("key_difficulty"),
                 ]
                 if not all(v is not None for v in required_step1):
-                    st.error("Please answer all questions on this page before continuing.")
+                    st.error("Please answer all questions before continuing.")
                 else:
                     st.session_state["step"] = 2
                     st.rerun()
 
-        # ----------------------------
-        # STEP 2: Remaining questions + "fake audio" pop-up/notice
-        # ----------------------------
+        # ==================================================
+        # STEP 2 — Remaining questions + FAKE notice
+        # ==================================================
         else:
-            # Pop-up-ish: toast + big banner
-            st.toast("🚨 You just listened to a FAKE audio clip.", icon="🚨")
+            st.toast("🚨 You listened to a FAKE audio clip", icon="🚨")
 
             st.markdown(
                 """
-                <style>
-                .fake-notice {
-                    background: #fff0f0;
-                    border: 3px solid #ff0000;
-                    color: #a10000;
-                    padding: 18px 18px;
-                    border-radius: 14px;
-                    font-size: 26px;
-                    font-weight: 900;
-                    text-align: center;
-                    margin: 10px 0 18px 0;
-                }
-                </style>
-                <div class="fake-notice">🚨 Warning: You listened to a fake (AI-generated) audio clip</div>
+                <div style="
+                    background:#fff0f0;
+                    border:3px solid red;
+                    padding:16px;
+                    font-size:24px;
+                    font-weight:900;
+                    text-align:center;
+                    border-radius:12px;
+                    margin-bottom:20px;">
+                    🚨 Warning: this audio is FAKE
+                </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-            # (Optional) keep the audio hidden here to make it feel like a new page
-            # If you want it visible, uncomment:
-            # st.audio(url, format="audio/wav")
-
-            st.divider()
-
-            # Q5: Trust political audio content online
-            st.markdown(
-                "<h5>❓How much do you trust political audio content you encounter online?</h5>",
-                unsafe_allow_html=True,
-            )
+            st.markdown("<h5>❓How much do you trust political audio content online?</h5>", unsafe_allow_html=True)
             ten_radio("key_trust_content", "Not at all", "Completely")
 
-            # Q6: Trust online news/political media
-            st.markdown(
-                "<h5>❓How much do you trust online news and political media in general?</h5>",
-                unsafe_allow_html=True,
-            )
+            st.markdown("<h5>❓How much do you trust online news media?</h5>", unsafe_allow_html=True)
             ten_radio("key_trust_media", "Not at all", "Completely")
 
-            # Attention check
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>', unsafe_allow_html=True)
-            st.radio(
-                "",
-                options=list(range(1, 11)),
-                horizontal=True,
-                index=None,
-                key="key_check",
-                label_visibility="collapsed",
-            )
+            st.markdown("<h7>I am carefully rating, select 4 if yes.</h7>", unsafe_allow_html=True)
+            st.radio("", list(range(1, 11)), horizontal=True, index=None, key="key_check")
 
-            # Q7: Scam / misleading info experience
-            st.markdown(
-                "<h5>❓Have you ever personally fallen for false or misleading information online (for example, a scam, hoax, or manipulated media)?</h5>",
-                unsafe_allow_html=True,
-            )
-            st.radio(
-                "",
-                options=["Yes", "No", "Not sure"],
-                horizontal=True,
-                index=None,
-                key="key_scam",
-                label_visibility="collapsed",
-            )
+            st.markdown("<h5>❓Have you fallen for misleading info online?</h5>", unsafe_allow_html=True)
+            st.radio("", ["Yes", "No", "Not sure"], horizontal=True, index=None, key="key_scam")
 
-            # Optional open-ended
-            st.markdown("<h5>Optional Open-Ended Question</h5>", unsafe_allow_html=True)
-            st.text_area(
-                "Did anything stand out or seem interesting to you? If so, why?",
-                key="key_open_ended",
-            )
+            st.markdown("<h5>Optional</h5>", unsafe_allow_html=True)
+            st.text_area("Anything stand out?", key="key_open_ended")
 
-            st.divider()
             submitted = st.form_submit_button("**Submit and View Next**")
 
             if submitted:
                 save_to_db()
-                # Reset for next clip
+
+                # reset UI state for next clip
                 st.session_state["step"] = 1
-                # optional: clear clip so a fresh one is sampled next time
-                for k in ["audio_clip_id", "url", "current_topic"]:
-                    if k in st.session_state:
-                        del st.session_state[k]
+                st.session_state["count"] += 1
+
+                for k in [
+                    "key_real_fake", "key_realness_scale", "key_confident",
+                    "key_difficulty", "key_trust_content", "key_trust_media",
+                    "key_check", "key_scam", "key_open_ended",
+                    "audio_clip_id", "url"
+                ]:
+                    st.session_state.pop(k, None)
+
                 st.rerun()
 
-    except SQLAlchemyError as e:
-        st.error(f"Database query failed: {e}")
     except Exception as e:
-        st.error(f"An unexpected error occurred: {e}")
+        st.error(f"Unexpected error: {e}")
 
 # Finish / route
 if st.session_state["count"] < 1:
