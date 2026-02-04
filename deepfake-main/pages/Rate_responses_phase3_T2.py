@@ -154,7 +154,7 @@ def insert_rating_phase3(
     difficult_to_decide: int,
     trust_content: int,
     trust_media: int,
-    scam: int,
+    scam: str,
     open_ended_response: str,
     check_1: bool,
     group_no: int
@@ -260,9 +260,7 @@ def save_to_db():
     trust_content = st.session_state.get("key_trust_content")
     trust_media = st.session_state.get("key_trust_media")
 
-    scam_raw = st.session_state.get("key_scam")
-    SCAM_MAP = {"Yes": 1, "No": 0, "Not sure": 2}
-    scam = SCAM_MAP.get(scam_raw)
+    scam = st.session_state.get("key_scam")
 
     check_val = st.session_state.get("key_check")
     check_1 = True if check_val == 4 else False
