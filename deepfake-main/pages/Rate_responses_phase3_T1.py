@@ -306,7 +306,7 @@ def save_to_db():
     )
 
     st.session_state["count"] += 1
-
+AUDIO_SET_NO = 4 
 with st.form(key="form_rating", clear_on_submit=True):
     try:
         # Fetch one clip for the chosen group
@@ -315,12 +315,12 @@ with st.form(key="form_rating", clear_on_submit=True):
                 """
                 SELECT audio_clip_id, url, topic
                 FROM deepfakes.audio_clips
-                WHERE group_no = 4
+                WHERE group_no = :audio_set_no
                 ORDER BY RAND()
                 LIMIT 1;
                 """
             )
-            sample_row = db_conn.execute(query, {"group_no": group_no}).fetchone()
+            sample_row = db_conn.execute(query, {"group_no": AUDIO_SET_NO}).fetchone()
 
         if not sample_row:
             st.error("No audio found for this group. Please try again later.")
