@@ -349,9 +349,9 @@ with st.form(key="form_rating", clear_on_submit=False):
                 "<h4>🔊 Listen to the audio clip and answer the questions below.</h4>",
                 unsafe_allow_html=True,
             )
-           st.audio(url, format="audio/wav")
-           st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
-           st.markdown(f"⬇️ **Download the audio if the player fails:** [{url}]({url})")
+            st.audio(url, format="audio/wav")
+            st.info("❗If the audio isn't playing, refresh the page or try a different browser.")
+            st.markdown(f"⬇️ **Download the audio if the player fails:** [{url}]({url})")
 
             st.divider()
 
