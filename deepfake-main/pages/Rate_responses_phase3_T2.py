@@ -442,7 +442,7 @@ with st.form(key="form_rating", clear_on_submit=False):
                     margin: 10px 0 18px 0;
                 }
                 </style>
-                <div class="fake-notice">🚨 Warning: this audio is FAKE</div>
+                <div class="fake-notice">🚨 Warning: You are listening to a fake (AI generated) audio clip</div>
                 """,
                 unsafe_allow_html=True,
             )
