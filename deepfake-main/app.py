@@ -52,13 +52,13 @@ survey = ss.StreamlitSurvey("Survey Audio Persuasiveness")
 
 st.title("Welcome, Audio Explorer! 🎧‍")
 
-text1 = "We've got an audio snippet for Kamala Harris or Donald Trump, Your mission? listen to the audio and rate it!"
+text1 = "We've got an audio snippet for Donald Trump, Your mission? listen to the audio and rate it!"
 st.write(text1)
 
 text2 = "**How to Play**: Listen to each audio clip and share your thoughts."
 st.markdown(text2)
 
-text3 = "Enjoy the journey! This challenge lasts 5-10 minutes."
+text3 = "Enjoy the journey! This challenge lasts 2-3 minutes."
 st.write(text3)
 
 st.divider()
