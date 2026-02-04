@@ -315,11 +315,12 @@ with st.form(key="form_rating", clear_on_submit=True):
                 """
                 SELECT audio_clip_id, url, topic
                 FROM deepfakes.audio_clips
-                WHERE group_no = :group_no
+                WHERE group_no = 4
                 ORDER BY RAND()
                 LIMIT 1;
                 """
             )
+            #WHERE group_no = :group_no
             sample_row = db_conn.execute(query, {"group_no": group_no}).fetchone()
 
         if not sample_row:
