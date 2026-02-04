@@ -233,7 +233,7 @@ if "count" not in st.session_state:
     st.session_state["count"] = 0
 
 # CONTROL GROUP_NO HERE (keep if you still sample by group_no)
-group_no=1
+group_no=2
 def ten_radio(key: str, left_label: str | None = None, right_label: str | None = None):
     val = st.radio(
         "",
