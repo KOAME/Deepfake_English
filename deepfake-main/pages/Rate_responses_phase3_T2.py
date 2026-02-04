@@ -228,6 +228,7 @@ if "step" not in st.session_state:
 
 group_no = 3
 
+
 def ten_radio(key: str, left_label: str | None = None, right_label: str | None = None):
     val = st.radio(
         "",
@@ -311,6 +312,7 @@ def save_to_db():
     st.session_state["count"] += 1
     return True
 
+AUDIO_SET_NO = 4      # this filters deepfakes.audio_clips.group_no
 with st.form(key="form_rating", clear_on_submit=False):
     try:
         # Fetch clip only when starting a new item
@@ -320,12 +322,12 @@ with st.form(key="form_rating", clear_on_submit=False):
                     """
                     SELECT audio_clip_id, url, topic
                     FROM deepfakes.audio_clips
-                    WHERE group_no = 4
+                    WHERE group_no = :audio_set_no
                     ORDER BY RAND()
                     LIMIT 1;
                     """
                 )
-                row = db_conn.execute(query, {"group_no": group_no}).fetchone()
+                row = db_conn.execute(query, {"group_no": AUDIO_SET_NO}).fetchone()
 
             if not row:
                 st.error("No audio found.")
