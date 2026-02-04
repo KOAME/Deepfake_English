@@ -322,12 +322,12 @@ with st.form(key="form_rating", clear_on_submit=False):
                     """
                     SELECT audio_clip_id, url, topic
                     FROM deepfakes.audio_clips
-                    WHERE audio_set_no = :audio_set_no
+                    WHERE group_no = :audio_set_no
                     ORDER BY RAND()
                     LIMIT 1;
                     """
                 )
-                row = db_conn.execute(query, {"group_no": AUDIO_SET_NO}).fetchone()
+                row = db_conn.execute(query, {"audio_set_no": AUDIO_SET_NO}).fetchone()
 
             if not row:
                 st.error("No audio found.")
