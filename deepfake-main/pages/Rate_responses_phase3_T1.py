@@ -329,7 +329,29 @@ with st.form(key="form_rating", clear_on_submit=True):
         audio_clip_id, url, topic = sample_row
         st.session_state["audio_clip_id"] = audio_clip_id
         st.session_state["current_topic"] = topic if topic else "this topic"
+        st.markdown(
+            """
+            <style>
+            .big-red-warning {
+                background: #ffe6e6;
+                border: 2px solid #ff0000;
+                color: #b30000;
+                padding: 16px 18px;
+                border-radius: 12px;
+                font-size: 24px;
+                font-weight: 800;
+                text-align: center;
+                line-height: 1.25;
+                margin: 10px 0 18px 0;
+            }
+            </style>
 
+            <div class="big-red-warning">
+                🚨 Warning: this audio is Fake
+              </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.warning(
             "⚠️ Use Google Chrome. Answer every question before submitting. "
             "If you skip any required question, you may lose answers for this clip."
