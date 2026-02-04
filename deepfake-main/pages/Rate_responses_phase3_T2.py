@@ -419,12 +419,15 @@ with st.form(key="form_rating", clear_on_submit=False):
 
             submitted = st.form_submit_button("**Submit and View Next**")
 
+
             if submitted:
-                save_to_db()
+                ok = save_to_db()
+                if not ok:
+                    st.stop()
 
                 # reset UI state for next clip
                 st.session_state["step"] = 1
-                st.session_state["count"] += 1
+                #st.session_state["count"] += 1
 
                 for k in [
                     "key_real_fake", "key_realness_scale", "key_confident",
