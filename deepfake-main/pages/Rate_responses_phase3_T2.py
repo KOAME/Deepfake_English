@@ -383,7 +383,7 @@ with st.form(key="form_rating", clear_on_submit=False):
         # STEP 2 — Remaining questions + FAKE notice
         # ==================================================
         else:
-            st.toast("🚨 You listened to a FAKE audio clip", icon="🚨")
+            st.toast("🚨 Warning: You listened to a fake (AI-generated) audio clip", icon="🚨")
 
             st.markdown(
                 """
@@ -396,7 +396,7 @@ with st.form(key="form_rating", clear_on_submit=False):
                     text-align:center;
                     border-radius:12px;
                     margin-bottom:20px;">
-                    🚨 Warning: this audio is FAKE
+                    🚨 Warning: You listened to a fake (AI-generated) audio clip
                 </div>
                 """,
                 unsafe_allow_html=True,
