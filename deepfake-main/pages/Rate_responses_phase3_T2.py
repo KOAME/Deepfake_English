@@ -226,7 +226,7 @@ if "count" not in st.session_state:
 if "step" not in st.session_state:
     st.session_state["step"] = 1  # 1 = first page, 2 = second page
 
-group_no = 1
+group_no = 3
 
 def ten_radio(key: str, left_label: str | None = None, right_label: str | None = None):
     val = st.radio(
