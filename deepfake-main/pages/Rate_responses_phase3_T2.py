@@ -322,7 +322,7 @@ with st.form(key="form_rating", clear_on_submit=False):
                     """
                     SELECT audio_clip_id, url, topic
                     FROM deepfakes.audio_clips
-                    WHERE group_no = :audio_set_no
+                    WHERE audio_set_no = :audio_set_no
                     ORDER BY RAND()
                     LIMIT 1;
                     """
