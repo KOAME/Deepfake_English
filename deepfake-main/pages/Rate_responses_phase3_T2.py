@@ -10,8 +10,6 @@ from sqlalchemy.exc import SQLAlchemyError
 # --------------------------------------------------------------------------------
 # Page & Layout
 # --------------------------------------------------------------------------------
-
-    
 st.set_page_config(initial_sidebar_state="collapsed", layout="wide")
 
 st.markdown(
@@ -125,13 +123,9 @@ tunnel = start_ssh_tunnel()
 pool = get_sqlalchemy_engine(tunnel)
 
 # --------------------------------------------------------------------------------
-# DB Helpers (NEW, MINIMAL)
+# DB Helpers
 # --------------------------------------------------------------------------------
 def insert_participant_and_get_id():
-    """
-    If you still want participant_id, you need a participants table.
-    Keep your existing implementation if participants_phase2 still exists.
-    """
     try:
         with pool.begin() as connection:
             insert_query = text(
@@ -165,9 +159,6 @@ def insert_rating_phase3(
     check_1: bool,
     group_no: int
 ):
-    """
-    Matches exactly: deepfakes.english_ratings_phase3
-    """
     insert_query = text(
         """
         INSERT INTO deepfakes.english_ratings_phase3 (
@@ -216,7 +207,7 @@ def insert_rating_phase3(
                     "scam": scam,
                     "open_ended_response": open_ended_response,
                     "check_1": check_1,
-                    "group_no":group_no
+                    "group_no": group_no,
                 },
             )
     except SQLAlchemyError as e:
@@ -231,11 +222,12 @@ survey = ss.StreamlitSurvey("rate_survey")
 
 if "count" not in st.session_state:
     st.session_state["count"] = 0
+
 if "step" not in st.session_state:
     st.session_state["step"] = 1  # 1 = first page, 2 = second page
-    
-# CONTROL GROUP_NO HERE (keep if you still sample by group_no)
-group_no=1
+
+group_no = 1
+
 def ten_radio(key: str, left_label: str | None = None, right_label: str | None = None):
     val = st.radio(
         "",
@@ -255,15 +247,16 @@ def save_to_db():
         st.session_state["participant_id"] = insert_participant_and_get_id()
     participant_id = st.session_state["participant_id"]
 
-    # --- map UI to DB types ---
-    realness_scale = st.session_state.get("key_realness_scale")
+    # ---- Step-1 answers are frozen into ans_* when clicking Next
+    realness_scale = st.session_state.get("ans_realness_scale")
 
-    rf = st.session_state.get("key_real_fake")
+    rf = st.session_state.get("ans_real_fake")
     realness_perception = 1 if rf == "Real" else (0 if rf == "Fake" else None)
 
-    confident = st.session_state.get("key_confident")
-    difficult_to_decide = st.session_state.get("key_difficulty")
+    confident = st.session_state.get("ans_confident")
+    difficult_to_decide = st.session_state.get("ans_difficulty")
 
+    # ---- Step-2 answers are read from the step-2 widgets
     trust_content = st.session_state.get("key_trust_content")
     trust_media = st.session_state.get("key_trust_media")
 
@@ -286,8 +279,20 @@ def save_to_db():
         scam,
         check_val,
     ]
+
     if not all(v is not None for v in required):
         st.error("You missed required questions. Please answer everything before submitting.")
+        # Helpful debug so you see exactly what is missing
+        st.write("DEBUG required:", {
+            "realness_scale": realness_scale,
+            "realness_perception": realness_perception,
+            "confident": confident,
+            "difficult_to_decide": difficult_to_decide,
+            "trust_content": trust_content,
+            "trust_media": trust_media,
+            "scam": scam,
+            "check_val": check_val,
+        })
         return False
 
     insert_rating_phase3(
@@ -302,18 +307,15 @@ def save_to_db():
         scam=scam,
         open_ended_response=open_ended_response,
         check_1=check_1,
-        group_no=1
+        group_no=group_no,
     )
 
     st.session_state["count"] += 1
     return True
 
-
 with st.form(key="form_rating", clear_on_submit=False):
     try:
-        # --------------------------------------------------
         # Fetch clip only when starting a new item
-        # --------------------------------------------------
         if st.session_state["step"] == 1 or "audio_clip_id" not in st.session_state:
             with pool.connect() as db_conn:
                 query = text(
@@ -376,6 +378,12 @@ with st.form(key="form_rating", clear_on_submit=False):
                 if not all(v is not None for v in required_step1):
                     st.error("Please answer all questions before continuing.")
                 else:
+                    # Freeze step-1 answers so they persist reliably into step-2 submission
+                    st.session_state["ans_real_fake"] = st.session_state.get("key_real_fake")
+                    st.session_state["ans_realness_scale"] = st.session_state.get("key_realness_scale")
+                    st.session_state["ans_confident"] = st.session_state.get("key_confident")
+                    st.session_state["ans_difficulty"] = st.session_state.get("key_difficulty")
+
                     st.session_state["step"] = 2
                     st.rerun()
 
@@ -419,21 +427,23 @@ with st.form(key="form_rating", clear_on_submit=False):
 
             submitted = st.form_submit_button("**Submit and View Next**")
 
-
             if submitted:
                 ok = save_to_db()
                 if not ok:
                     st.stop()
 
-                # reset UI state for next clip
+                # reset UI state for next clip (only after successful DB insert)
                 st.session_state["step"] = 1
-                #st.session_state["count"] += 1
 
                 for k in [
-                    "key_real_fake", "key_realness_scale", "key_confident",
-                    "key_difficulty", "key_trust_content", "key_trust_media",
-                    "key_check", "key_scam", "key_open_ended",
-                    "audio_clip_id", "url"
+                    # step-2 widget keys
+                    "key_trust_content", "key_trust_media", "key_check", "key_scam", "key_open_ended",
+                    # frozen step-1 answers
+                    "ans_real_fake", "ans_realness_scale", "ans_confident", "ans_difficulty",
+                    # clip cache
+                    "audio_clip_id", "url",
+                    # step-1 widget keys (optional cleanup)
+                    "key_real_fake", "key_realness_scale", "key_confident", "key_difficulty",
                 ]:
                     st.session_state.pop(k, None)
 
