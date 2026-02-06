@@ -18,7 +18,7 @@ if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = 'collapsed'
 
 ###################################################################################
-#age_group_list = ["I wish not to declare", "18-30", "31-40", "41-50", "51-60", "60<"]
+#age_group_list = ["I wish not to declare", "18-30", "31-40", "41-50", "51-60", "60+"]
 age_group_list = ["18-30", "31-40", "41-50", "51-60", "60<"]
 
 pronoun_list_ignore = [
