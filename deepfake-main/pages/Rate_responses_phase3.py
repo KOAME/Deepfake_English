@@ -217,7 +217,7 @@ def insert_rating_phase3(
                     "trust_content": trust_content,
                     "trust_media": trust_media,
                     "scam": scam,
-                    "key_take_greenland":"key_take_greenland",
+                    "take_greenland":key_take_greenland,
                     "open_ended_response": open_ended_response,
                     "check_1": check_1,
                     "group_no":group_no
