@@ -273,6 +273,8 @@ def save_to_db():
     scam_raw = st.session_state.get("key_scam")  # "Yes" / "No" / "Not sure" / None
     SCAM_MAP = {"Yes": 1, "No": 0, "Not sure": 2}
     scam = SCAM_MAP.get(scam_raw)  # -> 1/0/2/None
+    scam = st.session_state.get("key_scam")
+
     take_greenland = st.session_state.get("key_take_greenland")
 
     check_val = st.session_state.get("key_check")
