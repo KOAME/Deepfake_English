@@ -161,6 +161,7 @@ def insert_rating_phase3(
     trust_content: int,
     trust_media: int,
     scam: int,
+    take_greenland:str,
     open_ended_response: str,
     check_1: bool,
     group_no: int
@@ -180,6 +181,7 @@ def insert_rating_phase3(
             trust_content,
             trust_media,
             scam,
+            take_greenland,
             open_ended_response,
             check_1,
             group_no
@@ -194,6 +196,7 @@ def insert_rating_phase3(
             :trust_content,
             :trust_media,
             :scam,
+            :take_greenland,
             :open_ended_response,
             :check_1,
             :group_no
@@ -214,6 +217,7 @@ def insert_rating_phase3(
                     "trust_content": trust_content,
                     "trust_media": trust_media,
                     "scam": scam,
+                    "key_take_greenland":"key_take_greenland"
                     "open_ended_response": open_ended_response,
                     "check_1": check_1,
                     "group_no":group_no
@@ -269,6 +273,7 @@ def save_to_db():
     scam_raw = st.session_state.get("key_scam")  # "Yes" / "No" / "Not sure" / None
     SCAM_MAP = {"Yes": 1, "No": 0, "Not sure": 2}
     scam = SCAM_MAP.get(scam_raw)  # -> 1/0/2/None
+    take_greenland = st.session_state.get("key_take_greenland")
 
     check_val = st.session_state.get("key_check")
     # Your text says “select 4 if yes” so enforce boolean True if ==4
@@ -284,6 +289,7 @@ def save_to_db():
         trust_content,
         trust_media,
         scam,
+        take_greenland,
         check_val,  # so they must answer the attention check
     ]
     if not all(v is not None for v in required):
@@ -300,6 +306,7 @@ def save_to_db():
         trust_content=trust_content,
         trust_media=trust_media,
         scam=scam,
+        take_greenland=take_greenland,
         open_ended_response=open_ended_response,
         check_1=check_1,
         group_no=1
@@ -390,6 +397,19 @@ with st.form(key="form_rating", clear_on_submit=True):
         )
         ten_radio("key_trust_media", "Not at all", "Completely")
 
+        # Q6B: Scam / Greenland
+        st.markdown(
+            "<h5>❓Do you support or oppose the U.S. using military force to take control of Greenland?</h5>",
+            unsafe_allow_html=True,
+        )
+        st.radio(
+            "",
+            options=["Support", "Oppose", "Not sure"],
+            horizontal=True,
+            index=None,
+            key="key_take_greenland",
+            label_visibility="collapsed",
+        )
 
 
         # Attention check
