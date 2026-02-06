@@ -155,6 +155,7 @@ def insert_rating_phase3(
     trust_content: int,
     trust_media: int,
     scam: str,
+    take_greenland:str,
     open_ended_response: str,
     check_1: bool,
     group_no: int
@@ -171,6 +172,7 @@ def insert_rating_phase3(
             trust_content,
             trust_media,
             scam,
+            take_greenland,
             open_ended_response,
             check_1,
             group_no
@@ -185,6 +187,7 @@ def insert_rating_phase3(
             :trust_content,
             :trust_media,
             :scam,
+            :take_greenland,
             :open_ended_response,
             :check_1,
             :group_no
@@ -205,6 +208,7 @@ def insert_rating_phase3(
                     "trust_content": trust_content,
                     "trust_media": trust_media,
                     "scam": scam,
+                    "take_greenland": take_greenland,
                     "open_ended_response": open_ended_response,
                     "check_1": check_1,
                     "group_no": group_no,
@@ -262,6 +266,8 @@ def save_to_db():
     trust_media = st.session_state.get("key_trust_media")
 
     scam = st.session_state.get("key_scam")
+    
+    take_greenland = st.session_state.get("key_take_greenland")
 
     check_val = st.session_state.get("key_check")
     check_1 = True if check_val == 4 else False
@@ -276,6 +282,7 @@ def save_to_db():
         trust_content,
         trust_media,
         scam,
+        take_greenland,
         check_val,
     ]
 
@@ -290,6 +297,7 @@ def save_to_db():
             "trust_content": trust_content,
             "trust_media": trust_media,
             "scam": scam,
+            "take_greenland": take_greenland,
             "check_val": check_val,
         })
         return False
@@ -304,6 +312,7 @@ def save_to_db():
         trust_content=trust_content,
         trust_media=trust_media,
         scam=scam,
+        take_greenland=take_greenland,
         open_ended_response=open_ended_response,
         check_1=check_1,
         group_no=group_no,
@@ -421,6 +430,20 @@ with st.form(key="form_rating", clear_on_submit=False):
 
             st.markdown("<h5>❓How much do you trust online news media?</h5>", unsafe_allow_html=True)
             ten_radio("key_trust_media", "Not at all", "Completely")
+                    # Q6B: Scam / Greenland
+            st.markdown(
+            "<h5>❓Do you support or oppose the U.S. using military force to take control of Greenland?</h5>",
+            unsafe_allow_html=True,
+            )
+            st.radio(
+                "",
+                options=["Support", "Oppose", "Not sure"],
+                horizontal=True,
+                index=None,
+                key="key_take_greenland",
+                label_visibility="collapsed",
+            )
+
 
             st.markdown("<h7>I am carefully rating, select 4 if yes.</h7>", unsafe_allow_html=True)
             st.radio("", list(range(1, 11)), horizontal=True, index=None, key="key_check")
