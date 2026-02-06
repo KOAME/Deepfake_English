@@ -439,7 +439,7 @@ with st.form(key="form_rating", clear_on_submit=True):
 
         # Attention check
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown('<h7>I am carefully rating, select 4 if yes.</h7>', unsafe_allow_html=True)
+        st.markdown('<h7>I am reading carefully. Select 4 if yes.</h7>', unsafe_allow_html=True)
         st.radio(
             "",
             options=list(range(1, 11)),
