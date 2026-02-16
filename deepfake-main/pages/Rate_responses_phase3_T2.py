@@ -451,7 +451,22 @@ with st.form(key="form_rating", clear_on_submit=False):
 
             st.markdown("<h5>❓Have you fallen for misleading info online?</h5>", unsafe_allow_html=True)
             st.radio("", ["Yes", "No", "Not sure"], horizontal=True, index=None, key="key_scam")
-
+            st.markdown(
+                """
+                <div style="
+                    background:#fff0f0;
+                    border:3px solid red;
+                    padding:16px;
+                    font-size:24px;
+                    font-weight:900;
+                    text-align:center;
+                    border-radius:12px;
+                    margin-bottom:20px;">
+                    🚨 Warning: You listened to a fake (AI-generated) audio clip
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )  
             st.markdown("<h5>Optional</h5>", unsafe_allow_html=True)
             st.text_area("Anything stand out?", key="key_open_ended")
 
