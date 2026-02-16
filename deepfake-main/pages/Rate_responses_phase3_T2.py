@@ -414,6 +414,7 @@ with st.form(key="form_rating", clear_on_submit=False):
                     st.session_state["ans_difficulty"] = st.session_state.get("key_difficulty")
 
                     st.session_state["step"] = 2
+                    st.session_state["just_switched"] = True
                     st.rerun()
 
         # ==================================================
