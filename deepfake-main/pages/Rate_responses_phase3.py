@@ -264,9 +264,10 @@ def save_to_db():
     # Store as 1=Real, 0=Fake (consistent with your earlier coding)
     realness_perception = 1 if rf == "Real" else (0 if rf == "Fake" else None)
 
-    confident = st.session_state.get("key_confident")
-    difficult_to_decide = st.session_state.get("key_difficulty")
-
+   # confident = st.session_state.get("key_confident")
+   # difficult_to_decide = st.session_state.get("key_difficulty")
+    confident = None
+    difficult_to_decide = None
     trust_content = st.session_state.get("key_trust_content")
     trust_media = st.session_state.get("key_trust_media")
 
@@ -286,8 +287,8 @@ def save_to_db():
     required = [
         realness_scale,
         realness_perception,
-        confident,
-        difficult_to_decide,
+      #  confident,
+     #   difficult_to_decide,
         trust_content,
         trust_media,
         scam,
@@ -373,17 +374,17 @@ with st.form(key="form_rating", clear_on_submit=True):
 
 
         # Q3: Confidence retrospective
-        st.markdown(
-            "<h5>❓How confident are you that your judgement about the authenticity of the audio was correct?</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_confident", "Not confident at all", "Extremely confident")
+       # st.markdown(
+         #   "<h5>❓How confident are you that your judgement about the authenticity of the audio was correct?</h5>",
+         #   unsafe_allow_html=True,
+        #)
+       # ten_radio("key_confident", "Not confident at all", "Extremely confident")
         # Q4: Difficulty
         st.markdown(
-            "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
-            unsafe_allow_html=True,
-        )
-        ten_radio("key_difficulty", "Very easy", "Very difficult")
+       #     "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
+         #   unsafe_allow_html=True,
+       # )
+     #   ten_radio("key_difficulty", "Very easy", "Very difficult")
         
         # Q5: Trust political audio content online
         st.markdown(
