@@ -272,9 +272,11 @@ def save_to_db():
     rf = st.session_state.get("ans_real_fake")
     realness_perception = 1 if rf == "Real" else (0 if rf == "Fake" else None)
 
-    confident = st.session_state.get("ans_confident")
-    difficult_to_decide = st.session_state.get("ans_difficulty")
-
+  #  confident = st.session_state.get("ans_confident")
+  #  difficult_to_decide = st.session_state.get("ans_difficulty")
+    confident = None
+    difficult_to_decide = None
+    
     # ---- Step-2 answers are read from the step-2 widgets
     trust_content = st.session_state.get("key_trust_content")
     trust_media = st.session_state.get("key_trust_media")
@@ -291,8 +293,8 @@ def save_to_db():
     required = [
         realness_scale,
         realness_perception,
-        confident,
-        difficult_to_decide,
+       # confident,
+      #  difficult_to_decide,
         trust_content,
         trust_media,
         scam,
@@ -386,14 +388,14 @@ with st.form(key="form_rating", clear_on_submit=False):
             st.markdown("<h5>❓On a scale from fake to real, how would you rate this audio?</h5>", unsafe_allow_html=True)
             ten_radio("key_realness_scale", "Definitely Fake", "Definitely Real")
 
-            st.markdown("<h5>❓How confident are you in your judgement?</h5>", unsafe_allow_html=True)
-            ten_radio("key_confident", "Not confident", "Extremely confident")
+         #   st.markdown("<h5>❓How confident are you in your judgement?</h5>", unsafe_allow_html=True)
+        #    ten_radio("key_confident", "Not confident", "Extremely confident")
 
-            st.markdown(
-                "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
-                unsafe_allow_html=True,
-            )
-            ten_radio("key_difficulty", "Very easy", "Very difficult")
+           # st.markdown(
+            #    "<h5>❓How difficult was it for you to decide whether the audio was real or fake?</h5>",
+             #   unsafe_allow_html=True,
+         #   )
+         #   ten_radio("key_difficulty", "Very easy", "Very difficult")
 
             next_clicked = st.form_submit_button("Next ➜")
 
@@ -401,8 +403,8 @@ with st.form(key="form_rating", clear_on_submit=False):
                 required_step1 = [
                     st.session_state.get("key_real_fake"),
                     st.session_state.get("key_realness_scale"),
-                    st.session_state.get("key_confident"),
-                    st.session_state.get("key_difficulty"),
+                 #   st.session_state.get("key_confident"),
+                 #   st.session_state.get("key_difficulty"),
                 ]
                 if not all(v is not None for v in required_step1):
                     st.error("Please answer all questions before continuing.")
@@ -410,8 +412,8 @@ with st.form(key="form_rating", clear_on_submit=False):
                     # Freeze step-1 answers so they persist reliably into step-2 submission
                     st.session_state["ans_real_fake"] = st.session_state.get("key_real_fake")
                     st.session_state["ans_realness_scale"] = st.session_state.get("key_realness_scale")
-                    st.session_state["ans_confident"] = st.session_state.get("key_confident")
-                    st.session_state["ans_difficulty"] = st.session_state.get("key_difficulty")
+                  #  st.session_state["ans_confident"] = st.session_state.get("key_confident")
+                  #  st.session_state["ans_difficulty"] = st.session_state.get("key_difficulty")
 
                     st.session_state["step"] = 2
                     st.session_state["just_switched"] = True
