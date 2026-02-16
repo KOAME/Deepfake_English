@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, text
 import pymysql
 from sshtunnel import SSHTunnelForwarder
 from sqlalchemy.exc import SQLAlchemyError
+import streamlit.components.v1 as components
 
 # --------------------------------------------------------------------------------
 # Page & Layout
@@ -222,6 +223,19 @@ def insert_rating_phase3(
 # UI + Logic
 # --------------------------------------------------------------------------------
 st.title("Welcome, Audio Explorer! 🎧")
+
+# Force scroll to top when step changes
+if st.session_state.get("step") == 2 and st.session_state.get("just_switched"):
+    components.html(
+        """
+        <script>
+            window.parent.document.querySelector('section.main').scrollTo(0, 0);
+        </script>
+        """,
+        height=0,
+    )
+    st.session_state["just_switched"] = False
+
 survey = ss.StreamlitSurvey("rate_survey")
 
 if "count" not in st.session_state:
