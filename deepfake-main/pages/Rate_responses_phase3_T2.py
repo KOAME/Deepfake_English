@@ -433,7 +433,7 @@ with st.form(key="form_rating", clear_on_submit=False):
                 """,
                 unsafe_allow_html=True,
             )
-
+            st.toast("🚨 Warning: You listened to a fake (AI-generated) audio clip", icon="🚨")
             st.markdown("<h5>❓How much do you trust political audio content online?</h5>", unsafe_allow_html=True)
             ten_radio("key_trust_content", "Not at all", "Completely")
 
