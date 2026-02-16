@@ -419,16 +419,21 @@ with st.form(key="form_rating", clear_on_submit=False):
 
             st.markdown(
                 """
-                <div style="
-                    background:#fff0f0;
-                    border:3px solid red;
-                    padding:16px;
-                    font-size:24px;
-                    font-weight:900;
-                    text-align:center;
-                    border-radius:12px;
-                    margin-bottom:20px;">
-                    🚨 Warning: You listened to a fake (AI-generated) audio clip
+                    <div style="
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #ffdddd;
+                    border: 4px solid red;
+                    padding: 20px 40px;
+                    font-size: 28px;
+                    font-weight: 900;
+                    border-radius: 15px;
+                    z-index: 9999;
+                    box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+                        text-align: center;">
+                    🚨 WARNING: You listened to a fake (AI-generated) audio clip
                 </div>
                 """,
                 unsafe_allow_html=True,
