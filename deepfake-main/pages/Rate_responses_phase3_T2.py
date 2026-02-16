@@ -406,6 +406,15 @@ with st.form(key="form_rating", clear_on_submit=False):
         # STEP 2 — Remaining questions + FAKE notice
         # ==================================================
         else:
+                # force scroll to top when entering step 2
+            st.components.v1.html(
+                """
+                <script>
+                  window.parent.document.querySelector('section.main').scrollTo(0, 0);
+                </script>
+                """,
+                height=0,
+            )
             st.toast("🚨 Warning: You listened to a fake (AI-generated) audio clip", icon="🚨")
 
             st.markdown(
