@@ -314,7 +314,7 @@ def save_to_db():
         take_greenland=take_greenland,
         open_ended_response=open_ended_response,
         check_1=check_1,
-        group_no=1
+        group_no=2
     )
 
     st.session_state["count"] += 1
